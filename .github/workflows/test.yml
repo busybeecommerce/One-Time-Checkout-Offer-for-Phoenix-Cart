@@ -1,0 +1,26 @@
+name: Tests
+on: [push, pull_request]
+permissions:
+  contents: read
+jobs:
+  php:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        php: ['8.1', '8.3']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: ${{ matrix.php }}
+          coverage: none
+      - name: Checkout pinned Phoenix reference
+        uses: actions/checkout@v4
+        with:
+          repository: CE-PhoenixCart/PhoenixCart
+          ref: 1c2161d0f1f605724efa058ecffe66f6f4bf0e55
+          path: reference
+      - run: php tests/run.php reference
+      - run: node --test tests/storefront.test.js
+      - run: node --check ext/checkout_offer/checkout_offer.js
+      - run: git diff --check
