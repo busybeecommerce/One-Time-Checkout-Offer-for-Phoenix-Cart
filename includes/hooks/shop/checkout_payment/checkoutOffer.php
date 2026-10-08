@@ -60,7 +60,9 @@ class hook_shop_checkout_payment_checkoutOffer {
         }
         $normal = max(0.0, (float)$product->get('base_price') + $defaultAdjustment);
         $offer = checkout_offer_price($normal, $rule['mode'], (float)$rule['value']);
-        $rate = (float)$product->get('tax_rate');
+        $builder = new cart_order_builder($GLOBALS['order']);
+        $taxAddress = $builder->build_tax_address();
+        $rate = (float)Tax::get_rate($product->get('tax_class_id'), $taxAddress['entry_country_id'], $taxAddress['entry_zone_id']);
         $image = (string)$product->get('image');
         $imageHtml = '' === $image ? '' : '<img class="img-fluid mb-2" style="max-height:140px;object-fit:contain" src="'
             . checkout_offer_escape(DIR_WS_IMAGES . $image) . '" alt="' . checkout_offer_escape((string)$product->get('name')) . '">';

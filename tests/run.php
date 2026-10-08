@@ -244,6 +244,11 @@ ot_shipping::$free = true;
 near(checkout_offer_baseline_total($GLOBALS['order'], []), 120, 'Free shipping eligibility');
 ot_shipping::$free = false;
 $html = (new hook_shop_checkout_payment_checkoutOffer())->listen_injectFormDisplay();
+// Catalogue display tax can differ from the selected checkout delivery address.
+$GLOBALS['db']->products[2]['tax_rate'] = 0;
+$addressHtml = (new hook_shop_checkout_payment_checkoutOffer())->listen_injectFormDisplay();
+expect(str_contains($addressHtml, 'data-tax="20"'), 'Cards use checkout tax address rather than catalogue tax');
+$GLOBALS['db']->products[2]['tax_rate'] = 20;
 expect(str_contains($html, 'checkout_offer_options[3][4]'), 'Option fields have server-readable names');
 expect(str_contains($html, 'Test &lt;product&gt;'), 'Product title escaped');
 expect(str_contains($html, '#123456'), 'Accent colour rendered');
