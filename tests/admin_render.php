@@ -45,8 +45,10 @@ $GLOBALS['db'] = $db = new class($scenario) {
         };
     }
 };
+$formFile = is_file($reference . '/includes/system/versioned/1.01.00.07/form.php')
+    ? '1.01.00.07/form.php' : '1.0.8.1/form.php';
 foreach (['1.0.8.2/text.php', '1.0.8.1/html_element.php', '1.0.8.1/named_html_element.php',
-    '1.0.8.1/input.php', '1.01.00.07/form.php', '1.0.8.5/href.php'] as $file) {
+    '1.0.8.1/input.php', $formFile, '1.0.8.5/href.php'] as $file) {
     require $reference . '/includes/system/versioned/' . $file;
 }
 require $root . '/admin/includes/languages/english/checkout_offer.php';

@@ -8,6 +8,7 @@ jobs:
     strategy:
       matrix:
         php: ['8.1', '8.3']
+        phoenix: ['1.1.0.6', '1.1.0.8']
     steps:
       - uses: actions/checkout@v4
       - uses: shivammathur/setup-php@v2
@@ -18,7 +19,7 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: CE-PhoenixCart/PhoenixCart
-          ref: 1c2161d0f1f605724efa058ecffe66f6f4bf0e55
+          ref: ${{ matrix.phoenix == '1.1.0.6' && '69ba8de85ec03c809a14f0bb2c7ca9fa5295a347' || '1c2161d0f1f605724efa058ecffe66f6f4bf0e55' }}
           path: reference
       - run: php tests/run.php reference
       - run: php tests/admin_render.php reference install

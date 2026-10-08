@@ -17,3 +17,5 @@ When updating from v1.0.0, overwrite `admin/includes/boxes/checkout_offer.php` a
 ## Integration contract
 
 Phoenix 1.1.0.8 reference commit: `1c2161d0f1f605724efa058ecffe66f6f4bf0e55`. Requires `cartOrderBuild`, `injectAppTop`, `injectRedirects`, `injectFormDisplay`, `injectBodyEnd`, and the standard tokenised payment form. Uses Phoenix cart/order APIs; no core edits or custom order-total module.
+
+Phoenix 1.1.0.6 is also tested at reference commit `69ba8de85ec03c809a14f0bb2c7ca9fa5295a347`. Offer images use the standard `images/` path; no `DIR_WS_IMAGES` constant is required. To fix the v1.0.1 checkout rendering error, replace `includes/hooks/shop/checkout_payment/checkoutOffer.php` in the store root with the v1.0.2 file. No reinstallation or settings changes are needed.

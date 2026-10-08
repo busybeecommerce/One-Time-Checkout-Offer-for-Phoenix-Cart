@@ -8,6 +8,7 @@ if (!is_file($reference . '/includes/version.php')) {
     exit(2);
 }
 $reference = realpath($reference);
+$phoenixVersion = trim(file_get_contents($reference . '/includes/version.php'));
 $checks = 0;
 function expect(bool $condition, string $message): void
 {
@@ -32,7 +33,7 @@ function rejected(callable $call, string $message): void
 }
 
 $contracts = [
-    'includes/version.php' => ['1.1.0.8'],
+    'includes/version.php' => [$phoenixVersion],
     'includes/system/versioned/1.0.7.10/cart_order_builder.php' => ["cat('cartOrderBuild'", 'update_per_product'],
     'includes/system/versioned/1.0.7.10/order.php' => ['database_order_builder::build'],
     'includes/system/versioned/1.0.8.1/hooks.php' => ["cat('injectAppTop')", 'call_user_func'],
@@ -41,6 +42,7 @@ $contracts = [
     'templates/default/includes/components/template_bottom.php' => ["cat('injectBodyEnd')"],
     'includes/system/segments/checkout/insert_order.php' => ["'final_price' => \$product['final_price']", "'products_tax' => \$product['tax']"],
 ];
+expect(in_array($phoenixVersion, ['1.1.0.6', '1.1.0.8'], true), 'Unsupported Phoenix reference version');
 foreach ($contracts as $file => $needles) {
     $source = file_get_contents($reference . '/' . $file);
     foreach ($needles as $needle) {
@@ -67,7 +69,6 @@ foreach (['admin', 'includes', 'ext'] as $directory) {
 }
 
 define('DIR_FS_CATALOG', $root . '/');
-define('DIR_WS_IMAGES', 'images/');
 define('DISPLAY_PRICE_WITH_TAX', in_array('--net', $argv, true) ? 'false' : 'true');
 define('CHECKOUT_OFFER_ENABLED', 'True');
 define('CHECKOUT_OFFER_ACCENT', '#123456');
@@ -244,6 +245,8 @@ ot_shipping::$free = true;
 near(checkout_offer_baseline_total($GLOBALS['order'], []), 120, 'Free shipping eligibility');
 ot_shipping::$free = false;
 $html = (new hook_shop_checkout_payment_checkoutOffer())->listen_injectFormDisplay();
+expect(!defined('DIR_WS_IMAGES'), 'Do not mask unsupported legacy image constants in tests');
+expect(str_contains($html, 'src="images/test.png"'), 'Offer image uses the Phoenix images path without legacy constants');
 // Catalogue display tax can differ from the selected checkout delivery address.
 $GLOBALS['db']->products[2]['tax_rate'] = 0;
 $addressHtml = (new hook_shop_checkout_payment_checkoutOffer())->listen_injectFormDisplay();
@@ -340,7 +343,7 @@ expect('checkout_shipping.php' === Href::$last, 'Valid one-click POST redirects 
 expect($_SESSION['cart']->in_cart(2), 'Valid POST adds chosen product');
 expect(!isset($_SESSION['shipping']), 'Valid POST cannot keep outdated delivery quote');
 
-echo "Checkout Offer: $checks checks passed (Phoenix 1.1.0.8; tax display " . DISPLAY_PRICE_WITH_TAX . ").\n";
+echo "Checkout Offer: $checks checks passed (Phoenix $phoenixVersion; tax display " . DISPLAY_PRICE_WITH_TAX . ").\n";
 if (!in_array('--net', $argv, true)) {
     passthru(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(__FILE__) . ' ' . escapeshellarg($reference) . ' --net', $status);
     expect(0 === $status, 'Tax-exclusive test process failed');
