@@ -72,6 +72,12 @@ define('DIR_FS_CATALOG', $root . '/');
 define('DISPLAY_PRICE_WITH_TAX', in_array('--net', $argv, true) ? 'false' : 'true');
 define('CHECKOUT_OFFER_ENABLED', 'True');
 define('CHECKOUT_OFFER_ACCENT', '#123456');
+if (in_array('--modal', $argv, true)) {
+    define('CHECKOUT_OFFER_DISPLAY_MODE', 'modal');
+}
+if (in_array('--styled', $argv, true)) {
+    define('CHECKOUT_OFFER_APPEARANCE', '{"background":"#eef6ff","radius":18,"padding":24,"image_height":180,"columns":2,"button_style":"solid","modal_width":800}');
+}
 define('STOCK_CHECK', 'true');
 define('DEFAULT_ORDERS_STATUS_ID', 1);
 define('DEFAULT_CURRENCY', 'GBP');
@@ -247,6 +253,20 @@ ot_shipping::$free = false;
 $html = (new hook_shop_checkout_payment_checkoutOffer())->listen_injectFormDisplay();
 expect(!defined('DIR_WS_IMAGES'), 'Do not mask unsupported legacy image constants in tests');
 expect(str_contains($html, 'src="images/test.png"'), 'Offer image uses the Phoenix images path without legacy constants');
+expect(str_contains($html, 'data-display-mode="' . checkout_offer_display_mode() . '"'), 'Configured display mode is rendered');
+expect(str_contains($html, '--co-image-height:'), 'Appearance values rendered as scoped CSS properties');
+expect(str_contains((new hook_shop_siteWide_checkoutOffer())->listen_injectSiteStart(), 'checkout_offer.css'), 'Appearance stylesheet is loaded');
+if (in_array('--render', $argv, true)) {
+    $renderDirectory = $root . '/build';
+    if (!is_dir($renderDirectory)) {
+        mkdir($renderDirectory, 0777, true);
+    }
+    $suffix = in_array('--modal', $argv, true) ? 'modal' : 'inline';
+    file_put_contents($renderDirectory . '/storefront-' . $suffix . '.html',
+        '<form id="check_form" method="post" action="checkout_confirmation.php"><input type="hidden" name="formid" value="secret">'
+        . '<h1>Payment From You</h1><div id="payment-methods"><h2>Payment Method</h2><input type="radio" name="payment" value="cod" checked>Cash on delivery</div>'
+        . $html . '<button id="continue" type="submit">Continue</button></form>');
+}
 // Catalogue display tax can differ from the selected checkout delivery address.
 $GLOBALS['db']->products[2]['tax_rate'] = 0;
 $addressHtml = (new hook_shop_checkout_payment_checkoutOffer())->listen_injectFormDisplay();
@@ -319,14 +339,28 @@ expect(!isset($_SESSION['checkout_offer']), 'Empty completed basket expires acce
 
 $GLOBALS['db']->writes = [];
 checkout_offer_install();
-expect(4 === count($GLOBALS['db']->writes), 'Installer creates two tables and two settings');
+expect(6 === count($GLOBALS['db']->writes), 'Installer creates two tables and four settings');
 rejected(static fn() => checkout_offer_admin_action('settings', ['accent' => 'red']), 'Reject CSS injection');
 rejected(static fn() => checkout_offer_admin_action('uninstall', []), 'Uninstall requires confirmation');
 checkout_offer_admin_action('settings', ['accent' => '#abcdef', 'enabled' => 'on']);
-expect('True' === $GLOBALS['db']->writes[4][1]['configuration_value'], 'Enable setting saved');
+$settingsWrites = array_slice($GLOBALS['db']->writes, -4);
+expect('True' === $settingsWrites[0][1]['configuration_value'], 'Enable setting saved');
+rejected(static fn() => checkout_offer_admin_action('settings', ['accent' => '#abcdef', 'display_mode' => 'invalid']), 'Reject invalid display mode');
+checkout_offer_admin_action('settings', ['accent' => '#abcdef', 'display_mode' => 'modal', 'appearance' => ['radius' => 20, 'background' => '#fafafa']]);
+$settingsWrites = array_slice($GLOBALS['db']->writes, -4);
+expect('modal' === $settingsWrites[2][1]['configuration_value'], 'Modal choice saved');
+expect(20 === json_decode($settingsWrites[3][1]['configuration_value'], true)['radius'], 'Appearance saved');
+expect('update' === $settingsWrites[3][2], 'Appearance updates store configuration');
+foreach (['radius' => 41, 'image_height' => 301, 'columns' => 5, 'background' => 'red;display:none', 'shadow' => 'invalid'] as $key => $value) {
+    rejected(static fn() => checkout_offer_sanitise_appearance([$key => $value], true), 'Reject out-of-range or unsafe appearance');
+}
+expect(6 === checkout_offer_sanitise_appearance(['radius' => 41])['radius'], 'Invalid stored appearance safely defaults');
+expect(0 === checkout_offer_sanitise_appearance(['radius' => 0], true)['radius'], 'Minimum radius accepted');
+expect(300 === checkout_offer_sanitise_appearance(['image_height' => 300], true)['image_height'], 'Maximum image size accepted');
 checkout_offer_admin_action('save_tier', ['title' => 'Unlimited', 'minimum' => '0', 'maximum' => '', 'priority' => '3', 'enabled' => 'on']);
-expect('NULL' === $GLOBALS['db']->writes[6][1]['maximum'], 'Unlimited tiers use Phoenix SQL NULL marker');
-expect(3 === $GLOBALS['db']->writes[6][1]['priority'], 'Tier priority saved');
+$tierWrite = $GLOBALS['db']->writes[count($GLOBALS['db']->writes) - 1];
+expect('NULL' === $tierWrite[1]['maximum'], 'Unlimited tiers use Phoenix SQL NULL marker');
+expect(3 === $tierWrite[1]['priority'], 'Tier priority saved');
 $virtual = clone $GLOBALS['order'];
 $virtual->content_type = 'virtual';
 near(checkout_offer_baseline_total($virtual, []), 147.6, 'Virtual order eligibility excludes delivery');

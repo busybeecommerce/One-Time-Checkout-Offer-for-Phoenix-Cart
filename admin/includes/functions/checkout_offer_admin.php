@@ -18,7 +18,14 @@ function checkout_offer_install(): void
         products_id INT UNSIGNED NOT NULL, mode VARCHAR(10) NOT NULL, value DECIMAL(15,4) NOT NULL,
         UNIQUE KEY tier_product (tier_id, products_id)
     ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4");
-    foreach (['CHECKOUT_OFFER_ENABLED' => 'False', 'CHECKOUT_OFFER_ACCENT' => '#6f42c1'] as $key => $value) {
+    checkout_offer_install_settings();
+}
+
+function checkout_offer_install_settings(): void
+{
+    foreach (['CHECKOUT_OFFER_ENABLED' => 'False', 'CHECKOUT_OFFER_ACCENT' => '#6f42c1',
+        'CHECKOUT_OFFER_DISPLAY_MODE' => 'inline',
+        'CHECKOUT_OFFER_APPEARANCE' => json_encode(checkout_offer_appearance(), JSON_THROW_ON_ERROR)] as $key => $value) {
         $exists = $GLOBALS['db']->query("SELECT configuration_id FROM configuration WHERE configuration_key = '" . $key . "'")->fetch_assoc();
         if (!$exists) {
             $GLOBALS['db']->perform('configuration', ['configuration_title' => $key, 'configuration_key' => $key,
@@ -49,7 +56,15 @@ function checkout_offer_admin_action(string $action, array $input): void
         if (!preg_match('/^#[0-9a-f]{6}$/i', $accent)) {
             throw new InvalidArgumentException('Enter a six-digit hexadecimal accent colour.');
         }
-        foreach (['CHECKOUT_OFFER_ENABLED' => isset($input['enabled']) ? 'True' : 'False', 'CHECKOUT_OFFER_ACCENT' => $accent] as $key => $value) {
+        $mode = $input['display_mode'] ?? checkout_offer_display_mode();
+        if (!is_string($mode) || !in_array($mode, ['inline', 'modal'], true) || !is_array($input['appearance'] ?? [])) {
+            throw new InvalidArgumentException('Choose a valid display mode and appearance.');
+        }
+        $appearance = checkout_offer_sanitise_appearance(($input['appearance'] ?? []) + checkout_offer_appearance(), true);
+        // Add new settings on upgrades without recreating tiers or resetting existing settings.
+        checkout_offer_install_settings();
+        foreach (['CHECKOUT_OFFER_ENABLED' => isset($input['enabled']) ? 'True' : 'False', 'CHECKOUT_OFFER_ACCENT' => $accent,
+            'CHECKOUT_OFFER_DISPLAY_MODE' => $mode, 'CHECKOUT_OFFER_APPEARANCE' => json_encode($appearance, JSON_THROW_ON_ERROR)] as $key => $value) {
             $db->perform('configuration', ['configuration_value' => $value], 'update', "configuration_key = '" . $key . "'");
         }
         return;
@@ -58,7 +73,7 @@ function checkout_offer_admin_action(string $action, array $input): void
         if ('yes' !== ($input['confirm_remove'] ?? '')) {
             throw new InvalidArgumentException('Confirm removal of the offer configuration.');
         }
-        $db->query("DELETE FROM configuration WHERE configuration_key IN ('CHECKOUT_OFFER_ENABLED', 'CHECKOUT_OFFER_ACCENT')");
+        $db->query("DELETE FROM configuration WHERE configuration_key IN ('CHECKOUT_OFFER_ENABLED', 'CHECKOUT_OFFER_ACCENT', 'CHECKOUT_OFFER_DISPLAY_MODE', 'CHECKOUT_OFFER_APPEARANCE')");
         $db->query('DROP TABLE IF EXISTS checkout_offer_products');
         $db->query('DROP TABLE IF EXISTS checkout_offer_tiers');
         return;
