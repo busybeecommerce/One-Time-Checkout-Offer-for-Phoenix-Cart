@@ -1,6 +1,6 @@
 # One-Time Checkout Offer for Phoenix Cart
 
-Version **1.0.0** · CE Phoenix Cart **1.1.0.8** · PHP **8.1–8.3**
+Version **1.0.1** · CE Phoenix Cart **1.1.0.8** · PHP **8.1–8.3**
 
 Present discounted products at the payment step of checkout. This independent Phoenix implementation follows [PrestaChamps' published feature description](https://shop.prestachamps.com/en/prestashop-modules/118-one-time-checkout-offer.html). No PrestaShop module code or assets are included.
 
@@ -36,10 +36,13 @@ JavaScript moves the offer block above payment methods. Without JavaScript, it r
 
 ```powershell
 php tests/run.php ../tmp/PhoenixCart-reference
+php tests/admin_render.php ../tmp/PhoenixCart-reference install
+php tests/admin_render.php ../tmp/PhoenixCart-reference setup
+php tests/admin_render.php ../tmp/PhoenixCart-reference tier
 node --test tests/storefront.test.js
 node --check ext/checkout_offer/checkout_offer.js
 git diff --check
-powershell -File scripts/build_package.ps1 -Version 1.0.0
+powershell -File scripts/build_package.ps1 -Version 1.0.1
 ```
 
 The harness uses real Phoenix order/tax/currency classes with deterministic database/cart fixtures. CI repeats checks on PHP 8.1 and 8.3 against the pinned reference. No live store or payment capture was tested. See [TESTING.md](TESTING.md) for staging checks.

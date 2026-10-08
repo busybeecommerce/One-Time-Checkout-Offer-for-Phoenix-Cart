@@ -1,7 +1,9 @@
 admin/checkout_offer.php
 admin/includes/boxes/checkout_offer.php
+admin/includes/boxes/reports_checkout_offer.php
 admin/includes/functions/checkout_offer_admin.php
 admin/includes/languages/english/checkout_offer.php
+admin/includes/languages/english/modules/boxes/reports_checkout_offer.php
 ext/checkout_offer/checkout_offer.js
 includes/functions/checkout_offer.php
 includes/hooks/shop/checkout_payment/checkoutOffer.php
