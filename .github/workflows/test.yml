@@ -21,6 +21,9 @@ jobs:
           ref: 1c2161d0f1f605724efa058ecffe66f6f4bf0e55
           path: reference
       - run: php tests/run.php reference
+      - run: php tests/admin_render.php reference install
+      - run: php tests/admin_render.php reference setup
+      - run: php tests/admin_render.php reference tier
       - run: node --test tests/storefront.test.js
       - run: node --check ext/checkout_offer/checkout_offer.js
       - run: git diff --check

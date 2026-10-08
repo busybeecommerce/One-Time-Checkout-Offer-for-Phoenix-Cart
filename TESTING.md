@@ -2,6 +2,8 @@
 
 Run README.md automated commands. PHP tests lint package files, check manifest/contracts, exercise real Phoenix order construction and test pricing, tier boundaries, VAT, delivery tax, options and isolated acceptance. Node tests verify placement and option-price updates.
 
+The admin rendering regression executes the complete add-on page using real Phoenix Form, Input and Href classes. It checks the pre-install screen, setup and tier/product forms, CSRF inputs, completion of the page and registration within Reports. Bootstrap/template wrappers and database rows are fixtures.
+
 ## Staging acceptance
 
 1. Install twice; retain tiers. Confirm administrator access controls.

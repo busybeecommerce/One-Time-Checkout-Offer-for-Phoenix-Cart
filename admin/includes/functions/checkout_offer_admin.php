@@ -124,7 +124,7 @@ function checkout_offer_admin_action(string $action, array $input): void
 
 function checkout_offer_admin_form(string $action, array $hidden = []): string
 {
-    $html = (string)new Form('checkout_offer_' . $action, $GLOBALS['Admin']->link('checkout_offer.php'), 'post');
+    $html = (string)new Form('checkout_offer_' . $action, (string)$GLOBALS['Admin']->link('checkout_offer.php'), 'post');
     foreach (['action' => $action] + $hidden as $key => $value) {
         $html .= '<input type="hidden" name="' . checkout_offer_escape($key) . '" value="' . checkout_offer_escape((string)$value) . '">';
     }
