@@ -65,7 +65,7 @@ class hook_shop_checkout_payment_checkoutOffer {
         $rate = (float)Tax::get_rate($product->get('tax_class_id'), $taxAddress['entry_country_id'], $taxAddress['entry_zone_id']);
         $image = (string)$product->get('image');
         $imageHtml = '' === $image ? '' : '<img class="img-fluid mb-2" style="max-height:140px;object-fit:contain" src="'
-            . checkout_offer_escape(DIR_WS_IMAGES . $image) . '" alt="' . checkout_offer_escape((string)$product->get('name')) . '">';
+            . checkout_offer_escape('images/' . $image) . '" alt="' . checkout_offer_escape((string)$product->get('name')) . '">';
         $currency = $GLOBALS['currencies']->currencies[$_SESSION['currency']];
         $format = checkout_offer_escape(json_encode($currency, JSON_THROW_ON_ERROR));
         return '<div class="col-12 col-md-6 col-lg-4"><article class="border rounded p-3 h-100" data-offer-card data-currency="' . $format . '" data-tax-included="' . ('true' === DISPLAY_PRICE_WITH_TAX ? '1' : '0') . '" data-base="' . (float)$product->get('base_price')
