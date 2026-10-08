@@ -1,0 +1,30 @@
+<?php
+declare(strict_types=1);
+
+const HEADING_TITLE = 'One-Time Checkout Offer';
+const CHECKOUT_OFFER_ADMIN_HELP = 'Create basket-value tiers and attach products with a fixed price or percentage discount. All amounts use the store base currency. Tier limits include product tax, delivery and delivery tax.';
+const CHECKOUT_OFFER_ADMIN_INSTALLED = 'Checkout offer tables installed. Configure your tiers before enabling offers.';
+const CHECKOUT_OFFER_ADMIN_SAVED = 'Your changes were saved.';
+const CHECKOUT_OFFER_ADMIN_ERROR = 'The change could not be saved.';
+const CHECKOUT_OFFER_ADMIN_SETUP = 'Setup';
+const CHECKOUT_OFFER_ADMIN_TIERS = 'Offer tiers';
+const CHECKOUT_OFFER_ADMIN_PRODUCTS = 'Products';
+const CHECKOUT_OFFER_ADMIN_TITLE = 'Title';
+const CHECKOUT_OFFER_ADMIN_MINIMUM = 'Minimum basket value (inclusive)';
+const CHECKOUT_OFFER_ADMIN_MAXIMUM = 'Maximum basket value (exclusive; blank for unlimited)';
+const CHECKOUT_OFFER_ADMIN_PRIORITY = 'Priority (highest wins)';
+const CHECKOUT_OFFER_ADMIN_ENABLED = 'Enabled';
+const CHECKOUT_OFFER_ADMIN_SAVE = 'Save';
+const CHECKOUT_OFFER_ADMIN_DELETE = 'Delete';
+const CHECKOUT_OFFER_ADMIN_EDIT = 'Edit';
+const CHECKOUT_OFFER_ADMIN_NEW = 'New tier';
+const CHECKOUT_OFFER_ADMIN_PRODUCT_ID = 'Product ID';
+const CHECKOUT_OFFER_ADMIN_MODE = 'Pricing';
+const CHECKOUT_OFFER_ADMIN_FIXED = 'Fixed unit price excluding tax';
+const CHECKOUT_OFFER_ADMIN_PERCENT = 'Percentage discount';
+const CHECKOUT_OFFER_ADMIN_VALUE = 'Price or percentage';
+const CHECKOUT_OFFER_ADMIN_ACCENT = 'Accent colour';
+const CHECKOUT_OFFER_ADMIN_INSTALL = 'Install database tables';
+const CHECKOUT_OFFER_ADMIN_UNINSTALL = 'Uninstall';
+const CHECKOUT_OFFER_ADMIN_UNINSTALL_HELP = 'Remove offer configuration and tiers. Existing order prices remain unchanged. Delete the uploaded add-on files afterwards.';
+const CHECKOUT_OFFER_ADMIN_CONFIRM_REMOVE = 'I confirm removal of all offer tiers and settings';
