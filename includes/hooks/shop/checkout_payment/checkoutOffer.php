@@ -31,11 +31,14 @@ class hook_shop_checkout_payment_checkoutOffer {
         if ('' === $cards) {
             return '';
         }
-        $accent = defined('CHECKOUT_OFFER_ACCENT') && preg_match('/^#[0-9a-f]{6}$/i', CHECKOUT_OFFER_ACCENT)
-            ? CHECKOUT_OFFER_ACCENT : '#6f42c1';
-        return '<section id="checkout-offer" class="border rounded p-3 mb-4" style="border-top:4px solid ' . $accent . '!important">'
-            . '<h2 class="h5">' . CHECKOUT_OFFER_HEADING . '</h2><p class="text-body-secondary small">' . CHECKOUT_OFFER_DESCRIPTION
-            . '</p><div class="row g-3">' . $cards . '</div></section>';
+        $appearance = checkout_offer_appearance();
+        $key = hash('sha256', checkout_offer_basket_signature() . ':' . (int)$tier['id']);
+        return '<section id="checkout-offer" class="mb-4" data-display-mode="' . checkout_offer_display_mode()
+            . '" data-offer-key="' . $key . '" data-shadow="' . $appearance['shadow'] . '" data-button-style="' . $appearance['button_style']
+            . '" data-open-label="' . checkout_offer_escape(CHECKOUT_OFFER_OPEN) . '" data-close-label="' . checkout_offer_escape(CHECKOUT_OFFER_CLOSE)
+            . '" data-dismiss-label="' . checkout_offer_escape(CHECKOUT_OFFER_DISMISS) . '" style="' . checkout_offer_escape(checkout_offer_style($appearance)) . '">'
+            . '<h2 class="h5" id="checkout-offer-title">' . CHECKOUT_OFFER_HEADING . '</h2><p class="checkout-offer-description">' . CHECKOUT_OFFER_DESCRIPTION
+            . '</p><div class="checkout-offer-grid">' . $cards . '</div></section>';
     }
 
     private function card(Product $product, array $rule): string
@@ -64,17 +67,17 @@ class hook_shop_checkout_payment_checkoutOffer {
         $taxAddress = $builder->build_tax_address();
         $rate = (float)Tax::get_rate($product->get('tax_class_id'), $taxAddress['entry_country_id'], $taxAddress['entry_zone_id']);
         $image = (string)$product->get('image');
-        $imageHtml = '' === $image ? '' : '<img class="img-fluid mb-2" style="max-height:140px;object-fit:contain" src="'
+        $imageHtml = '' === $image ? '' : '<img class="checkout-offer-image" src="'
             . checkout_offer_escape('images/' . $image) . '" alt="' . checkout_offer_escape((string)$product->get('name')) . '">';
         $currency = $GLOBALS['currencies']->currencies[$_SESSION['currency']];
         $format = checkout_offer_escape(json_encode($currency, JSON_THROW_ON_ERROR));
-        return '<div class="col-12 col-md-6 col-lg-4"><article class="border rounded p-3 h-100" data-offer-card data-currency="' . $format . '" data-tax-included="' . ('true' === DISPLAY_PRICE_WITH_TAX ? '1' : '0') . '" data-base="' . (float)$product->get('base_price')
+        return '<article class="checkout-offer-card" data-offer-card data-currency="' . $format . '" data-tax-included="' . ('true' === DISPLAY_PRICE_WITH_TAX ? '1' : '0') . '" data-base="' . (float)$product->get('base_price')
             . '" data-mode="' . checkout_offer_escape($rule['mode']) . '" data-value="' . (float)$rule['value'] . '" data-tax="' . $rate . '">'
             . $imageHtml . '<h3 class="h6">' . checkout_offer_escape((string)$product->get('name')) . '</h3>' . $options
             . '<p><del class="text-body-secondary me-2" data-normal-price>' . $GLOBALS['currencies']->display_price($normal, $rate)
             . '</del><strong data-offer-price>' . $GLOBALS['currencies']->display_price($offer, $rate) . '</strong></p>'
-            . '<button type="submit" class="btn btn-outline-primary btn-sm" name="checkout_offer_product" value="' . $id
+            . '<button type="submit" class="btn checkout-offer-add" name="checkout_offer_product" value="' . $id
             . '" formaction="' . checkout_offer_escape((string)$GLOBALS['Linker']->build('checkout_payment.php')) . '" formnovalidate>'
-            . CHECKOUT_OFFER_ADD . '</button></article></div>';
+            . CHECKOUT_OFFER_ADD . '</button></article>';
     }
 }

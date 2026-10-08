@@ -11,6 +11,74 @@ function checkout_offer_escape(string $text): string
     return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
 }
 
+function checkout_offer_appearance_fields(): array
+{
+    return [
+        'background' => ['type' => 'color', 'default' => '#ffffff'],
+        'text' => ['type' => 'color', 'default' => '#212529'],
+        'card_background' => ['type' => 'color', 'default' => '#ffffff'],
+        'border' => ['type' => 'color', 'default' => '#dee2e6'],
+        'button_background' => ['type' => 'color', 'default' => '#0d6efd'],
+        'button_text' => ['type' => 'color', 'default' => '#ffffff'],
+        'radius' => ['type' => 'number', 'default' => 6, 'min' => 0, 'max' => 40],
+        'padding' => ['type' => 'number', 'default' => 16, 'min' => 0, 'max' => 60],
+        'gap' => ['type' => 'number', 'default' => 16, 'min' => 0, 'max' => 48],
+        'border_width' => ['type' => 'number', 'default' => 1, 'min' => 0, 'max' => 6],
+        'image_height' => ['type' => 'number', 'default' => 140, 'min' => 60, 'max' => 300],
+        'font_size' => ['type' => 'number', 'default' => 16, 'min' => 12, 'max' => 24],
+        'columns' => ['type' => 'number', 'default' => 3, 'min' => 1, 'max' => 4],
+        'modal_width' => ['type' => 'number', 'default' => 900, 'min' => 360, 'max' => 1200],
+        'button_style' => ['type' => 'select', 'default' => 'outline', 'choices' => ['outline', 'solid']],
+        'shadow' => ['type' => 'select', 'default' => 'none', 'choices' => ['none', 'soft', 'strong']],
+    ];
+}
+
+function checkout_offer_sanitise_appearance(array $input, bool $strict = false): array
+{
+    $appearance = [];
+    foreach (checkout_offer_appearance_fields() as $key => $field) {
+        $value = $input[$key] ?? $field['default'];
+        if ('number' === $field['type']) {
+            $value = filter_var($value, FILTER_VALIDATE_INT);
+            $valid = false !== $value && $value >= $field['min'] && $value <= $field['max'];
+        } elseif ('color' === $field['type']) {
+            $valid = is_string($value) && 1 === preg_match('/^#[0-9a-f]{6}$/i', $value);
+        } else {
+            $valid = is_string($value) && in_array($value, $field['choices'], true);
+        }
+        if (!$valid && $strict) {
+            throw new InvalidArgumentException('Invalid appearance value: ' . $key);
+        }
+        $appearance[$key] = $valid ? $value : $field['default'];
+    }
+    return $appearance;
+}
+
+function checkout_offer_appearance(): array
+{
+    $saved = defined('CHECKOUT_OFFER_APPEARANCE') ? json_decode(CHECKOUT_OFFER_APPEARANCE, true) : [];
+    return checkout_offer_sanitise_appearance(is_array($saved) ? $saved : []);
+}
+
+function checkout_offer_display_mode(): string
+{
+    return defined('CHECKOUT_OFFER_DISPLAY_MODE') && 'modal' === CHECKOUT_OFFER_DISPLAY_MODE ? 'modal' : 'inline';
+}
+
+function checkout_offer_style(array $appearance): string
+{
+    $style = '';
+    foreach (checkout_offer_appearance_fields() as $key => $field) {
+        if ('select' !== $field['type']) {
+            $unit = 'number' === $field['type'] && 'columns' !== $key ? 'px' : '';
+            $style .= '--co-' . str_replace('_', '-', $key) . ':' . $appearance[$key] . $unit . ';';
+        }
+    }
+    $accent = defined('CHECKOUT_OFFER_ACCENT') && preg_match('/^#[0-9a-f]{6}$/i', CHECKOUT_OFFER_ACCENT)
+        ? CHECKOUT_OFFER_ACCENT : '#6f42c1';
+    return $style . '--co-accent:' . $accent . ';';
+}
+
 function checkout_offer_language(): void
 {
     if (!defined('CHECKOUT_OFFER_HEADING')) {

@@ -25,7 +25,7 @@ test('offer moves above payment methods and option changes recalculate displayed
     };
     let firstChild;
     const form = {prepend: function (element) { firstChild = element; }};
-    const section = {closest: function () { return form; }, querySelectorAll: function () { return [card]; }};
+    const section = {dataset: {displayMode: 'inline'}, closest: function () { return form; }, querySelectorAll: function () { return [card]; }};
     const document = {
         addEventListener: function (event, listener) { listener(); },
         getElementById: function () { return section; }

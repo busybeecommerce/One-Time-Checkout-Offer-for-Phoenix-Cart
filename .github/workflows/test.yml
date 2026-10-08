@@ -22,9 +22,28 @@ jobs:
           ref: ${{ matrix.phoenix == '1.1.0.6' && '69ba8de85ec03c809a14f0bb2c7ca9fa5295a347' || '1c2161d0f1f605724efa058ecffe66f6f4bf0e55' }}
           path: reference
       - run: php tests/run.php reference
+      - run: php tests/run.php reference --modal --styled
       - run: php tests/admin_render.php reference install
       - run: php tests/admin_render.php reference setup
       - run: php tests/admin_render.php reference tier
       - run: node --test tests/storefront.test.js
       - run: node --check ext/checkout_offer/checkout_offer.js
       - run: git diff --check
+  browser:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.3'
+          coverage: none
+      - uses: actions/checkout@v4
+        with:
+          repository: CE-PhoenixCart/PhoenixCart
+          ref: 1c2161d0f1f605724efa058ecffe66f6f4bf0e55
+          path: reference
+      - run: npm install --no-save --package-lock=false playwright@1.62.1
+      - run: npx playwright install --with-deps chromium
+      - run: php tests/run.php reference --render
+      - run: php tests/run.php reference --render --modal --styled
+      - run: node tests/browser.cjs

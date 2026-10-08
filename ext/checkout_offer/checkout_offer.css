@@ -1,0 +1,29 @@
+#checkout-offer {
+    background: var(--co-background);
+    color: var(--co-text);
+    border: var(--co-border-width) solid var(--co-border);
+    border-top: 4px solid var(--co-accent);
+    border-radius: var(--co-radius);
+    padding: var(--co-padding);
+    font-size: var(--co-font-size);
+}
+#checkout-offer h2 { font-size: 1.25em; color: inherit; }
+#checkout-offer h3 { font-size: 1.05em; color: inherit; }
+#checkout-offer .checkout-offer-description { font-size: .9em; margin-bottom: var(--co-gap); }
+#checkout-offer .checkout-offer-grid { display: grid; grid-template-columns: repeat(var(--co-columns), minmax(0, 1fr)); gap: var(--co-gap); }
+#checkout-offer .checkout-offer-card { background: var(--co-card-background); border: var(--co-border-width) solid var(--co-border); border-radius: var(--co-radius); padding: var(--co-padding); min-width: 0; }
+#checkout-offer .checkout-offer-image { display: block; width: 100%; height: var(--co-image-height); object-fit: contain; margin-bottom: 12px; }
+#checkout-offer .checkout-offer-add { border: 1px solid var(--co-button-background); background: var(--co-button-background); color: var(--co-button-text); border-radius: var(--co-radius); font-size: .9em; }
+#checkout-offer[data-button-style="outline"] .checkout-offer-add { background: transparent; color: var(--co-button-background); }
+#checkout-offer .checkout-offer-add:hover { background: var(--co-button-background); color: var(--co-button-text); filter: brightness(.92); }
+#checkout-offer .checkout-offer-add:focus-visible { outline: 3px solid var(--co-accent); outline-offset: 3px; }
+#checkout-offer[data-shadow="soft"] { box-shadow: 0 4px 16px #00000014; }
+#checkout-offer[data-shadow="strong"] { box-shadow: 0 8px 28px #00000029; }
+#checkout-offer-modal { width: var(--co-modal-width); max-width: calc(100vw - 32px); max-height: calc(100dvh - 32px); padding: 0; border: 0; border-radius: var(--co-radius); background: var(--co-background); color: var(--co-text); overflow: auto; }
+#checkout-offer-modal::backdrop { background: #00000080; }
+#checkout-offer-modal #checkout-offer { margin: 0 !important; }
+#checkout-offer-modal .checkout-offer-modal-controls { display: flex; justify-content: flex-end; padding: 8px 12px; }
+#checkout-offer-modal .checkout-offer-modal-close { background: transparent; color: inherit; border: 0; font-size: 1.5rem; line-height: 1; padding: 8px; }
+#checkout-offer-modal .checkout-offer-modal-footer { display: flex; justify-content: flex-end; padding: 12px; }
+@media (max-width: 767px) { #checkout-offer .checkout-offer-grid { grid-template-columns: repeat(min(2, var(--co-columns)), minmax(0, 1fr)); } }
+@media (max-width: 575px) { #checkout-offer .checkout-offer-grid { grid-template-columns: minmax(0, 1fr); } }

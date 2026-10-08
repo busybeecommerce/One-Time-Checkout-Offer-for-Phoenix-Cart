@@ -29,6 +29,7 @@ $ready = checkout_offer_schema_ready();
 $tierId = (int)($_GET['tier_id'] ?? 0);
 $tier = $ready && $tierId > 0 ? checkout_offer_admin_tier($tierId) : null;
 $editTier = $tier ?? ['id' => 0, 'title' => '', 'minimum' => '0', 'maximum' => '', 'priority' => '0', 'enabled' => 1];
+$appearance = checkout_offer_appearance();
 require 'includes/template_top.php';
 ?>
 <div class="checkout-offer-admin">
@@ -45,8 +46,32 @@ require 'includes/template_top.php';
           <h2 class="h5"><?= CHECKOUT_OFFER_ADMIN_SETUP ?></h2>
           <?= checkout_offer_admin_form('settings') ?>
             <label class="form-check mb-3"><input class="form-check-input" type="checkbox" name="enabled" <?= checkout_offer_enabled() ? 'checked' : '' ?>> <?= CHECKOUT_OFFER_ADMIN_ENABLED ?></label>
+            <label class="form-label" for="display-mode"><?= CHECKOUT_OFFER_ADMIN_DISPLAY_MODE ?></label>
+            <select class="form-select form-select-sm mb-3" id="display-mode" name="display_mode">
+              <option value="inline" <?= 'inline' === checkout_offer_display_mode() ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_INLINE ?></option>
+              <option value="modal" <?= 'modal' === checkout_offer_display_mode() ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_MODAL ?></option>
+            </select>
+            <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_MODAL_HELP ?></p>
             <label class="form-label" for="accent"><?= CHECKOUT_OFFER_ADMIN_ACCENT ?></label>
             <input class="form-control form-control-color mb-3" type="color" id="accent" name="accent" value="<?= checkout_offer_escape(defined('CHECKOUT_OFFER_ACCENT') ? CHECKOUT_OFFER_ACCENT : '#6f42c1') ?>">
+            <details class="mb-3"><summary class="fw-semibold"><?= CHECKOUT_OFFER_ADMIN_APPEARANCE ?></summary>
+              <div class="row g-2 mt-1">
+                <?php foreach (checkout_offer_appearance_fields() as $key => $field) { ?>
+                  <div class="col-6">
+                    <label class="form-label small" for="style-<?= $key ?>"><?= constant('CHECKOUT_OFFER_ADMIN_STYLE_' . strtoupper($key)) ?></label>
+                    <?php if ('select' === $field['type']) { ?>
+                      <select class="form-select form-select-sm" id="style-<?= $key ?>" name="appearance[<?= $key ?>]">
+                        <?php foreach ($field['choices'] as $choice) { ?>
+                          <option value="<?= $choice ?>" <?= $appearance[$key] === $choice ? 'selected' : '' ?>><?= constant('CHECKOUT_OFFER_ADMIN_CHOICE_' . strtoupper($choice)) ?></option>
+                        <?php } ?>
+                      </select>
+                    <?php } else { ?>
+                      <input class="form-control form-control-sm<?= 'color' === $field['type'] ? ' form-control-color' : '' ?>" id="style-<?= $key ?>" type="<?= $field['type'] ?>" name="appearance[<?= $key ?>]" value="<?= checkout_offer_escape((string)$appearance[$key]) ?>" <?= 'number' === $field['type'] ? 'min="' . $field['min'] . '" max="' . $field['max'] . '" step="1"' : '' ?>>
+                    <?php } ?>
+                  </div>
+                <?php } ?>
+              </div>
+            </details>
             <button class="btn btn-primary btn-sm"><?= CHECKOUT_OFFER_ADMIN_SAVE ?></button>
           </form>
         </div></section>

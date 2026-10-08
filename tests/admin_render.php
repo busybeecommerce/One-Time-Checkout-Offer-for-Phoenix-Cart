@@ -85,7 +85,7 @@ if (in_array('--expect-broken', $argv, true)) {
 if (null !== $error) {
     throw $error;
 }
-$expected = 'install' === $scenario ? ['Install database tables'] : ['Setup', 'New tier', 'Uninstall'];
+$expected = 'install' === $scenario ? ['Install database tables'] : ['Setup', 'New tier', 'Uninstall', 'name="display_mode"', 'Modal popup', 'name="appearance[modal_width]"', 'name="appearance[background]"'];
 if ('tier' === $scenario) {
     $expected[] = 'name="products_id"';
     $expected[] = 'name="item_id" value="1"';

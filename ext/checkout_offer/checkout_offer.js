@@ -11,6 +11,63 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     // The hook is inside the payment form; move its block before payment methods.
     form.prepend(section);
+    if (section.dataset.displayMode === 'modal') {
+        const dialog = document.createElement('dialog');
+        if (typeof dialog.showModal === 'function') {
+            dialog.id = 'checkout-offer-modal';
+            dialog.style.cssText = section.style.cssText;
+            dialog.setAttribute('aria-labelledby', 'checkout-offer-title');
+            const launcher = document.createElement('button');
+            launcher.type = 'button';
+            launcher.className = 'btn btn-outline-primary mb-3';
+            launcher.textContent = section.dataset.openLabel;
+            launcher.setAttribute('aria-haspopup', 'dialog');
+            launcher.setAttribute('aria-controls', dialog.id);
+            const controls = document.createElement('div');
+            controls.className = 'checkout-offer-modal-controls';
+            const close = document.createElement('button');
+            close.type = 'button';
+            close.className = 'checkout-offer-modal-close';
+            close.textContent = '×';
+            close.setAttribute('aria-label', section.dataset.closeLabel);
+            controls.append(close);
+            const footer = document.createElement('div');
+            footer.className = 'checkout-offer-modal-footer';
+            const dismiss = document.createElement('button');
+            dismiss.type = 'button';
+            dismiss.className = 'btn btn-outline-secondary btn-sm';
+            dismiss.textContent = section.dataset.dismissLabel;
+            footer.append(dismiss);
+            dialog.append(controls, section, footer);
+            // Keep every offer field and submit button inside the original payment form.
+            form.prepend(dialog);
+            form.prepend(launcher);
+            launcher.addEventListener('click', function () { dialog.showModal(); });
+            close.addEventListener('click', function () { dialog.close(); });
+            dismiss.addEventListener('click', function () { dialog.close(); });
+            dialog.addEventListener('close', function () { launcher.focus(); });
+            dialog.addEventListener('click', function (event) {
+                if (event.target !== dialog) {
+                    return;
+                }
+                const bounds = dialog.getBoundingClientRect();
+                if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) {
+                    dialog.close();
+                }
+            });
+            const key = 'checkout-offer-viewed:' + section.dataset.offerKey;
+            let viewed = false;
+            try {
+                viewed = sessionStorage.getItem(key) === '1';
+                sessionStorage.setItem(key, '1');
+            } catch (error) {
+                // Storage may be disabled; the modal remains usable without remembering dismissal.
+            }
+            if (!viewed) {
+                dialog.showModal();
+            }
+        }
+    }
     section.querySelectorAll('[data-offer-card]').forEach(function (card) {
         const currency = JSON.parse(card.dataset.currency);
         function format(price) {
