@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.5
+
+- Present Maintenance as an open danger area with red warning styling, permanent-removal wording and a distinct confirmation checkbox. Preserve existing uninstall validation and historical order records.
+
 ## 1.7.4
 
 - Add heading-area and product-image background colour controls for inline and modal offers. Clarify heading font size and text colour labels. Blank colours retain existing Classic/template defaults; no migration or reinstall.
