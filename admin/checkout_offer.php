@@ -40,7 +40,7 @@ if (!is_string($activeTab) || !in_array($activeTab, ['setup', 'templates', 'appe
 }
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.4')) ?>">
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.5')) ?>">
 <script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.2')) ?>" defer></script>
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
@@ -200,13 +200,16 @@ require 'includes/template_top.php';
       </div>
     </div>
     </section>
-    <section id="co-panel-maintenance" class="co-admin-panel" data-co-panel="maintenance"><h2><?= CHECKOUT_OFFER_ADMIN_UNINSTALL ?></h2>
-    <details class="co-admin-uninstall mt-4"><summary><?= CHECKOUT_OFFER_ADMIN_UNINSTALL ?></summary>
-      <p class="small mt-3"><?= CHECKOUT_OFFER_ADMIN_UNINSTALL_HELP ?></p>
+    <section id="co-panel-maintenance" class="co-admin-panel" data-co-panel="maintenance"><h2><?= CHECKOUT_OFFER_ADMIN_DANGER_ZONE ?></h2>
+    <details class="co-admin-uninstall" open><summary><span class="co-admin-danger-icon" aria-hidden="true">&#9888;</span><?= CHECKOUT_OFFER_ADMIN_REMOVE_ADDON ?></summary>
+      <div class="co-admin-danger-body">
+      <p class="co-admin-danger-warning"><?= CHECKOUT_OFFER_ADMIN_PERMANENT_REMOVAL ?></p>
+      <p class="small"><?= CHECKOUT_OFFER_ADMIN_UNINSTALL_HELP ?></p>
       <?= checkout_offer_admin_form('uninstall') ?>
         <label class="form-check my-3"><input class="form-check-input" type="checkbox" name="confirm_remove" value="yes" required> <?= CHECKOUT_OFFER_ADMIN_CONFIRM_REMOVE ?></label>
         <button class="btn btn-danger btn-sm"><?= CHECKOUT_OFFER_ADMIN_UNINSTALL ?></button>
       </form>
+      </div>
     </details>
     </section>
     </div>
