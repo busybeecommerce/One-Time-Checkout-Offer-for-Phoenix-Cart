@@ -40,7 +40,7 @@ if (!is_string($activeTab) || !in_array($activeTab, ['setup', 'templates', 'appe
 }
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.2')) ?>">
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.4')) ?>">
 <script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.2')) ?>" defer></script>
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
@@ -96,7 +96,7 @@ require 'includes/template_top.php';
           <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_TEXT_STYLE_HELP ?></p>
           <div class="co-appearance-groups">
             <?php foreach ([
-                CHECKOUT_OFFER_ADMIN_GROUP_COLOURS => ['background', 'text', 'card_background', 'border', 'button_background', 'button_text'],
+                CHECKOUT_OFFER_ADMIN_GROUP_COLOURS => ['background', 'text', 'card_background', 'border', 'button_background', 'button_text', 'heading_background', 'image_background'],
                 CHECKOUT_OFFER_ADMIN_GROUP_LAYOUT => ['product_layout', 'columns', 'modal_width', 'content_alignment', 'products_alignment'],
                 CHECKOUT_OFFER_ADMIN_GROUP_SPACING => ['radius', 'padding', 'gap', 'border_width', 'image_height', 'font_size'],
                 CHECKOUT_OFFER_ADMIN_GROUP_BUTTONS => ['button_style', 'shadow'],

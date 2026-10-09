@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.4
+
+- Add heading-area and product-image background colour controls for inline and modal offers. Clarify heading font size and text colour labels. Blank colours retain existing Classic/template defaults; no migration or reinstall.
+
 ## 1.7.3
 
 - Refine Classic inline offer cards with a separated introduction, subtle image surfaces, stronger price hierarchy and compact purchase rows. Retain option-bearing card alignment, configured colours/sizes, custom text and existing modal/template styling.

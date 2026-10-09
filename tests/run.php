@@ -78,7 +78,7 @@ if (in_array('--modal', $argv, true)) {
 }
 $fixtureAppearance = in_array('--styled', $argv, true) ? ['background' => '#eef6ff', 'radius' => 18, 'padding' => 24, 'image_height' => 180, 'columns' => 2, 'button_style' => 'solid', 'modal_width' => 800, 'content_alignment' => 'center', 'products_alignment' => 'center'] : [];
 if (in_array('--custom-text', $argv, true)) {
-    $fixtureAppearance += ['heading_text' => 'Your <b>exclusive</b> offer', 'description_text' => "Chosen for you\nAdd something special", 'add_text' => 'Choose this offer', 'dismiss_text' => 'Continue without an offer', 'heading_size' => 26, 'description_size' => 17, 'heading_weight' => '600', 'description_style' => 'italic', 'heading_colour' => '#254a68'];
+    $fixtureAppearance += ['heading_text' => 'Your <b>exclusive</b> offer', 'description_text' => "Chosen for you\nAdd something special", 'add_text' => 'Choose this offer', 'dismiss_text' => 'Continue without an offer', 'heading_size' => 26, 'description_size' => 17, 'heading_weight' => '600', 'description_style' => 'italic', 'heading_colour' => '#254a68', 'heading_background' => '#e1edf8', 'image_background' => '#fff4dc'];
 }
 foreach ($argv as $argument) {
     if (str_starts_with($argument, '--template=')) {
@@ -429,6 +429,17 @@ foreach (['heading_text' => str_repeat('x', 201), 'description_text' => [], 'hea
     rejected(static fn() => checkout_offer_sanitise_appearance([$key => $value], true), 'Invalid custom text or typography rejected');
 }
 expect(!str_contains(checkout_offer_style(checkout_offer_sanitise_appearance([])), '--co-heading-size:'), 'Default heading size preserves template');
+checkout_offer_admin_action('settings', ['appearance' => ['heading_background' => '#e1edf8', 'image_background' => '#fff4dc']]);
+$colourSettings = json_decode(array_slice($GLOBALS['db']->writes, -4, 3)[2][1]['configuration_value'], true);
+expect('#e1edf8' === $colourSettings['heading_background'] && '#fff4dc' === $colourSettings['image_background'], 'Heading and image backgrounds saved');
+expect(str_contains(checkout_offer_style($colourSettings), '--co-heading-background:#e1edf8;') && str_contains(checkout_offer_style($colourSettings), '--co-image-background:#fff4dc;'), 'Saved background colours reach renderer');
+foreach (['classic', 'red'] as $template) {
+    $defaults = checkout_offer_style(checkout_offer_sanitise_appearance(['template' => $template, 'heading_background' => '', 'image_background' => ''], true));
+    expect(!str_contains($defaults, '--co-heading-background:') && !str_contains($defaults, '--co-image-background:'), 'Cleared colours retain design defaults');
+    foreach (['heading_background', 'image_background'] as $key) {
+        rejected(static fn() => checkout_offer_sanitise_appearance([$key => 'red;display:none'], true), 'Unsafe background colour rejected');
+    }
+}
 checkout_offer_admin_action('save_tier', ['title' => 'Unlimited', 'minimum' => '0', 'maximum' => '', 'priority' => '3', 'enabled' => 'on']);
 $tierWrite = $GLOBALS['db']->writes[count($GLOBALS['db']->writes) - 1];
 expect('NULL' === $tierWrite[1]['maximum'], 'Unlimited tiers use Phoenix SQL NULL marker');

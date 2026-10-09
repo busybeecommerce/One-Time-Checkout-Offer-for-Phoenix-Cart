@@ -38,6 +38,8 @@ function checkout_offer_appearance_fields(): array
         'border' => ['type' => 'color', 'default' => '#dee2e6'],
         'button_background' => ['type' => 'color', 'default' => '#0d6efd'],
         'button_text' => ['type' => 'color', 'default' => '#ffffff'],
+        'heading_background' => ['type' => 'optional_color', 'default' => ''],
+        'image_background' => ['type' => 'optional_color', 'default' => ''],
         'radius' => ['type' => 'number', 'default' => 6, 'min' => 0, 'max' => 40],
         'padding' => ['type' => 'number', 'default' => 16, 'min' => 0, 'max' => 60],
         'gap' => ['type' => 'number', 'default' => 16, 'min' => 0, 'max' => 48],
