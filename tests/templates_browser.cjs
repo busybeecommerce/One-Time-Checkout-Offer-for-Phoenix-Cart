@@ -8,8 +8,6 @@ const { chromium } = require('playwright');
     const bootstrap = fs.readFileSync(process.env.CHECKOUT_OFFER_BOOTSTRAP_CSS || require.resolve('bootstrap/dist/css/bootstrap.min.css'), 'utf8');
     const browser = await chromium.launch({ headless: true, ...(process.env.CHECKOUT_OFFER_BROWSER ? { channel: process.env.CHECKOUT_OFFER_BROWSER } : {}) });
     const context = await browser.newContext();
-    // Each visual variant represents a fresh basket; once-per-basket behaviour has its own regression.
-    await context.addInitScript(() => sessionStorage.clear());
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
@@ -27,6 +25,7 @@ const { chromium } = require('playwright');
         for (const mode of ['inline', 'modal']) {
             await page.setViewportSize({ width: 1280, height: 900 });
             await page.goto('http://templates.test/' + mode + '-' + theme);
+            if (mode === 'modal') await page.locator('#checkout-offer-modal').evaluate(node => Promise.all(node.getAnimations().map(animation => animation.finished)));
             const section = page.locator('#checkout-offer');
             assert.equal(await section.getAttribute('data-template'), theme);
             assert.equal(await page.locator('.checkout-offer-badge').isVisible(), true);
@@ -67,6 +66,7 @@ const { chromium } = require('playwright');
                                 buttonRight: button.right, textAlign: getComputedStyle(node.querySelector('h3')).textAlign };
                         });
                         assert.equal(bounds.textAlign, alignment);
+                        assert.ok(await product.locator('button').evaluate(node => node.getBoundingClientRect().width < node.parentElement.getBoundingClientRect().width * .85));
                         if (alignment === 'center') {
                             assert.ok(Math.abs(bounds.imageCenter - bounds.center) < 2);
                             assert.ok(Math.abs(bounds.buttonCenter - bounds.center) < 2);
@@ -83,14 +83,17 @@ const { chromium } = require('playwright');
                 await page.locator('#checkout-offer-modal').evaluate(node => node.style.setProperty('--co-content-alignment', 'center'));
                 await page.setViewportSize({ width: 1280, height: 900 });
             }
+            await page.locator('.checkout-offer-image').evaluateAll(images => Promise.all(images.map(image => image.decode())));
             await page.screenshot({ path: 'build/template-' + theme + '-' + mode + '.png', fullPage: true });
             await page.setViewportSize({ width: 375, height: 812 });
             assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+            await page.locator('.checkout-offer-image').evaluateAll(images => Promise.all(images.map(image => image.decode())));
             await page.screenshot({ path: 'build/template-' + theme + '-' + mode + '-mobile.png', fullPage: true });
             if (mode === 'modal') {
                 await page.getByRole('button', { name: 'Close checkout offers' }).click();
                 assert.equal(await page.locator('#checkout-offer-modal').evaluate(node => node.open), false);
-                await page.getByRole('button', { name: 'View checkout offers' }).click();
+                assert.equal(await page.getByRole('button', { name: 'View checkout offers' }).count(), 0);
+                await page.reload();
                 assert.equal(await page.locator('#checkout-offer-modal').evaluate(node => node.open), true);
             }
         }
@@ -103,5 +106,5 @@ const { chromium } = require('playwright');
     assert.equal(await staticPage.locator('[data-offer-saving]').nth(1).textContent(), '£8.40');
     assert.deepEqual(errors, []);
     await browser.close();
-    console.log('Template browser checks passed: all four designs in inline/modal, mobile, price/savings, submission, close/reopen and no-JavaScript rendering.');
+    console.log('Template browser checks passed: all four designs in inline/modal, mobile, price/savings, submission, dismiss/reload and no-JavaScript rendering.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

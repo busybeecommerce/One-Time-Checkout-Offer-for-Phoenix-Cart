@@ -290,6 +290,27 @@ expect(str_contains($html, 'Test &lt;product&gt;'), 'Product title escaped');
 expect(!str_contains($html, '#123456') && !str_contains($html, '--co-accent'), 'Legacy accent colour is not rendered');
 expect(!str_contains($html, 'value="1" formaction'), 'Existing product hidden');
 
+$paymentHook = new hook_shop_checkout_payment_checkoutOffer();
+$savedCustomer = $_SESSION['customer_id'];
+unset($_SESSION['customer_id']);
+expect('' === $paymentHook->listen_injectFormDisplay(), 'No offers rendered without a customer');
+$_SESSION['customer_id'] = $savedCustomer;
+$GLOBALS['db']->tiers[0]['enabled'] = 0;
+expect('' === $paymentHook->listen_injectFormDisplay(), 'No modal content for a disabled eligible tier');
+$GLOBALS['db']->tiers[0]['enabled'] = 1;
+$savedItems = $GLOBALS['db']->items;
+$GLOBALS['db']->items = [];
+expect('' === $paymentHook->listen_injectFormDisplay(), 'No modal content when no offered products exist');
+$GLOBALS['db']->items = $savedItems;
+foreach ([2, 3] as $id) $GLOBALS['db']->products[$id]['status'] = 0;
+expect('' === $paymentHook->listen_injectFormDisplay(), 'No modal content when all offered products are inactive');
+foreach ([2, 3] as $id) {
+    $GLOBALS['db']->products[$id]['status'] = 1;
+    $GLOBALS['db']->products[$id]['in_stock'] = 0;
+}
+expect('' === $paymentHook->listen_injectFormDisplay(), 'No modal content when all offered products lack stock');
+foreach ([2, 3] as $id) $GLOBALS['db']->products[$id]['in_stock'] = 5;
+
 checkout_offer_accept($GLOBALS['order'], 2, []);
 expect(!isset($_SESSION['shipping']), 'Adding invalidates shipping quote');
 expect($_SESSION['cart']->in_cart(2), 'Product added');
