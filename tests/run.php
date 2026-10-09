@@ -76,8 +76,14 @@ define('CHECKOUT_OFFER_ACCENT', '#123456');
 if (in_array('--modal', $argv, true)) {
     define('CHECKOUT_OFFER_DISPLAY_MODE', 'modal');
 }
-if (in_array('--styled', $argv, true)) {
-    define('CHECKOUT_OFFER_APPEARANCE', '{"background":"#eef6ff","radius":18,"padding":24,"image_height":180,"columns":2,"button_style":"solid","modal_width":800,"content_alignment":"center","products_alignment":"center"}');
+$fixtureAppearance = in_array('--styled', $argv, true) ? ['background' => '#eef6ff', 'radius' => 18, 'padding' => 24, 'image_height' => 180, 'columns' => 2, 'button_style' => 'solid', 'modal_width' => 800, 'content_alignment' => 'center', 'products_alignment' => 'center'] : [];
+foreach ($argv as $argument) {
+    if (str_starts_with($argument, '--template=')) {
+        $fixtureAppearance['template'] = substr($argument, 11);
+    }
+}
+if ($fixtureAppearance) {
+    define('CHECKOUT_OFFER_APPEARANCE', json_encode($fixtureAppearance, JSON_THROW_ON_ERROR));
 }
 define('STOCK_CHECK', 'true');
 define('DEFAULT_ORDERS_STATUS_ID', 1);
@@ -256,6 +262,8 @@ expect(!defined('DIR_WS_IMAGES'), 'Do not mask unsupported legacy image constant
 expect(str_contains($html, 'src="images/test.png"'), 'Offer image uses the Phoenix images path without legacy constants');
 expect(str_contains($html, 'data-display-mode="' . checkout_offer_display_mode() . '"'), 'Configured display mode is rendered');
 expect(str_contains($html, '--co-image-height:'), 'Appearance values rendered as scoped CSS properties');
+expect(str_contains($html, 'data-template="' . checkout_offer_appearance()['template'] . '"'), 'Validated template is rendered');
+expect(str_contains($html, 'data-offer-saving') && str_contains($html, 'data-button-price'), 'Savings and price-labelled button render without JavaScript');
 expect(str_contains((new hook_shop_siteWide_checkoutOffer())->listen_injectSiteStart(), 'checkout_offer.css'), 'Appearance stylesheet is loaded');
 if (in_array('--render', $argv, true)) {
     $renderDirectory = $root . '/build';
@@ -263,6 +271,9 @@ if (in_array('--render', $argv, true)) {
         mkdir($renderDirectory, 0777, true);
     }
     $suffix = in_array('--modal', $argv, true) ? 'modal' : 'inline';
+    if ('classic' !== checkout_offer_appearance()['template']) {
+        $suffix .= '-' . checkout_offer_appearance()['template'];
+    }
     file_put_contents($renderDirectory . '/storefront-' . $suffix . '.html',
         '<form id="check_form" method="post" action="checkout_confirmation.php"><input type="hidden" name="formid" value="secret">'
         . '<h1>Payment From You</h1><div id="payment-methods"><h2>Payment Method</h2><input type="radio" name="payment" value="cod" checked>Cash on delivery</div>'
@@ -355,12 +366,17 @@ expect('right' === json_decode($settingsWrites[2][1]['configuration_value'], tru
 expect('update' === $settingsWrites[2][2], 'Appearance updates store configuration');
 expect(str_contains($GLOBALS['db']->writes[count($GLOBALS['db']->writes) - 1], "configuration_key = 'CHECKOUT_OFFER_ACCENT'"), 'Saving Setup removes legacy accent setting');
 expect(!str_contains(checkout_offer_style(checkout_offer_appearance()), 'accent'), 'Legacy accent has no styling effect');
-foreach (['radius' => 41, 'image_height' => 301, 'columns' => 5, 'background' => 'red;display:none', 'shadow' => 'invalid', 'content_alignment' => 'justify', 'products_alignment' => 'center;display:none'] as $key => $value) {
+foreach (['radius' => 41, 'image_height' => 301, 'columns' => 5, 'background' => 'red;display:none', 'shadow' => 'invalid', 'content_alignment' => 'justify', 'products_alignment' => 'center;display:none', 'template' => 'red" onclick="bad'] as $key => $value) {
     rejected(static fn() => checkout_offer_sanitise_appearance([$key => $value], true), 'Reject out-of-range or unsafe appearance');
 }
 expect(6 === checkout_offer_sanitise_appearance(['radius' => 41])['radius'], 'Invalid stored appearance safely defaults');
 expect(0 === checkout_offer_sanitise_appearance(['radius' => 0], true)['radius'], 'Minimum radius accepted');
 expect(300 === checkout_offer_sanitise_appearance(['image_height' => 300], true)['image_height'], 'Maximum image size accepted');
+foreach (array_keys(checkout_offer_templates()) as $template) {
+    expect($template === checkout_offer_sanitise_appearance(['template' => $template], true)['template'], 'Known template accepted');
+}
+expect('classic' === checkout_offer_sanitise_appearance(['template' => 'unknown'])['template'], 'Invalid stored template falls back to Classic');
+expect(str_contains(checkout_offer_style(checkout_offer_sanitise_appearance(['template' => 'red'])), '--co-button-background:#d91920;'), 'Template palette applied');
 checkout_offer_admin_action('save_tier', ['title' => 'Unlimited', 'minimum' => '0', 'maximum' => '', 'priority' => '3', 'enabled' => 'on']);
 $tierWrite = $GLOBALS['db']->writes[count($GLOBALS['db']->writes) - 1];
 expect('NULL' === $tierWrite[1]['maximum'], 'Unlimited tiers use Phoenix SQL NULL marker');
@@ -383,6 +399,7 @@ expect(!isset($_SESSION['shipping']), 'Valid POST cannot keep outdated delivery 
 
 echo "Checkout Offer: $checks checks passed (Phoenix $phoenixVersion; tax display " . DISPLAY_PRICE_WITH_TAX . ").\n";
 if (!in_array('--net', $argv, true)) {
-    passthru(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(__FILE__) . ' ' . escapeshellarg($reference) . ' --net', $status);
+    $childArguments = array_filter(array_slice($argv, 2), static fn(string $argument): bool => '--render' !== $argument);
+    passthru(escapeshellarg(PHP_BINARY) . ' ' . escapeshellarg(__FILE__) . ' ' . escapeshellarg($reference) . ' --net ' . implode(' ', array_map('escapeshellarg', $childArguments)), $status);
     expect(0 === $status, 'Tax-exclusive test process failed');
 }

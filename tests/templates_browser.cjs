@@ -1,0 +1,72 @@
+'use strict';
+
+const assert = require('node:assert/strict');
+const fs = require('node:fs');
+const { chromium } = require('playwright');
+
+(async function () {
+    const bootstrap = fs.readFileSync(process.env.CHECKOUT_OFFER_BOOTSTRAP_CSS || require.resolve('bootstrap/dist/css/bootstrap.min.css'), 'utf8');
+    const browser = await chromium.launch({ headless: true, ...(process.env.CHECKOUT_OFFER_BROWSER ? { channel: process.env.CHECKOUT_OFFER_BROWSER } : {}) });
+    const context = await browser.newContext();
+    // Each visual variant represents a fresh basket; once-per-basket behaviour has its own regression.
+    await context.addInitScript(() => sessionStorage.clear());
+    const page = await context.newPage();
+    const errors = [];
+    page.on('pageerror', error => errors.push(error.message));
+    const css = fs.readFileSync('ext/checkout_offer/checkout_offer.css', 'utf8');
+    const js = fs.readFileSync('ext/checkout_offer/checkout_offer.js', 'utf8');
+    await context.route('http://templates.test/**', route => {
+        if (route.request().url().endsWith('.png')) {
+            return route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect x="20" y="10" width="60" height="80" rx="8" fill="#334155"/></svg>' });
+        }
+        const fixture = new URL(route.request().url()).pathname.slice(1);
+        const html = fs.readFileSync('build/storefront-' + fixture + '.html', 'utf8');
+        return route.fulfill({ contentType: 'text/html', body: '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>' + bootstrap + 'body{font:16px Arial;margin:24px}' + css + '</style>' + html + '<script>' + js + '</script>' });
+    });
+    for (const theme of ['red', 'honey', 'midnight', 'green']) {
+        for (const mode of ['inline', 'modal']) {
+            await page.setViewportSize({ width: 1280, height: 900 });
+            await page.goto('http://templates.test/' + mode + '-' + theme);
+            const section = page.locator('#checkout-offer');
+            assert.equal(await section.getAttribute('data-template'), theme);
+            assert.equal(await page.locator('.checkout-offer-badge').isVisible(), true);
+            assert.equal(await page.locator('.checkout-offer-note').isVisible(), true);
+            assert.equal(await page.locator('.checkout-offer-card').first().evaluate(node => node.getBoundingClientRect().width > node.parentElement.getBoundingClientRect().width * .9), true);
+            const product = page.locator('[data-offer-card]').nth(1);
+            assert.equal(await product.locator('[data-offer-saving]').textContent(), '£8.40');
+            assert.equal(await product.locator('[data-button-price]').textContent(), '£9.60');
+            assert.equal(await product.locator('button').evaluate(node => node.form.id), 'check_form');
+            await page.evaluate(() => document.querySelector('form').addEventListener('submit', event => {
+                event.preventDefault(); window.submission = Object.fromEntries(new FormData(event.target, event.submitter));
+            }));
+            await product.locator('button').click();
+            const submission = await page.evaluate(() => window.submission);
+            assert.equal(submission.formid, 'secret');
+            assert.equal(submission.checkout_offer_product, '3');
+            assert.equal(submission['checkout_offer_options[3][4]'], '8');
+            if (mode === 'modal') {
+                assert.equal(await section.evaluate(node => getComputedStyle(node).paddingTop), '0px');
+                await page.locator('#checkout-offer-modal').evaluate(node => node.style.setProperty('--co-modal-width', '560px'));
+            }
+            await page.screenshot({ path: 'build/template-' + theme + '-' + mode + '.png', fullPage: true });
+            await page.setViewportSize({ width: 375, height: 812 });
+            assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+            await page.screenshot({ path: 'build/template-' + theme + '-' + mode + '-mobile.png', fullPage: true });
+            if (mode === 'modal') {
+                await page.getByRole('button', { name: 'Close checkout offers' }).click();
+                assert.equal(await page.locator('#checkout-offer-modal').evaluate(node => node.open), false);
+                await page.getByRole('button', { name: 'View checkout offers' }).click();
+                assert.equal(await page.locator('#checkout-offer-modal').evaluate(node => node.open), true);
+            }
+        }
+    }
+    const staticContext = await browser.newContext({ javaScriptEnabled: false });
+    await staticContext.route('http://templates.test/**', route => route.fulfill({ contentType: 'text/html', body: '<meta charset="utf-8"><style>' + css + '</style>' + fs.readFileSync('build/storefront-modal-red.html', 'utf8') }));
+    const staticPage = await staticContext.newPage();
+    await staticPage.goto('http://templates.test/modal-red');
+    assert.equal(await staticPage.locator('#checkout-offer').isVisible(), true);
+    assert.equal(await staticPage.locator('[data-offer-saving]').nth(1).textContent(), '£8.40');
+    assert.deepEqual(errors, []);
+    await browser.close();
+    console.log('Template browser checks passed: all four designs in inline/modal, mobile, price/savings, submission, close/reopen and no-JavaScript rendering.');
+})().catch(error => { console.error(error); process.exitCode = 1; });

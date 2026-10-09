@@ -45,6 +45,15 @@
 .checkout-offer-admin .co-admin-product-rule .form-label { width: 100%; }
 .checkout-offer-admin .co-admin-empty p { margin: 0; color: #66727e; }
 .checkout-offer-admin .co-admin-uninstall { padding: 1rem 1.25rem; border: 1px solid var(--co-admin-border); border-radius: .75rem; background: #fff; }
+.checkout-offer-admin .co-template-picker legend { font-size: .85rem; font-weight: 700; }
+.checkout-offer-admin .co-template-choices { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .6rem; margin-bottom: 1rem; }
+.checkout-offer-admin .co-template-choice { padding: .6rem; border: 1px solid var(--co-admin-border); border-radius: .5rem; background: #fff; cursor: pointer; font-size: .75rem; }
+.checkout-offer-admin .co-template-choice:has(input:checked) { border-color: #a94d00; box-shadow: 0 0 0 1px #a94d00; }
+.checkout-offer-admin .co-template-name { font-weight: 600; }
+.checkout-offer-admin .co-template-preview { display: block; position: relative; height: 65px; margin-top: .4rem; overflow: hidden; border: 1px solid #dee2e6; border-radius: 4px; background: #fff; }
+.checkout-offer-admin .co-template-preview-header { display: block; height: 22px; background: var(--co-preview-colour); }
+.checkout-offer-admin .co-template-preview-product { position: absolute; top: 29px; left: 8px; width: 22px; height: 24px; border-radius: 3px; background: #e9edf1; }
+.checkout-offer-admin .co-template-preview-button { position: absolute; left: 36px; right: 8px; bottom: 8px; height: 12px; border-radius: 2px; background: var(--co-preview-button); }
 @media (max-width: 575px) {
     .checkout-offer-admin { padding: .75rem; }
     .checkout-offer-admin .co-admin-header { padding: 1rem; }

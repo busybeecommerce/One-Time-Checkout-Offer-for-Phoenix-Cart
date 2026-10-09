@@ -15,6 +15,7 @@ document.addEventListener('DOMContentLoaded', function () {
         const dialog = document.createElement('dialog');
         if (typeof dialog.showModal === 'function') {
             dialog.id = 'checkout-offer-modal';
+            dialog.dataset.template = section.dataset.template;
             dialog.style.cssText = section.style.cssText;
             dialog.setAttribute('aria-labelledby', 'checkout-offer-title');
             const launcher = document.createElement('button');
@@ -67,13 +68,16 @@ document.addEventListener('DOMContentLoaded', function () {
     }
     section.querySelectorAll('[data-offer-card]').forEach(function (card) {
         const currency = JSON.parse(card.dataset.currency);
-        function format(price) {
+        function amount(price) {
             const tax = card.dataset.taxIncluded === '1' ? 1 + Number(card.dataset.tax) / 100 : 1;
             const scale = Math.pow(10, Number(currency.decimal_places));
             // Phoenix rounds the unit price before converting its currency.
             const unit = Math.round((price * tax + Number.EPSILON) * scale) / scale;
             const converted = Math.round((unit * Number(currency.value) + Number.EPSILON) * scale) / scale;
-            const parts = converted.toFixed(Number(currency.decimal_places)).split('.');
+            return converted;
+        }
+        function formatAmount(value) {
+            const parts = value.toFixed(Number(currency.decimal_places)).split('.');
             parts[0] = parts[0].replace(/\B(?=(\d{3})+(?!\d))/g, currency.thousands_point);
             return currency.symbol_left + parts.join(currency.decimal_point) + currency.symbol_right;
         }
@@ -85,8 +89,12 @@ document.addEventListener('DOMContentLoaded', function () {
             normal = Math.max(0, normal);
             const value = Number(card.dataset.value);
             const offer = Math.round(Math.min(normal, card.dataset.mode === 'fixed' ? value : normal * (1 - value / 100)) * 10000) / 10000;
-            card.querySelector('[data-normal-price]').textContent = format(normal);
-            card.querySelector('[data-offer-price]').textContent = format(offer);
+            card.querySelector('[data-normal-price]').textContent = formatAmount(amount(normal));
+            card.querySelector('[data-offer-price]').textContent = formatAmount(amount(offer));
+            const saving = card.querySelector('[data-offer-saving]');
+            const buttonPrice = card.querySelector('[data-button-price]');
+            if (saving) saving.textContent = formatAmount(Math.max(0, amount(normal) - amount(offer)));
+            if (buttonPrice) buttonPrice.textContent = formatAmount(amount(offer));
         }
         card.querySelectorAll('[data-offer-option]').forEach(function (select) {
             select.addEventListener('change', refresh);

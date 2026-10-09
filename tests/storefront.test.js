@@ -9,6 +9,8 @@ const vm = require('node:vm');
 test('offer moves above payment methods and option changes recalculate displayed prices', function () {
     const normal = {textContent: ''};
     const offer = {textContent: ''};
+    const saving = {textContent: ''};
+    const buttonPrice = {textContent: ''};
     let optionChange;
     const select = {
         selectedOptions: [{dataset: {adjustment: '3'}}],
@@ -21,7 +23,7 @@ test('offer moves above payment methods and option changes recalculate displayed
         dataset: {base: '12', mode: 'percent', value: '25', tax: '20', taxIncluded: '1',
             currency: JSON.stringify({value: 1.5, symbol_left: '$', symbol_right: '', decimal_places: 2, decimal_point: '.', thousands_point: ','})},
         querySelectorAll: function () { return [select]; },
-        querySelector: function (selector) { return selector === '[data-normal-price]' ? normal : offer; }
+        querySelector: function (selector) { return {'[data-normal-price]': normal, '[data-offer-price]': offer, '[data-offer-saving]': saving, '[data-button-price]': buttonPrice}[selector] || null; }
     };
     let firstChild;
     const form = {prepend: function (element) { firstChild = element; }};
@@ -35,10 +37,14 @@ test('offer moves above payment methods and option changes recalculate displayed
     assert.equal(firstChild, section);
     assert.equal(normal.textContent, '$27.00');
     assert.equal(offer.textContent, '$20.25');
+    assert.equal(saving.textContent, '$6.75');
+    assert.equal(buttonPrice.textContent, '$20.25');
     select.selectedOptions[0].dataset.adjustment = '8';
     optionChange();
     assert.equal(normal.textContent, '$36.00');
     assert.equal(offer.textContent, '$27.00');
+    assert.equal(saving.textContent, '$9.00');
+    assert.equal(buttonPrice.textContent, '$27.00');
     card.dataset.mode = 'fixed';
     card.dataset.value = '8';
     optionChange();

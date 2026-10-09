@@ -34,11 +34,13 @@ class hook_shop_checkout_payment_checkoutOffer {
         $appearance = checkout_offer_appearance();
         $key = hash('sha256', checkout_offer_basket_signature() . ':' . (int)$tier['id']);
         return '<section id="checkout-offer" class="mb-4" data-display-mode="' . checkout_offer_display_mode()
-            . '" data-offer-key="' . $key . '" data-shadow="' . $appearance['shadow'] . '" data-button-style="' . $appearance['button_style']
+            . '" data-offer-key="' . $key . '" data-template="' . $appearance['template'] . '" data-shadow="' . $appearance['shadow'] . '" data-button-style="' . $appearance['button_style']
             . '" data-open-label="' . checkout_offer_escape(CHECKOUT_OFFER_OPEN) . '" data-close-label="' . checkout_offer_escape(CHECKOUT_OFFER_CLOSE)
             . '" data-dismiss-label="' . checkout_offer_escape(CHECKOUT_OFFER_DISMISS) . '" style="' . checkout_offer_escape(checkout_offer_style($appearance)) . '">'
-            . '<h2 class="h5" id="checkout-offer-title">' . CHECKOUT_OFFER_HEADING . '</h2><p class="checkout-offer-description">' . CHECKOUT_OFFER_DESCRIPTION
-            . '</p><div class="checkout-offer-grid">' . $cards . '</div></section>';
+            . '<div class="checkout-offer-banner"><span class="checkout-offer-badge">' . CHECKOUT_OFFER_BADGE . '</span>'
+            . '<h2 class="h5" id="checkout-offer-title">' . ('classic' === $appearance['template'] ? CHECKOUT_OFFER_HEADING : CHECKOUT_OFFER_TEMPLATE_HEADING)
+            . '</h2><p class="checkout-offer-description">' . ('classic' === $appearance['template'] ? CHECKOUT_OFFER_DESCRIPTION : CHECKOUT_OFFER_TEMPLATE_DESCRIPTION)
+            . '</p></div><div class="checkout-offer-grid">' . $cards . '</div><p class="checkout-offer-note">' . CHECKOUT_OFFER_NOTE . '</p></section>';
     }
 
     private function card(Product $product, array $rule): string
@@ -70,14 +72,17 @@ class hook_shop_checkout_payment_checkoutOffer {
         $imageHtml = '' === $image ? '' : '<img class="checkout-offer-image" src="'
             . checkout_offer_escape('images/' . $image) . '" alt="' . checkout_offer_escape((string)$product->get('name')) . '">';
         $currency = $GLOBALS['currencies']->currencies[$_SESSION['currency']];
+        $saving = max(0.0, (float)$GLOBALS['currencies']->display_raw($normal, $rate) - (float)$GLOBALS['currencies']->display_raw($offer, $rate));
         $format = checkout_offer_escape(json_encode($currency, JSON_THROW_ON_ERROR));
         return '<article class="checkout-offer-card" data-offer-card data-currency="' . $format . '" data-tax-included="' . ('true' === DISPLAY_PRICE_WITH_TAX ? '1' : '0') . '" data-base="' . (float)$product->get('base_price')
             . '" data-mode="' . checkout_offer_escape($rule['mode']) . '" data-value="' . (float)$rule['value'] . '" data-tax="' . $rate . '">'
-            . $imageHtml . '<h3 class="h6">' . checkout_offer_escape((string)$product->get('name')) . '</h3>' . $options
+            . $imageHtml . '<div class="checkout-offer-card-content"><h3 class="h6">' . checkout_offer_escape((string)$product->get('name')) . '</h3>' . $options
             . '<p><del class="text-body-secondary me-2" data-normal-price>' . $GLOBALS['currencies']->display_price($normal, $rate)
-            . '</del><strong data-offer-price>' . $GLOBALS['currencies']->display_price($offer, $rate) . '</strong></p>'
+            . '</del><strong data-offer-price>' . $GLOBALS['currencies']->display_price($offer, $rate) . '</strong>'
+            . '<span class="checkout-offer-saving">' . CHECKOUT_OFFER_SAVE . ' <span data-offer-saving>' . $GLOBALS['currencies']->format($saving, false) . '</span></span></p>'
             . '<button type="submit" class="btn checkout-offer-add" name="checkout_offer_product" value="' . $id
             . '" formaction="' . checkout_offer_escape((string)$GLOBALS['Linker']->build('checkout_payment.php')) . '" formnovalidate>'
-            . CHECKOUT_OFFER_ADD . '</button></article>';
+            . '<span class="checkout-offer-classic-label">' . CHECKOUT_OFFER_ADD . '</span><span class="checkout-offer-template-label">' . CHECKOUT_OFFER_ADD_PRICE
+            . ' <span data-button-price>' . $GLOBALS['currencies']->display_price($offer, $rate) . '</span></span></button></div></article>';
     }
 }

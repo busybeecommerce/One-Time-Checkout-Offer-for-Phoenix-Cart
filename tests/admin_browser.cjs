@@ -39,6 +39,7 @@ const { chromium } = require('playwright');
     assert.equal(await page.locator('[name="appearance[content_alignment]"]').isVisible(), true);
     await page.locator('[name="display_mode"]').selectOption('modal');
     await page.locator('[name="appearance[content_alignment]"]').selectOption('center');
+    await page.locator('[name="appearance[template]"][value="red"]').check();
     await page.evaluate(() => document.querySelectorAll('form').forEach(form => form.addEventListener('submit', event => {
         event.preventDefault();
         window.submission = Object.fromEntries(new FormData(event.target, event.submitter));
@@ -49,6 +50,7 @@ const { chromium } = require('playwright');
     assert.equal(submission.action, 'settings');
     assert.equal(submission.display_mode, 'modal');
     assert.equal(submission['appearance[content_alignment]'], 'center');
+    assert.equal(submission['appearance[template]'], 'red');
     assert.equal(Object.hasOwn(submission, 'accent'), false);
     const productForm = page.locator('form:has(input[value="save_product"])').first();
     await productForm.locator('button').click();

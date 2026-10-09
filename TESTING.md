@@ -10,6 +10,8 @@ After generating all three admin fixtures, `node tests/admin_browser.cjs` checks
 
 The browser regression also checks that no modal header strip renders, the corner close button remains positioned correctly, the accent border is absent, and Left/Centre/Right settings actually position both text and an incomplete product row. PHP/admin tests check alignment persistence and validation plus removal of the obsolete accent setting.
 
+Generate each template fixture with `php tests/run.php <reference> --render --template=red` and the equivalent `--modal` command; repeat for honey, midnight and green. `node tests/templates_browser.cjs` verifies all four templates in both display modes, mobile bounds, full-width product rows, savings/button prices, product/options/token submission, close/reopen and no-JavaScript output. Template screenshots are saved in `build/`. Admin browser tests also save a selected template through the existing Setup form.
+
 ## Staging acceptance
 
 1. Install twice; retain tiers. Confirm administrator access controls.

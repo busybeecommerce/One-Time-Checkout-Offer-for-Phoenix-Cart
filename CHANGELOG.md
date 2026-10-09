@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.2.0
+
+- Add an admin template picker with visual swatches: Custom / Classic, Red special offer, BusyBee honey, Midnight and Fresh green.
+- Add styled promotional banners, compact product rows, savings badges, price-labelled Add buttons and an order-availability note for inline and modal offers.
+- Keep the current appearance as the default; validate stored template IDs and retain manual appearance values when switching designs.
+- Calculate displayed savings from the displayed normal/offer amounts and refresh savings/button prices when options change, including tax and currency formatting.
+- Test every styled design on desktop/mobile, in both display modes, including form submission and no-JavaScript rendering.
+
 ## 1.1.2
 
 - Add a BusyBee orange/yellow admin header with a locally packaged logo linking to BusyBee Commerce and an offer-status indicator.
