@@ -80,6 +80,13 @@ const { chromium } = require('playwright');
     })));
     assert.ok(Math.abs(rowFooters[0].button - rowFooters[1].button) < 1);
     assert.ok(Math.abs(rowFooters[0].price - rowFooters[1].price) < 1);
+    assert.equal(await page.locator('.checkout-offer-saving').first().isVisible(), true);
+    assert.equal(await page.locator('.checkout-offer-saving').first().textContent(), 'You save: £6.00');
+    const modalSavingBounds = await page.locator('.checkout-offer-prices').first().evaluate(node => ({
+        priceBottom: node.querySelector('[data-offer-price]').getBoundingClientRect().bottom,
+        savingTop: node.querySelector('.checkout-offer-saving').getBoundingClientRect().top,
+    }));
+    assert.ok(modalSavingBounds.savingTop > modalSavingBounds.priceBottom, 'Modal saving appears beneath the price');
     await page.emulateMedia({ reducedMotion: 'reduce' });
     assert.equal(await dialog.evaluate(node => getComputedStyle(node).animationName), 'none');
     await page.keyboard.press('Tab');
