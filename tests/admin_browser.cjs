@@ -8,6 +8,7 @@ const { chromium } = require('playwright');
     const bootstrap = fs.readFileSync(process.env.CHECKOUT_OFFER_BOOTSTRAP_CSS || require.resolve('bootstrap/dist/css/bootstrap.min.css'), 'utf8');
     const browser = await chromium.launch({ headless: true, ...(process.env.CHECKOUT_OFFER_BROWSER ? { channel: process.env.CHECKOUT_OFFER_BROWSER } : {}) });
     const page = await browser.newPage({ viewport: { width: 1440, height: 1000 } });
+    await page.clock.install();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
     await page.route('https://example.test/**', route => {
@@ -35,6 +36,22 @@ const { chromium } = require('playwright');
         assert.equal(await page.locator('#outside').evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(13, 110, 253)');
         assert.ok(await page.locator('.co-admin-header h1').evaluate(node => parseFloat(getComputedStyle(node).fontSize) <= 32));
         assert.equal(await page.locator('.co-admin-header h1').evaluate(node => getComputedStyle(node).color), 'rgb(255, 255, 255)');
+        assert.equal(await page.locator('.co-admin-header').evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(255, 122, 0)');
+        for (const width of [1920, 1440, 375]) {
+            await page.setViewportSize({ width, height: 1000 });
+            const bounds = await page.evaluate(() => {
+                const admin = document.querySelector('.checkout-offer-admin').getBoundingClientRect();
+                return Array.from(document.querySelectorAll('.alert')).map(notice => ({ left: notice.getBoundingClientRect().left - admin.left, right: notice.getBoundingClientRect().right - admin.right }));
+            });
+            assert.ok(bounds.every(rect => Math.abs(rect.left) < 1 && Math.abs(rect.right) < 1), 'Notice edges match admin content at ' + width);
+        }
+        await page.setViewportSize({ width: 1440, height: 1000 });
+        assert.equal(await page.locator('.alert-success').count(), 1);
+        await page.clock.runFor(6000);
+        assert.equal(await page.locator('.alert-success').evaluate(node => node.classList.contains('co-admin-notice-fading')), true);
+        await page.clock.runFor(400);
+        assert.equal(await page.locator('.alert-success').count(), 0);
+        assert.equal(await page.locator('.alert-warning:visible, .alert-danger:visible').count(), 2);
         if (scenario !== 'install') assert.equal(await page.locator('[data-co-panel]:visible').count(), 1);
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
         await page.screenshot({ path: 'build/admin-' + scenario + '-desktop.png', fullPage: true });

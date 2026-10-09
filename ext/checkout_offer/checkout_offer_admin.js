@@ -1,6 +1,19 @@
 'use strict';
 
 document.addEventListener('DOMContentLoaded', function () {
+    const admin = document.querySelector('.checkout-offer-admin');
+    if (!admin) {
+        return;
+    }
+    admin.parentElement.querySelectorAll(':scope > .alert-success').forEach(function (notice) {
+        if (!(notice.compareDocumentPosition(admin) & Node.DOCUMENT_POSITION_FOLLOWING)) {
+            return;
+        }
+        window.setTimeout(function () {
+            notice.classList.add('co-admin-notice-fading');
+            window.setTimeout(function () { notice.remove(); }, 350);
+        }, 6000);
+    });
     const workspace = document.querySelector('.co-admin-workspace');
     if (!workspace) {
         return;
