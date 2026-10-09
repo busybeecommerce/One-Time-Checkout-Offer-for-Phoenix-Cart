@@ -405,6 +405,12 @@ foreach (array_keys(checkout_offer_templates()) as $template) {
 }
 expect('classic' === checkout_offer_sanitise_appearance(['template' => 'unknown'])['template'], 'Invalid stored template falls back to Classic');
 expect(str_contains(checkout_offer_style(checkout_offer_sanitise_appearance(['template' => 'red'])), '--co-button-background:#d91920;'), 'Template palette applied');
+checkout_offer_admin_action('settings', ['appearance' => ['template' => 'classic', 'button_background' => '#234567', 'product_layout' => 'row']]);
+$clearedSettings = json_decode(array_slice($GLOBALS['db']->writes, -4, 3)[2][1]['configuration_value'], true);
+expect('classic' === $clearedSettings['template'], 'No-template choice saved');
+expect('row' === $clearedSettings['product_layout'], 'Clearing template preserves selected layout');
+expect(str_contains(checkout_offer_style($clearedSettings), '--co-button-background:#234567;'), 'Clearing template restores custom colours');
+expect(!str_contains(checkout_offer_style($clearedSettings), '--co-banner-background:'), 'No template has no predefined banner palette');
 checkout_offer_admin_action('save_tier', ['title' => 'Unlimited', 'minimum' => '0', 'maximum' => '', 'priority' => '3', 'enabled' => 'on']);
 $tierWrite = $GLOBALS['db']->writes[count($GLOBALS['db']->writes) - 1];
 expect('NULL' === $tierWrite[1]['maximum'], 'Unlimited tiers use Phoenix SQL NULL marker');

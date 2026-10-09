@@ -21,7 +21,7 @@ const { chromium } = require('playwright');
         const html = fs.readFileSync('build/storefront-' + fixture + '.html', 'utf8');
         return route.fulfill({ contentType: 'text/html', body: '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>' + bootstrap + 'body{font:16px Arial;margin:24px}' + css + '</style>' + html + '<script>' + js + '</script>' });
     });
-    for (const theme of ['red', 'honey', 'midnight', 'green']) {
+    for (const theme of ['red', 'honey', 'midnight', 'green', 'ocean', 'plum', 'slate', 'coral', 'teal', 'champagne']) {
         for (const mode of ['inline', 'modal']) {
             await page.setViewportSize({ width: 1280, height: 900 });
             await page.goto('http://templates.test/' + mode + '-' + theme);
@@ -135,5 +135,5 @@ const { chromium } = require('playwright');
     assert.equal(await staticPage.locator('[data-offer-saving]').nth(1).textContent(), '£8.40');
     assert.deepEqual(errors, []);
     await browser.close();
-    console.log('Template browser checks passed: all four designs in inline/modal, mobile, price/savings, submission, dismiss/reload and no-JavaScript rendering.');
+    console.log('Template browser checks passed: all ten designs in inline/modal, mobile, price/savings, submission, dismiss/reload and no-JavaScript rendering.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

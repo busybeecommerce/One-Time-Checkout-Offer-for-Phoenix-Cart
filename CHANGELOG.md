@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.5.0
+
+- Add Ocean blue, Soft plum, Slate minimal, Warm coral, Clean teal and Champagne predefined templates.
+- Make the custom appearance choice explicit as No template / Custom. Choosing it and saving removes the predefined palette and restores custom colours without changing the selected product layout.
+- Test all ten predefined designs in inline/modal and Row/Stacked layouts, plus no-template settings submission and persistence.
+
 ## 1.4.0
 
 - Align paired admin appearance controls even when labels wrap onto multiple lines.

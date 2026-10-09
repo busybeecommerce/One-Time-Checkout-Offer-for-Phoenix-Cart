@@ -10,7 +10,7 @@ After generating all three admin fixtures, `node tests/admin_browser.cjs` checks
 
 The browser regression also checks that no modal header strip renders, the corner close button remains positioned correctly, the accent border is absent, and Left/Centre/Right settings actually position both text and an incomplete product row. PHP/admin tests check alignment persistence and validation plus removal of the obsolete accent setting.
 
-Generate each template fixture with `php tests/run.php <reference> --render --template=red` and the equivalent `--modal` command; repeat for honey, midnight and green. `node tests/templates_browser.cjs` verifies all four templates in both display modes, mobile bounds, full-width product rows, savings/button prices, product/options/token submission, dismiss/reload and no-JavaScript output. Template screenshots are saved in `build/`. Admin browser tests also save a selected template through the existing Setup form.
+Generate each template fixture with `php tests/run.php <reference> --render --template=red` and the equivalent `--modal` command; repeat for honey, midnight, green, ocean, plum, slate, coral, teal and champagne. `node tests/templates_browser.cjs` verifies all ten templates in both display modes, mobile bounds, full-width product rows, savings/button prices, product/options/token submission, dismiss/reload and no-JavaScript output. Template screenshots are saved in `build/`. Admin browser tests also save a selected template through the existing Setup form.
 
 Template browser checks measure Add button width and image/button positions for Left, Centre and Right at desktop and mobile widths. Centred screenshots show the thumbnail above the details. Saved alignment is rendered as a validated data attribute by the PHP hook, including when JavaScript is unavailable.
 
@@ -31,3 +31,5 @@ Admin browser checks measure paired appearance field tops and bottoms at 1440, 1
 9. Disable/uninstall; preserve saved historical prices.
 
 No live store installation or real payment capture was exercised during release validation.
+
+The admin regression selects a predefined design, then chooses No template / Custom and submits Setup. It verifies the saved custom configuration identifier, manual colours and Row setting remain present. PHP tests confirm the no-template palette uses custom colours without a predefined banner.
