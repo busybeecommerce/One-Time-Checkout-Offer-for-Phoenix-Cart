@@ -28,6 +28,22 @@ const { chromium } = require('playwright');
             if (mode === 'modal') await page.locator('#checkout-offer-modal').evaluate(node => Promise.all(node.getAnimations().map(animation => animation.finished)));
             const section = page.locator('#checkout-offer');
             assert.equal(await section.getAttribute('data-template'), theme);
+            const originalColours = await section.evaluate(node => ({
+                banner: getComputedStyle(node.querySelector('.checkout-offer-banner')).backgroundColor,
+                image: getComputedStyle(node.querySelector('.checkout-offer-image')).backgroundColor,
+            }));
+            await section.evaluate(node => {
+                node.style.setProperty('--co-heading-background', '#e1edf8');
+                node.style.setProperty('--co-image-background', '#fff4dc');
+            });
+            assert.equal(await page.locator('.checkout-offer-banner').evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(225, 237, 248)');
+            assert.equal(await page.locator('.checkout-offer-image').first().evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(255, 244, 220)');
+            await section.evaluate(node => {
+                node.style.removeProperty('--co-heading-background');
+                node.style.removeProperty('--co-image-background');
+            });
+            assert.equal(await page.locator('.checkout-offer-banner').evaluate(node => getComputedStyle(node).backgroundColor), originalColours.banner);
+            assert.equal(await page.locator('.checkout-offer-image').first().evaluate(node => getComputedStyle(node).backgroundColor), originalColours.image);
             assert.equal(await page.locator('.checkout-offer-badge').isVisible(), true);
             assert.equal(await page.locator('.checkout-offer-note').isVisible(), mode === 'inline');
             if (mode === 'modal') {
