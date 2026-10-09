@@ -51,13 +51,18 @@ const { chromium } = require('playwright');
     await page.locator('[name="appearance[product_layout]"]').selectOption('row');
     for (const width of [1440, 1200, 768]) {
         await page.setViewportSize({ width, height: 1000 });
-        const fields = await page.locator('.co-appearance-field').evaluateAll(nodes => nodes.map(node => {
+        for (const group of await page.locator('.co-admin-field-group').all()) {
+        const fields = await group.locator('.co-appearance-field').evaluateAll(nodes => nodes.map(node => {
             const control = node.querySelector('input, select').getBoundingClientRect();
             return { top: control.top, bottom: control.bottom };
         }));
         for (let index = 0; index + 1 < fields.length; index += 2) {
             assert.ok(Math.abs(fields[index].top - fields[index + 1].top) < 1, 'Paired field tops align at ' + width);
             assert.ok(Math.abs(fields[index].bottom - fields[index + 1].bottom) < 1, 'Paired field bottoms align at ' + width);
+        }
+        }
+        for (const control of await page.locator('#co-panel-appearance input[type="number"], #co-panel-appearance input[type="text"]').all()) {
+            assert.ok(await control.evaluate(node => node.getBoundingClientRect().width <= 161), 'Short values have compact fields');
         }
     }
     await page.setViewportSize({ width: 1440, height: 1000 });
@@ -84,6 +89,14 @@ const { chromium } = require('playwright');
     assert.equal(submission['appearance[button_background]'], '#0d6efd');
     assert.equal(await page.locator('[name="appearance[template]"]:checked').count(), 1);
     await page.getByRole('tab', { name: 'Custom offer text', exact: true }).click();
+    const textWidths = await page.locator('#co-panel-text').evaluate(panel => ({
+        panel: panel.getBoundingClientRect().width,
+        short: panel.querySelector('[name="appearance[badge_text]"]').getBoundingClientRect().width,
+        long: panel.querySelector('[name="appearance[description_text]"]').getBoundingClientRect().width,
+    }));
+    assert.ok(textWidths.short < textWidths.long / 1.8, 'Short copy fields share a row');
+    assert.ok(textWidths.long < textWidths.panel * .8, 'Long copy has a readable bounded width');
+    await page.screenshot({ path: 'build/admin-text-desktop.png', fullPage: true });
     await page.locator('[name="appearance[heading_text]"]').fill('An offer for you');
     await page.locator('[name="appearance[description_text]"]').fill('');
     await page.getByRole('tab', { name: 'Appearance', exact: true }).click();

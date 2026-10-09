@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.1
+
+- Refine all admin tabs with compact value fields, grouped appearance controls, paired short-text fields and bounded descriptions and maintenance panels. Keep existing form names, values and responsive layouts.
+
 ## 1.7.0
 
 - Organise administration into Setup, Templates, Appearance, Custom text, Tiers & products and Maintenance tabs. Preserve unsaved settings when switching tabs and return to the active tab after saving.

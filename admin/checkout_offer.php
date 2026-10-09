@@ -40,7 +40,7 @@ if (!is_string($activeTab) || !in_array($activeTab, ['setup', 'templates', 'appe
 }
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.0')) ?>">
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.1')) ?>">
 <script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.0')) ?>" defer></script>
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
@@ -94,9 +94,16 @@ require 'includes/template_top.php';
         </section>
         <section id="co-panel-appearance" class="co-admin-panel" data-co-panel="appearance"><h2><?= CHECKOUT_OFFER_ADMIN_APPEARANCE ?></h2>
           <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_TEXT_STYLE_HELP ?></p>
-          <div class="co-appearance-fields mt-1">
-            <?php foreach (checkout_offer_appearance_fields() as $key => $field) { ?>
-              <?php if ('template' === $key || 'text' === $field['type']) { continue; } ?>
+          <div class="co-appearance-groups">
+            <?php foreach ([
+                CHECKOUT_OFFER_ADMIN_GROUP_COLOURS => ['background', 'text', 'card_background', 'border', 'button_background', 'button_text'],
+                CHECKOUT_OFFER_ADMIN_GROUP_LAYOUT => ['product_layout', 'columns', 'modal_width', 'content_alignment', 'products_alignment'],
+                CHECKOUT_OFFER_ADMIN_GROUP_SPACING => ['radius', 'padding', 'gap', 'border_width', 'image_height', 'font_size'],
+                CHECKOUT_OFFER_ADMIN_GROUP_BUTTONS => ['button_style', 'shadow'],
+                CHECKOUT_OFFER_ADMIN_GROUP_TYPOGRAPHY => ['heading_size', 'description_size', 'heading_weight', 'description_weight', 'heading_colour', 'description_colour', 'heading_style', 'description_style'],
+            ] as $group => $keys) { ?>
+            <fieldset class="co-admin-field-group"><legend><?= $group ?></legend><div class="co-appearance-fields">
+            <?php foreach ($keys as $key) { $field = checkout_offer_appearance_fields()[$key]; ?>
               <div class="co-appearance-field">
                 <label class="form-label small" for="style-<?= $key ?>"><?= constant('CHECKOUT_OFFER_ADMIN_STYLE_' . strtoupper($key)) ?></label>
                 <?php if ('select' === $field['type']) { ?>
@@ -110,15 +117,21 @@ require 'includes/template_top.php';
                 <?php } ?>
               </div>
             <?php } ?>
+            </div></fieldset>
+            <?php } ?>
           </div>
         </section>
 
         <section id="co-panel-text" class="co-admin-panel" data-co-panel="text"><h2><?= CHECKOUT_OFFER_ADMIN_CUSTOM_TEXT ?></h2>
           <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_TEXT_HELP ?></p>
-          <?php foreach (checkout_offer_appearance_fields() as $key => $field) { if ('text' !== $field['type']) { continue; } ?>
+          <div class="co-admin-text-fields">
+          <?php foreach (['heading_text', 'badge_text', 'add_text', 'dismiss_text', 'saving_text', 'description_text', 'note_text'] as $key) { $field = checkout_offer_appearance_fields()[$key]; ?>
+            <div class="co-admin-text-field<?= $field['max'] > 200 ? ' co-admin-text-field-wide' : '' ?>">
             <label class="form-label" for="style-<?= $key ?>"><?= constant('CHECKOUT_OFFER_ADMIN_STYLE_' . strtoupper($key)) ?></label>
             <textarea class="form-control form-control-sm mb-3" id="style-<?= $key ?>" name="appearance[<?= $key ?>]" rows="<?= $field['max'] > 200 ? 3 : 1 ?>" maxlength="<?= $field['max'] ?>"><?= checkout_offer_escape($appearance[$key]) ?></textarea>
+            </div>
           <?php } ?>
+          </div>
         </section>
         <button class="btn btn-primary btn-sm"><?= CHECKOUT_OFFER_ADMIN_SAVE ?></button>
       </form>
