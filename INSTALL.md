@@ -18,6 +18,8 @@ For v1.1.1, upload the updated add-on files and save Setup. Appearance includes 
 
 For v1.1.2, also upload the new `ext/checkout_offer/checkout_offer_admin.css` and `images/checkout_offer/busybee-logo.png`. The admin page uses an orange/yellow BusyBee header with a logo linking to BusyBee Commerce. Asset URLs use Phoenix's catalogue link builder, supporting renamed admin directories and stores in subdirectories. No database update or reinstallation is required.
 
+For v1.2.0, upload the updated add-on PHP/language, CSS and JavaScript files. Select a design under **Setup → Appearance → Offer template** and save. Existing installations default to Custom / Classic, preserving their appearance. Styled templates use their own colour palette and compact product rows; choosing Classic restores manual appearance settings. No database migration or reinstallation is required.
+
 When updating from v1.0.0, overwrite `admin/includes/boxes/checkout_offer.php` as well as uploading the new `reports_checkout_offer.php` box and its language file. The old file is intentionally retained as an empty compatibility file to remove the separate top-level menu. Existing tiers/settings are preserved.
 
 ## Integration contract

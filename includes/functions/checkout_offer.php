@@ -11,9 +11,21 @@ function checkout_offer_escape(string $text): string
     return htmlspecialchars($text, ENT_QUOTES, 'UTF-8');
 }
 
+function checkout_offer_templates(): array
+{
+    return [
+        'classic' => [],
+        'red' => ['background' => '#fff5f5', 'text' => '#212529', 'card_background' => '#ffffff', 'border' => '#f5b5b5', 'button_background' => '#d91920', 'button_text' => '#ffffff', 'banner_background' => '#ef2929', 'banner_text' => '#ffffff'],
+        'honey' => ['background' => '#fff8e8', 'text' => '#29231b', 'card_background' => '#ffffff', 'border' => '#eccb83', 'button_background' => '#a94d00', 'button_text' => '#ffffff', 'banner_background' => '#ffb900', 'banner_text' => '#212529'],
+        'midnight' => ['background' => '#111827', 'text' => '#f9fafb', 'card_background' => '#1f2937', 'border' => '#475569', 'button_background' => '#fbbf24', 'button_text' => '#111827', 'banner_background' => '#17243b', 'banner_text' => '#ffffff'],
+        'green' => ['background' => '#effaf5', 'text' => '#18372c', 'card_background' => '#ffffff', 'border' => '#a3d6bf', 'button_background' => '#12734b', 'button_text' => '#ffffff', 'banner_background' => '#19865a', 'banner_text' => '#ffffff'],
+    ];
+}
+
 function checkout_offer_appearance_fields(): array
 {
     return [
+        'template' => ['type' => 'select', 'default' => 'classic', 'choices' => array_keys(checkout_offer_templates())],
         'background' => ['type' => 'color', 'default' => '#ffffff'],
         'text' => ['type' => 'color', 'default' => '#212529'],
         'card_background' => ['type' => 'color', 'default' => '#ffffff'],
@@ -69,11 +81,18 @@ function checkout_offer_display_mode(): string
 
 function checkout_offer_style(array $appearance): string
 {
+    $palette = checkout_offer_templates()[$appearance['template']];
+    $appearance = array_replace($appearance, $palette);
     $style = '';
     foreach (checkout_offer_appearance_fields() as $key => $field) {
         if ('select' !== $field['type'] || in_array($key, ['content_alignment', 'products_alignment'], true)) {
             $unit = 'number' === $field['type'] && 'columns' !== $key ? 'px' : '';
             $style .= '--co-' . str_replace('_', '-', $key) . ':' . $appearance[$key] . $unit . ';';
+        }
+    }
+    foreach (['banner_background', 'banner_text'] as $key) {
+        if (isset($palette[$key])) {
+            $style .= '--co-' . str_replace('_', '-', $key) . ':' . $palette[$key] . ';';
         }
     }
     return $style;

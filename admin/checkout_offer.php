@@ -32,7 +32,7 @@ $editTier = $tier ?? ['id' => 0, 'title' => '', 'minimum' => '0', 'maximum' => '
 $appearance = checkout_offer_appearance();
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.1.2')) ?>">
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.2.0')) ?>">
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
     <div class="co-admin-heading">
@@ -63,8 +63,24 @@ require 'includes/template_top.php';
             </select>
             <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_MODAL_HELP ?></p>
             <details class="co-admin-appearance mb-3"><summary class="fw-semibold"><?= CHECKOUT_OFFER_ADMIN_APPEARANCE ?></summary>
+              <fieldset class="co-template-picker">
+                <legend><?= CHECKOUT_OFFER_ADMIN_STYLE_TEMPLATE ?></legend>
+                <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_TEMPLATE_HELP ?></p>
+                <div class="co-template-choices">
+                  <?php foreach (checkout_offer_templates() as $name => $palette) { ?>
+                    <label class="co-template-choice">
+                      <input type="radio" name="appearance[template]" value="<?= $name ?>" <?= $appearance['template'] === $name ? 'checked' : '' ?>>
+                      <span class="co-template-name"><?= constant('CHECKOUT_OFFER_ADMIN_CHOICE_' . strtoupper($name)) ?></span>
+                      <span class="co-template-preview" aria-hidden="true" style="--co-preview-colour:<?= $palette['banner_background'] ?? '#e9edf1' ?>;--co-preview-button:<?= $palette['button_background'] ?? '#0d6efd' ?>">
+                        <span class="co-template-preview-header"></span><span class="co-template-preview-product"></span><span class="co-template-preview-button"></span>
+                      </span>
+                    </label>
+                  <?php } ?>
+                </div>
+              </fieldset>
               <div class="row g-2 mt-1">
                 <?php foreach (checkout_offer_appearance_fields() as $key => $field) { ?>
+                  <?php if ('template' === $key) { continue; } ?>
                   <div class="col-6">
                     <label class="form-label small" for="style-<?= $key ?>"><?= constant('CHECKOUT_OFFER_ADMIN_STYLE_' . strtoupper($key)) ?></label>
                     <?php if ('select' === $field['type']) { ?>

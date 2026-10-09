@@ -8,6 +8,7 @@
 }
 #checkout-offer h2 { font-size: 1.25em; color: inherit; }
 #checkout-offer h3 { font-size: 1.05em; color: inherit; }
+#checkout-offer .checkout-offer-badge, #checkout-offer .checkout-offer-saving, #checkout-offer .checkout-offer-template-label, #checkout-offer .checkout-offer-note { display: none; }
 #checkout-offer .checkout-offer-description { font-size: .9em; margin-bottom: var(--co-gap); }
 #checkout-offer .checkout-offer-grid { display: grid; grid-template-columns: repeat(var(--co-columns), minmax(0, 1fr)); gap: var(--co-gap); }
 #checkout-offer .checkout-offer-card { background: var(--co-card-background); border: var(--co-border-width) solid var(--co-border); border-radius: var(--co-radius); padding: var(--co-padding); min-width: 0; }
@@ -29,3 +30,25 @@
 @media (max-width: 575px) { #checkout-offer .checkout-offer-grid { grid-template-columns: minmax(0, 1fr); } }
 @media (max-width: 767px) { #checkout-offer-modal .checkout-offer-grid { --co-active-columns: min(2, var(--co-columns)); } }
 @media (max-width: 575px) { #checkout-offer-modal .checkout-offer-grid { --co-active-columns: 1; } }
+#checkout-offer[data-template]:not([data-template="classic"]) { padding: 0; overflow: hidden; }
+#checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-banner { padding: var(--co-padding); padding-right: max(48px, var(--co-padding)); background: var(--co-banner-background); color: var(--co-banner-text); }
+#checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-badge { display: inline-block; margin-bottom: .45em; padding: .2em .45em; border-radius: 3px; background: #fff; color: #212529; font-size: .65em; font-weight: 700; text-transform: uppercase; }
+#checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-description { margin: .3em 0 0; }
+#checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-grid { display: flex; flex-direction: column; padding: var(--co-padding); }
+#checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-card { display: flex; align-items: flex-start; gap: 12px; flex: 0 0 auto; width: 100%; padding: var(--co-padding); }
+#checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-image { flex: 0 0 80px; width: 80px; height: 80px; margin: 0; border-radius: 4px; }
+#checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-card-content { flex: 1; min-width: 0; }
+#checkout-offer[data-template]:not([data-template="classic"]) h3 { font-weight: 700; }
+#checkout-offer[data-template]:not([data-template="classic"]) [data-offer-price] { color: var(--co-button-background); }
+#checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-saving { display: inline-block; margin-left: .5em; padding: .2em .45em; border-radius: 3px; background: #e9f7ee; color: #166534; font-size: .7em; font-weight: 600; }
+#checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-add { width: 100%; background: var(--co-button-background); color: var(--co-button-text); font-weight: 700; }
+#checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-classic-label { display: none; }
+#checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-template-label { display: inline; }
+#checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-note { display: block; margin: 0; padding: 10px var(--co-padding); border-top: 1px solid var(--co-border); font-size: .75em; }
+#checkout-offer[data-template="midnight"] del { color: #cbd5e1 !important; }
+#checkout-offer-modal[data-template]:not([data-template="classic"]) .checkout-offer-modal-close { background: transparent; color: var(--co-banner-text); }
+#checkout-offer-modal #checkout-offer[data-template]:not([data-template="classic"]) { padding: 0; }
+@media (max-width: 575px) {
+    #checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-image { flex-basis: 60px; width: 60px; height: 60px; }
+    #checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-card { padding: 12px; gap: 10px; }
+}

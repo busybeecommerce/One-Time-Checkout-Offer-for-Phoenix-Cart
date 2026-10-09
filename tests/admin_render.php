@@ -94,7 +94,12 @@ if ('tier' === $scenario) {
     $expected[] = 'name="products_id"';
     $expected[] = 'name="item_id" value="1"';
 }
-foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.1.2']) as $text) {
+if ('install' !== $scenario) {
+    foreach (array_keys(checkout_offer_templates()) as $template) {
+        $expected[] = 'name="appearance[template]" value="' . $template . '"';
+    }
+}
+foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.2.0']) as $text) {
     if (!str_contains($html, $text)) {
         throw new RuntimeException("Admin $scenario output missing: $text");
     }

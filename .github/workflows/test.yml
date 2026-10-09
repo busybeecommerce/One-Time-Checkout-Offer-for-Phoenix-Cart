@@ -23,6 +23,7 @@ jobs:
           path: reference
       - run: php tests/run.php reference
       - run: php tests/run.php reference --modal --styled
+      - run: php tests/run.php reference --modal --template=red
       - run: php tests/admin_render.php reference install
       - run: php tests/admin_render.php reference setup
       - run: php tests/admin_render.php reference tier
@@ -51,3 +52,9 @@ jobs:
       - run: php tests/admin_render.php reference setup
       - run: php tests/admin_render.php reference tier
       - run: node tests/admin_browser.cjs
+      - run: |
+          for template in red honey midnight green; do
+            php tests/run.php reference --render --template=$template
+            php tests/run.php reference --render --modal --template=$template
+          done
+      - run: node tests/templates_browser.cjs
