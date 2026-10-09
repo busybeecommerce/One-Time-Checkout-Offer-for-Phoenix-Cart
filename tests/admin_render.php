@@ -53,6 +53,11 @@ foreach (['1.0.8.2/text.php', '1.0.8.1/html_element.php', '1.0.8.1/named_html_el
     require $reference . '/includes/system/versioned/' . $file;
 }
 require $root . '/admin/includes/languages/english/checkout_offer.php';
+require $reference . '/admin/includes/classes/message_stack.php';
+$messageStack = new messageStack();
+$messageStack->add(CHECKOUT_OFFER_ADMIN_SAVED, 'success');
+$messageStack->add('Warning fixture', 'warning');
+$messageStack->add('Error fixture', 'error');
 
 // Only Phoenix bootstrap/template wrappers and database rows are fixtures;
 // the complete add-on page, Form, Input and Href classes execute unchanged.
@@ -62,7 +67,7 @@ if (!is_dir($fixtureRoot . '/includes')) {
 }
 file_put_contents($fixtureRoot . '/includes/application_top.php', '<?php');
 file_put_contents($fixtureRoot . '/includes/application_bottom.php', '<?php');
-file_put_contents($fixtureRoot . '/includes/template_top.php', '<!doctype html><html><body>');
+file_put_contents($fixtureRoot . '/includes/template_top.php', '<!doctype html><html><body>' . $messageStack->output());
 file_put_contents($fixtureRoot . '/includes/template_bottom.php', '<footer id="render-complete"></footer></body></html>');
 $previousDirectory = getcwd();
 chdir($fixtureRoot);
@@ -99,7 +104,7 @@ if ('install' !== $scenario) {
         $expected[] = 'name="appearance[template]" value="' . $template . '"';
     }
 }
-foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.7.1']) as $text) {
+foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.7.2']) as $text) {
     if (!str_contains($html, $text)) {
         throw new RuntimeException("Admin $scenario output missing: $text");
     }

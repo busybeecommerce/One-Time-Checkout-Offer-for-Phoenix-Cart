@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.2
+
+- Restore the BusyBee orange admin header with white text. Match notification width to the admin content and fade successful save messages after six seconds, including on the installation screen. Keep warnings/errors visible and respect reduced motion.
+
 ## 1.7.1
 
 - Refine all admin tabs with compact value fields, grouped appearance controls, paired short-text fields and bounded descriptions and maintenance panels. Keep existing form names, values and responsive layouts.
