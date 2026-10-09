@@ -23,7 +23,7 @@ function checkout_offer_install(): void
 
 function checkout_offer_install_settings(): void
 {
-    foreach (['CHECKOUT_OFFER_ENABLED' => 'False', 'CHECKOUT_OFFER_ACCENT' => '#6f42c1',
+    foreach (['CHECKOUT_OFFER_ENABLED' => 'False',
         'CHECKOUT_OFFER_DISPLAY_MODE' => 'inline',
         'CHECKOUT_OFFER_APPEARANCE' => json_encode(checkout_offer_appearance(), JSON_THROW_ON_ERROR)] as $key => $value) {
         $exists = $GLOBALS['db']->query("SELECT configuration_id FROM configuration WHERE configuration_key = '" . $key . "'")->fetch_assoc();
@@ -52,10 +52,6 @@ function checkout_offer_admin_action(string $action, array $input): void
         throw new InvalidArgumentException('Install the database tables first.');
     }
     if ('settings' === $action) {
-        $accent = (string)($input['accent'] ?? '');
-        if (!preg_match('/^#[0-9a-f]{6}$/i', $accent)) {
-            throw new InvalidArgumentException('Enter a six-digit hexadecimal accent colour.');
-        }
         $mode = $input['display_mode'] ?? checkout_offer_display_mode();
         if (!is_string($mode) || !in_array($mode, ['inline', 'modal'], true) || !is_array($input['appearance'] ?? [])) {
             throw new InvalidArgumentException('Choose a valid display mode and appearance.');
@@ -63,10 +59,11 @@ function checkout_offer_admin_action(string $action, array $input): void
         $appearance = checkout_offer_sanitise_appearance(($input['appearance'] ?? []) + checkout_offer_appearance(), true);
         // Add new settings on upgrades without recreating tiers or resetting existing settings.
         checkout_offer_install_settings();
-        foreach (['CHECKOUT_OFFER_ENABLED' => isset($input['enabled']) ? 'True' : 'False', 'CHECKOUT_OFFER_ACCENT' => $accent,
+        foreach (['CHECKOUT_OFFER_ENABLED' => isset($input['enabled']) ? 'True' : 'False',
             'CHECKOUT_OFFER_DISPLAY_MODE' => $mode, 'CHECKOUT_OFFER_APPEARANCE' => json_encode($appearance, JSON_THROW_ON_ERROR)] as $key => $value) {
             $db->perform('configuration', ['configuration_value' => $value], 'update', "configuration_key = '" . $key . "'");
         }
+        $db->query("DELETE FROM configuration WHERE configuration_key = 'CHECKOUT_OFFER_ACCENT'");
         return;
     }
     if ('uninstall' === $action) {

@@ -23,14 +23,11 @@ document.addEventListener('DOMContentLoaded', function () {
             launcher.textContent = section.dataset.openLabel;
             launcher.setAttribute('aria-haspopup', 'dialog');
             launcher.setAttribute('aria-controls', dialog.id);
-            const controls = document.createElement('div');
-            controls.className = 'checkout-offer-modal-controls';
             const close = document.createElement('button');
             close.type = 'button';
             close.className = 'checkout-offer-modal-close';
             close.textContent = '×';
             close.setAttribute('aria-label', section.dataset.closeLabel);
-            controls.append(close);
             const footer = document.createElement('div');
             footer.className = 'checkout-offer-modal-footer';
             const dismiss = document.createElement('button');
@@ -38,7 +35,7 @@ document.addEventListener('DOMContentLoaded', function () {
             dismiss.className = 'btn btn-outline-secondary btn-sm';
             dismiss.textContent = section.dataset.dismissLabel;
             footer.append(dismiss);
-            dialog.append(controls, section, footer);
+            dialog.append(close, section, footer);
             // Keep every offer field and submit button inside the original payment form.
             form.prepend(dialog);
             form.prepend(launcher);

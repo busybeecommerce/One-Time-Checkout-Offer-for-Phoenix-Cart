@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.1
+
+- Remove the modal header strip while retaining an accessible top-right close ×.
+- Add independent Left, Centre and Right alignment for modal text/buttons and product rows.
+- Remove the accent colour setting and coloured top border; use the configured button colour for keyboard focus. Clean up the obsolete setting when Setup is saved.
+- Test alignment placement, header removal, close/reopen behaviour and upgrade configuration.
+
 ## 1.1.0
 
 - Add optional modal offers with automatic opening once per basket, accessible close controls, Escape/backdrop dismissal and a reopen button.

@@ -30,6 +30,8 @@ function checkout_offer_appearance_fields(): array
         'modal_width' => ['type' => 'number', 'default' => 900, 'min' => 360, 'max' => 1200],
         'button_style' => ['type' => 'select', 'default' => 'outline', 'choices' => ['outline', 'solid']],
         'shadow' => ['type' => 'select', 'default' => 'none', 'choices' => ['none', 'soft', 'strong']],
+        'content_alignment' => ['type' => 'select', 'default' => 'left', 'choices' => ['left', 'center', 'right']],
+        'products_alignment' => ['type' => 'select', 'default' => 'left', 'choices' => ['left', 'center', 'right']],
     ];
 }
 
@@ -69,14 +71,12 @@ function checkout_offer_style(array $appearance): string
 {
     $style = '';
     foreach (checkout_offer_appearance_fields() as $key => $field) {
-        if ('select' !== $field['type']) {
+        if ('select' !== $field['type'] || in_array($key, ['content_alignment', 'products_alignment'], true)) {
             $unit = 'number' === $field['type'] && 'columns' !== $key ? 'px' : '';
             $style .= '--co-' . str_replace('_', '-', $key) . ':' . $appearance[$key] . $unit . ';';
         }
     }
-    $accent = defined('CHECKOUT_OFFER_ACCENT') && preg_match('/^#[0-9a-f]{6}$/i', CHECKOUT_OFFER_ACCENT)
-        ? CHECKOUT_OFFER_ACCENT : '#6f42c1';
-    return $style . '--co-accent:' . $accent . ';';
+    return $style;
 }
 
 function checkout_offer_language(): void

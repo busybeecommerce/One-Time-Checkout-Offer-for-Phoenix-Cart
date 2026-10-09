@@ -76,7 +76,7 @@ if (in_array('--modal', $argv, true)) {
     define('CHECKOUT_OFFER_DISPLAY_MODE', 'modal');
 }
 if (in_array('--styled', $argv, true)) {
-    define('CHECKOUT_OFFER_APPEARANCE', '{"background":"#eef6ff","radius":18,"padding":24,"image_height":180,"columns":2,"button_style":"solid","modal_width":800}');
+    define('CHECKOUT_OFFER_APPEARANCE', '{"background":"#eef6ff","radius":18,"padding":24,"image_height":180,"columns":2,"button_style":"solid","modal_width":800,"content_alignment":"center","products_alignment":"center"}');
 }
 define('STOCK_CHECK', 'true');
 define('DEFAULT_ORDERS_STATUS_ID', 1);
@@ -274,7 +274,7 @@ expect(str_contains($addressHtml, 'data-tax="20"'), 'Cards use checkout tax addr
 $GLOBALS['db']->products[2]['tax_rate'] = 20;
 expect(str_contains($html, 'checkout_offer_options[3][4]'), 'Option fields have server-readable names');
 expect(str_contains($html, 'Test &lt;product&gt;'), 'Product title escaped');
-expect(str_contains($html, '#123456'), 'Accent colour rendered');
+expect(!str_contains($html, '#123456') && !str_contains($html, '--co-accent'), 'Legacy accent colour is not rendered');
 expect(!str_contains($html, 'value="1" formaction'), 'Existing product hidden');
 
 checkout_offer_accept($GLOBALS['order'], 2, []);
@@ -339,19 +339,22 @@ expect(!isset($_SESSION['checkout_offer']), 'Empty completed basket expires acce
 
 $GLOBALS['db']->writes = [];
 checkout_offer_install();
-expect(6 === count($GLOBALS['db']->writes), 'Installer creates two tables and four settings');
-rejected(static fn() => checkout_offer_admin_action('settings', ['accent' => 'red']), 'Reject CSS injection');
+expect(5 === count($GLOBALS['db']->writes), 'Installer creates two tables and three settings');
+rejected(static fn() => checkout_offer_admin_action('settings', ['appearance' => ['background' => 'red;display:none']]), 'Reject CSS injection');
 rejected(static fn() => checkout_offer_admin_action('uninstall', []), 'Uninstall requires confirmation');
-checkout_offer_admin_action('settings', ['accent' => '#abcdef', 'enabled' => 'on']);
-$settingsWrites = array_slice($GLOBALS['db']->writes, -4);
+checkout_offer_admin_action('settings', ['enabled' => 'on']);
+$settingsWrites = array_slice($GLOBALS['db']->writes, -4, 3);
 expect('True' === $settingsWrites[0][1]['configuration_value'], 'Enable setting saved');
-rejected(static fn() => checkout_offer_admin_action('settings', ['accent' => '#abcdef', 'display_mode' => 'invalid']), 'Reject invalid display mode');
-checkout_offer_admin_action('settings', ['accent' => '#abcdef', 'display_mode' => 'modal', 'appearance' => ['radius' => 20, 'background' => '#fafafa']]);
-$settingsWrites = array_slice($GLOBALS['db']->writes, -4);
-expect('modal' === $settingsWrites[2][1]['configuration_value'], 'Modal choice saved');
-expect(20 === json_decode($settingsWrites[3][1]['configuration_value'], true)['radius'], 'Appearance saved');
-expect('update' === $settingsWrites[3][2], 'Appearance updates store configuration');
-foreach (['radius' => 41, 'image_height' => 301, 'columns' => 5, 'background' => 'red;display:none', 'shadow' => 'invalid'] as $key => $value) {
+rejected(static fn() => checkout_offer_admin_action('settings', ['display_mode' => 'invalid']), 'Reject invalid display mode');
+checkout_offer_admin_action('settings', ['display_mode' => 'modal', 'appearance' => ['radius' => 20, 'background' => '#fafafa', 'content_alignment' => 'right', 'products_alignment' => 'center']]);
+$settingsWrites = array_slice($GLOBALS['db']->writes, -4, 3);
+expect('modal' === $settingsWrites[1][1]['configuration_value'], 'Modal choice saved');
+expect(20 === json_decode($settingsWrites[2][1]['configuration_value'], true)['radius'], 'Appearance saved');
+expect('right' === json_decode($settingsWrites[2][1]['configuration_value'], true)['content_alignment'], 'Modal alignment saved');
+expect('update' === $settingsWrites[2][2], 'Appearance updates store configuration');
+expect(str_contains($GLOBALS['db']->writes[count($GLOBALS['db']->writes) - 1], "configuration_key = 'CHECKOUT_OFFER_ACCENT'"), 'Saving Setup removes legacy accent setting');
+expect(!str_contains(checkout_offer_style(checkout_offer_appearance()), 'accent'), 'Legacy accent has no styling effect');
+foreach (['radius' => 41, 'image_height' => 301, 'columns' => 5, 'background' => 'red;display:none', 'shadow' => 'invalid', 'content_alignment' => 'justify', 'products_alignment' => 'center;display:none'] as $key => $value) {
     rejected(static fn() => checkout_offer_sanitise_appearance([$key => $value], true), 'Reject out-of-range or unsafe appearance');
 }
 expect(6 === checkout_offer_sanitise_appearance(['radius' => 41])['radius'], 'Invalid stored appearance safely defaults');

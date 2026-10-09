@@ -31,6 +31,34 @@ const { chromium } = require('playwright');
     assert.equal(await page.locator('.checkout-offer-image').first().evaluate(node => getComputedStyle(node).height), '180px');
     assert.equal(await page.locator('[name="checkout_offer_product"]').first().evaluate(node => node.form.id), 'check_form');
     assert.equal(await page.locator('[data-offer-option]').evaluate(node => node.form.id), 'check_form');
+    assert.equal(await page.locator('.checkout-offer-modal-controls').count(), 0);
+    assert.equal(await page.locator('.checkout-offer-modal-close').evaluate(node => getComputedStyle(node).position), 'absolute');
+    assert.equal(await page.locator('#checkout-offer').evaluate(node => getComputedStyle(node).borderTopWidth), '1px');
+    for (const alignment of ['left', 'center', 'right']) {
+        await page.locator('#checkout-offer').evaluate((node, value) => {
+            node.style.setProperty('--co-content-alignment', value);
+            node.style.setProperty('--co-products-alignment', value);
+            node.querySelectorAll('[data-offer-card]')[1].hidden = true;
+        }, alignment);
+        await dialog.evaluate((node, value) => node.style.setProperty('--co-content-alignment', value), alignment);
+        assert.equal(await page.locator('#checkout-offer h2').evaluate(node => getComputedStyle(node).textAlign), alignment);
+        assert.equal(await page.locator('.checkout-offer-modal-footer').evaluate(node => getComputedStyle(node).justifyContent), alignment);
+        const bounds = await page.locator('.checkout-offer-grid').evaluate(node => {
+            const grid = node.getBoundingClientRect();
+            const card = node.firstElementChild.getBoundingClientRect();
+            return { left: card.left - grid.left, right: grid.right - card.right, width: grid.width, cardWidth: card.width };
+        });
+        if (alignment === 'left') assert.ok(bounds.left < 1);
+        if (alignment === 'center') assert.ok(Math.abs(bounds.left - bounds.right) < 1);
+        if (alignment === 'right') assert.ok(bounds.right < 1);
+        assert.ok(bounds.cardWidth < bounds.width * .6);
+    }
+    await page.locator('#checkout-offer').evaluate(node => {
+        node.style.setProperty('--co-content-alignment', 'center');
+        node.style.setProperty('--co-products-alignment', 'center');
+        node.querySelectorAll('[data-offer-card]')[1].hidden = false;
+    });
+    await dialog.evaluate(node => node.style.setProperty('--co-content-alignment', 'center'));
     await page.screenshot({ path: 'build/modal-desktop.png', fullPage: true });
     await page.keyboard.press('Escape');
     await page.waitForFunction(() => document.activeElement.getAttribute('aria-controls') === 'checkout-offer-modal');
