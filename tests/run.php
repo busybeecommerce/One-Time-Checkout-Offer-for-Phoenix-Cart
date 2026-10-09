@@ -41,6 +41,7 @@ $contracts = [
     'templates/default/includes/components/template_top.php' => ["cat('injectRedirects')"],
     'templates/default/includes/components/template_bottom.php' => ["cat('injectBodyEnd')"],
     'includes/system/segments/checkout/insert_order.php' => ["'final_price' => \$product['final_price']", "'products_tax' => \$product['tax']"],
+    'admin/includes/classes/admin.php' => ['function catalog(', 'catalog_linker->build'],
 ];
 expect(in_array($phoenixVersion, ['1.1.0.6', '1.1.0.8'], true), 'Unsupported Phoenix reference version');
 foreach ($contracts as $file => $needles) {
@@ -55,7 +56,7 @@ expect(count($manifest) === count(array_unique($manifest)), 'Duplicate manifest 
 foreach ($manifest as $file) {
     expect(is_file($root . '/' . $file), "Missing package file: $file");
 }
-foreach (['admin', 'includes', 'ext'] as $directory) {
+foreach (['admin', 'includes', 'ext', 'images'] as $directory) {
     $iterator = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($root . '/' . $directory, FilesystemIterator::SKIP_DOTS));
     foreach ($iterator as $file) {
         $relative = str_replace('\\', '/', substr($file->getPathname(), strlen($root) + 1));

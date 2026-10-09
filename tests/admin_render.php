@@ -24,6 +24,7 @@ $GLOBALS['all_hooks'] = new class {
 };
 $GLOBALS['Admin'] = $Admin = new class {
     public function link(string $page, array $parameters = []): Href { return new Href('https://example.test/admin/', $page, $parameters, false); }
+    public function catalog(string $page): Href { return new Href('https://example.test/store/', $page, [], false); }
 };
 $GLOBALS['db'] = $db = new class($scenario) {
     private string $scenario;
@@ -93,7 +94,7 @@ if ('tier' === $scenario) {
     $expected[] = 'name="products_id"';
     $expected[] = 'name="item_id" value="1"';
 }
-foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"']) as $text) {
+foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.1.2']) as $text) {
     if (!str_contains($html, $text)) {
         throw new RuntimeException("Admin $scenario output missing: $text");
     }

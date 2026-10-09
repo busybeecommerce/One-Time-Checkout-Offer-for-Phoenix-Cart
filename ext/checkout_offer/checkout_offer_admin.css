@@ -1,0 +1,55 @@
+.checkout-offer-admin {
+    --co-admin-brand: #ff7a00;
+    --co-admin-ink: #212529;
+    --co-admin-border: #dfe3e8;
+    max-width: 90rem;
+    margin: 1.25rem auto 2rem;
+    padding: 1.25rem;
+    border-radius: 1rem;
+    background: #f6f8fa;
+    color: var(--co-admin-ink);
+    font-size: .925rem;
+}
+.checkout-offer-admin .co-admin-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.25rem; padding: 1.5rem; border-radius: .875rem; background: linear-gradient(120deg, var(--co-admin-brand), #ffc107); box-shadow: 0 4px 16px #9e4a001a; }
+.checkout-offer-admin .co-admin-heading { flex: 1 1 20rem; min-width: 0; }
+.checkout-offer-admin .co-admin-eyebrow { margin: 0 0 .4rem; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
+.checkout-offer-admin .co-admin-header h1 { margin: 0 0 .75rem; font-size: clamp(1.35rem, 2.2vw, 1.85rem); font-weight: 700; line-height: 1.2; }
+.checkout-offer-admin .co-admin-status { display: inline-block; padding: .3rem .65rem; border: 1px solid #21252926; border-radius: 2rem; background: #ffffffd9; font-size: .75rem; font-weight: 600; }
+.checkout-offer-admin .co-admin-logo { display: block; width: 16rem; max-width: 100%; padding: .5rem .75rem; border-radius: .75rem; background: #fff; }
+.checkout-offer-admin .co-admin-logo img { display: block; width: 100%; height: auto; }
+.checkout-offer-admin .co-admin-intro { margin: 1.25rem .25rem; color: #52606d; line-height: 1.6; }
+.checkout-offer-admin .card { border: 1px solid var(--co-admin-border); border-radius: .875rem; box-shadow: 0 3px 12px #26313d08; overflow: hidden; }
+.checkout-offer-admin .card-body { padding: 1.25rem; }
+.checkout-offer-admin .card-body > h2 { margin: -.25rem 0 1.1rem; padding-bottom: .85rem; border-bottom: 1px solid #e9edf1; font-size: 1.05rem; font-weight: 700; }
+.checkout-offer-admin .form-label { display: block; margin-bottom: .4rem; color: #46515d; font-size: .8rem; font-weight: 600; }
+.checkout-offer-admin .form-control, .checkout-offer-admin .form-select { font-size: .875rem; border-color: #cfd7df; border-radius: .5rem; min-height: 2.25rem; }
+.checkout-offer-admin .form-control:focus, .checkout-offer-admin .form-select:focus { border-color: var(--co-admin-brand); box-shadow: 0 0 0 .2rem #ff7a0026; }
+.checkout-offer-admin .form-check-input:checked { background-color: #b95500; border-color: #b95500; }
+.checkout-offer-admin .form-check-input:focus { border-color: #b95500; box-shadow: 0 0 0 .2rem #ff7a0026; }
+.checkout-offer-admin .btn { border-radius: .5rem; font-size: .825rem; font-weight: 600; padding: .5rem .85rem; }
+.checkout-offer-admin .btn-primary { color: #fff; background: #a94d00; border-color: #a94d00; }
+.checkout-offer-admin .btn-primary:hover { background: #873d00; border-color: #873d00; }
+.checkout-offer-admin .btn-outline-primary { color: #a94d00; border-color: #a94d00; }
+.checkout-offer-admin .btn-outline-primary:hover { color: #fff; background: #a94d00; }
+.checkout-offer-admin .btn:focus-visible, .checkout-offer-admin a:focus-visible, .checkout-offer-admin summary:focus-visible { outline: 3px solid #a94d00; outline-offset: 3px; box-shadow: none; }
+.checkout-offer-admin .co-admin-appearance { padding: .85rem; border: 1px solid #f1d7bb; border-radius: .65rem; background: #fffaf4; }
+.checkout-offer-admin summary { cursor: pointer; font-size: .875rem; }
+.checkout-offer-admin .co-admin-appearance[open] summary { margin-bottom: .75rem; }
+.checkout-offer-admin .co-admin-tier { margin-bottom: .5rem; padding: .85rem; border: 1px solid var(--co-admin-border); border-radius: .6rem; background: #fafbfc; }
+.checkout-offer-admin .co-admin-tier-selected { border-color: #dc8b42; background: #fff4e7; }
+.checkout-offer-admin .co-admin-tier a { display: block; margin-bottom: .25rem; color: #914400; font-weight: 600; text-decoration: none; }
+.checkout-offer-admin .co-admin-tier a:hover { text-decoration: underline; }
+.checkout-offer-admin .co-admin-product-rule { padding: 1rem; margin-bottom: 1rem; border: 1px solid var(--co-admin-border); border-radius: .65rem; background: #fafbfc; }
+.checkout-offer-admin .co-admin-product-rule:last-child { margin-bottom: 0; }
+.checkout-offer-admin .co-admin-product-rule h3 { margin: 0 0 .85rem; color: #46515d; font-size: .85rem; font-weight: 700; }
+.checkout-offer-admin .co-admin-product-rule .form-label { width: 100%; }
+.checkout-offer-admin .co-admin-empty p { margin: 0; color: #66727e; }
+.checkout-offer-admin .co-admin-uninstall { padding: 1rem 1.25rem; border: 1px solid var(--co-admin-border); border-radius: .75rem; background: #fff; }
+@media (max-width: 575px) {
+    .checkout-offer-admin { padding: .75rem; }
+    .checkout-offer-admin .co-admin-header { padding: 1rem; }
+    .checkout-offer-admin .co-admin-heading { flex-basis: 100%; }
+    .checkout-offer-admin .co-admin-logo { width: 14rem; }
+    .checkout-offer-admin .card-body { padding: 1rem; }
+    .checkout-offer-admin .co-admin-appearance .col-6 { width: 100%; }
+}

@@ -4,6 +4,8 @@ Run README.md automated commands. PHP tests lint package files, check manifest/c
 
 The admin rendering regression executes the complete add-on page using real Phoenix Form, Input and Href classes. It checks the pre-install screen, setup and tier/product forms, CSRF inputs, completion of the page and registration within Reports. Bootstrap/template wrappers and database rows are fixtures.
 
+After generating all three admin fixtures, `node tests/admin_browser.cjs` checks the packaged logo and BusyBee link, page-scoped colours, responsive bounds, appearance controls and unchanged settings/product form submissions. It uses Bootstrap 5.3.8, matching Phoenix's admin hook, and saves desktop/mobile screenshots under `build/`. `CHECKOUT_OFFER_BOOTSTRAP_CSS` can point to the same stylesheet locally instead of an npm installation.
+
 `node tests/browser.cjs` uses actual PHP-generated inline and styled modal fixtures (generate with `tests/run.php --render` and `--render --modal --styled`). It verifies native dialog opening/dismissal/reopening, token/payment/product/option submission, mobile bounds, disabled storage and JavaScript/dialog fallbacks. Screenshots are saved under `build/`. Set `CHECKOUT_OFFER_BROWSER=msedge` to use installed Edge locally. Browser fixtures use simplified surrounding checkout markup; test your theme on staging.
 
 The browser regression also checks that no modal header strip renders, the corner close button remains positioned correctly, the accent border is absent, and Left/Centre/Right settings actually position both text and an incomplete product row. PHP/admin tests check alignment persistence and validation plus removal of the obsolete accent setting.

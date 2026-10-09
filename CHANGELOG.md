@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.1.2
+
+- Add a BusyBee orange/yellow admin header with a locally packaged logo linking to BusyBee Commerce and an offer-status indicator.
+- Refine admin spacing, typography, inputs, buttons, selected-tier highlighting and product forms; include guidance before a tier is selected.
+- Scope styling to the add-on page and resolve logo/CSS URLs through Phoenix's catalogue link builder.
+- Verify desktop/mobile rendering with Phoenix's Bootstrap version and retain existing settings/product submission fields.
+
 ## 1.1.1
 
 - Remove the modal header strip while retaining an accessible top-right close ×.
