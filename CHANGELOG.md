@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.7
+
+- Show the customisable You save label and saving amount beneath Classic modal offer prices. Preserve card/button alignment and existing option-price recalculation.
+
 ## 1.7.6
 
 - Show the customisable You save label and saving amount beneath Classic inline offer prices. Retain aligned purchase rows and existing option-price recalculation.
