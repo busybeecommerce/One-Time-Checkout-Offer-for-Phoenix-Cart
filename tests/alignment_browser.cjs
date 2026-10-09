@@ -3,12 +3,13 @@
 const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const { chromium } = require('playwright');
+let browser;
 
 (async function () {
     const bootstrap = fs.readFileSync(process.env.CHECKOUT_OFFER_BOOTSTRAP_CSS || require.resolve('bootstrap/dist/css/bootstrap.min.css'), 'utf8');
     const css = fs.readFileSync('ext/checkout_offer/checkout_offer.css', 'utf8');
     const js = fs.readFileSync('ext/checkout_offer/checkout_offer.js', 'utf8');
-    const browser = await chromium.launch({ headless: true, ...(process.env.CHECKOUT_OFFER_BROWSER ? { channel: process.env.CHECKOUT_OFFER_BROWSER } : {}) });
+    browser = await chromium.launch({ headless: true, ...(process.env.CHECKOUT_OFFER_BROWSER ? { channel: process.env.CHECKOUT_OFFER_BROWSER } : {}) });
     const page = await browser.newPage();
     await page.route('http://alignment.test/**', route => {
         if (route.request().url().endsWith('.png')) return route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="80" height="80"><circle cx="40" cy="40" r="30" fill="green"/></svg>' });
@@ -73,4 +74,8 @@ const { chromium } = require('playwright');
     }
     await browser.close();
     console.log('Alignment browser checks passed: ' + cases + ' Classic/template, inline/modal, responsive alignment cases.');
-})().catch(error => { console.error(error); process.exitCode = 1; });
+})().catch(async error => {
+    console.error(error);
+    if (browser) await browser.close();
+    process.exitCode = 1;
+});
