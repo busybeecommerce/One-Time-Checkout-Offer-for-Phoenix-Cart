@@ -12,6 +12,8 @@ The browser regression also checks that no modal header strip renders, the corne
 
 Generate each template fixture with `php tests/run.php <reference> --render --template=red` and the equivalent `--modal` command; repeat for honey, midnight and green. `node tests/templates_browser.cjs` verifies all four templates in both display modes, mobile bounds, full-width product rows, savings/button prices, product/options/token submission, close/reopen and no-JavaScript output. Template screenshots are saved in `build/`. Admin browser tests also save a selected template through the existing Setup form.
 
+Template browser checks measure Add button width and image/button positions for Left, Centre and Right at desktop and mobile widths. Centred screenshots show the thumbnail above the details. Saved alignment is rendered as a validated data attribute by the PHP hook, including when JavaScript is unavailable.
+
 ## Staging acceptance
 
 1. Install twice; retain tiers. Confirm administrator access controls.

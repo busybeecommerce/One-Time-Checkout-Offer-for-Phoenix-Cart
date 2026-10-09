@@ -263,6 +263,7 @@ expect(str_contains($html, 'src="images/test.png"'), 'Offer image uses the Phoen
 expect(str_contains($html, 'data-display-mode="' . checkout_offer_display_mode() . '"'), 'Configured display mode is rendered');
 expect(str_contains($html, '--co-image-height:'), 'Appearance values rendered as scoped CSS properties');
 expect(str_contains($html, 'data-template="' . checkout_offer_appearance()['template'] . '"'), 'Validated template is rendered');
+expect(str_contains($html, 'data-content-alignment="' . checkout_offer_appearance()['content_alignment'] . '"'), 'Validated image/content alignment is rendered');
 expect(str_contains($html, 'data-offer-saving') && str_contains($html, 'data-button-price'), 'Savings and price-labelled button render without JavaScript');
 expect(str_contains((new hook_shop_siteWide_checkoutOffer())->listen_injectSiteStart(), 'checkout_offer.css'), 'Appearance stylesheet is loaded');
 if (in_array('--render', $argv, true)) {

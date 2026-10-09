@@ -1,6 +1,6 @@
 # One-Time Checkout Offer for Phoenix Cart
 
-Version **1.2.0** · Tested CE Phoenix Cart **1.1.0.6 / 1.1.0.8** · PHP **8.1–8.3**
+Version **1.2.1** · Tested CE Phoenix Cart **1.1.0.6 / 1.1.0.8** · PHP **8.1–8.3**
 
 Present discounted products at the payment step of checkout. This independent Phoenix implementation follows [PrestaChamps' published feature description](https://shop.prestachamps.com/en/prestashop-modules/118-one-time-checkout-offer.html). No PrestaShop module code or assets are included.
 
@@ -38,7 +38,7 @@ Changing basket contents, quantity, options, customer or currency invalidates ac
 
 Choose **Reports → Checkout Offers → Setup → Offer display** and save. Inline is the default. Modal opens once per eligible basket in the current browser tab; customers can dismiss it or reopen it with **View checkout offers**. Expand **Appearance** to customise either display. Existing installations receive the new settings when Setup is saved, preserving tiers and products.
 
-Under Appearance, **Modal text and button alignment** and **Modal product row alignment** each offer Left, Centre and Right. Product row alignment positions incomplete rows within the configured columns. Alignment affects the modal only. The former accent setting and coloured top border have been removed; saving Setup cleans up the obsolete setting.
+Under Appearance, **Modal image, text and button alignment** and **Modal product row alignment** each offer Left, Centre and Right. Product row alignment positions incomplete Classic rows within the configured columns. Styled templates keep the compact image-left layout when Left is selected; Centre and Right stack the image above the details at the chosen position. Add buttons fit their labels. Alignment affects the modal only. The former accent setting and coloured top border have been removed; saving Setup cleans up the obsolete setting.
 
 Choose a design under **Setup → Appearance → Offer template**, then save. **Custom / Classic** preserves your current design and manual colour/button/column settings. Styled templates supply their own colours, solid buttons, full-width compact product rows and thumbnail sizes. Spacing, corners, text size, modal width and modal text alignment remain configurable. Templates work inline and in modals; the classic modal remains header-free while styled designs include a promotional banner. Savings and button prices update with selected options, tax display and currency, and also render without JavaScript.
 
@@ -63,7 +63,7 @@ foreach ($template in @('red','honey','midnight','green')) {
 }
 node tests/templates_browser.cjs
 git diff --check
-powershell -File scripts/build_package.ps1 -Version 1.2.0
+powershell -File scripts/build_package.ps1 -Version 1.2.1
 ```
 
 The harness uses real Phoenix order/tax/currency classes with deterministic database/cart fixtures, without defining legacy image constants. CI repeats checks on PHP 8.1 and 8.3 against pinned Phoenix 1.1.0.6 and 1.1.0.8 references. Browser checks require Playwright 1.62.1, Bootstrap 5.3.8 and Chromium (`npm install --no-save --package-lock=false playwright@1.62.1 bootstrap@5.3.8`, then `npx playwright install chromium`). No live store or payment capture was tested. See [TESTING.md](TESTING.md) for staging checks.
