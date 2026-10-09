@@ -58,9 +58,10 @@ let browser;
                         assert.equal(card.imagePosition, { left: '0% 50%', center: '50% 50%', right: '100% 50%' }[alignment]);
                         assert.ok(card.savingTop >= card.offerBottom, 'Savings appear beneath the offer price');
                         assert.ok(card.buttonTop >= card.savingBottom, 'Buttons appear beneath savings');
-                        if (alignment === 'left') assert.ok(Math.abs(card.buttonLeft - card.left) < 2);
-                        if (alignment === 'center') assert.ok(Math.abs(card.buttonCenter - card.center) < 2);
-                        if (alignment === 'right') assert.ok(Math.abs(card.buttonRight - card.right) < 2);
+                        const placement = JSON.stringify({ theme, mode, width, alignment, card });
+                        if (alignment === 'left') assert.ok(Math.abs(card.buttonLeft - card.left) < 2, placement);
+                        if (alignment === 'center') assert.ok(Math.abs(card.buttonCenter - card.center) < 2, placement);
+                        if (alignment === 'right') assert.ok(Math.abs(card.buttonRight - card.right) < 2, placement);
                     }
                     if (Math.abs(cards[0].top - cards[1].top) < 1) {
                         assert.ok(Math.abs(cards[0].priceTop - cards[1].priceTop) < 1, 'Prices align with and without options: ' + JSON.stringify({ theme, mode, width, alignment, cards }));
