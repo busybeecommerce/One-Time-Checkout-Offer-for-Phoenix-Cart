@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1
+
+- Make styled-template Add buttons fit their labels rather than filling the available width.
+- Apply modal content alignment to product images as well as text and buttons. Centre and Right stack thumbnails above aligned details; Left keeps compact rows.
+- Verify image/button positions and compact button widths in all templates on desktop and mobile.
+
 ## 1.2.0
 
 - Add an admin template picker with visual swatches: Custom / Classic, Red special offer, BusyBee honey, Midnight and Fresh green.

@@ -20,6 +20,8 @@ For v1.1.2, also upload the new `ext/checkout_offer/checkout_offer_admin.css` an
 
 For v1.2.0, upload the updated add-on PHP/language, CSS and JavaScript files. Select a design under **Setup → Appearance → Offer template** and save. Existing installations default to Custom / Classic, preserving their appearance. Styled templates use their own colour palette and compact product rows; choosing Classic restores manual appearance settings. No database migration or reinstallation is required.
 
+For v1.2.1, upload the updated add-on files, particularly the checkout offer hook, site-wide hook and stylesheet. Styled Add buttons now fit their labels. The modal image/text/button alignment setting also positions thumbnails: Centre and Right show the image above the details at the chosen position; Left retains compact image-left rows. Existing saved alignment settings apply automatically. No database changes are required.
+
 When updating from v1.0.0, overwrite `admin/includes/boxes/checkout_offer.php` as well as uploading the new `reports_checkout_offer.php` box and its language file. The old file is intentionally retained as an empty compatibility file to remove the separate top-level menu. Existing tiers/settings are preserved.
 
 ## Integration contract

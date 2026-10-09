@@ -36,6 +36,7 @@ const { chromium } = require('playwright');
             assert.equal(await product.locator('[data-offer-saving]').textContent(), '£8.40');
             assert.equal(await product.locator('[data-button-price]').textContent(), '£9.60');
             assert.equal(await product.locator('button').evaluate(node => node.form.id), 'check_form');
+            assert.ok(await product.locator('button').evaluate(node => node.getBoundingClientRect().width < node.parentElement.getBoundingClientRect().width * .85));
             await page.evaluate(() => document.querySelector('form').addEventListener('submit', event => {
                 event.preventDefault(); window.submission = Object.fromEntries(new FormData(event.target, event.submitter));
             }));
@@ -47,6 +48,40 @@ const { chromium } = require('playwright');
             if (mode === 'modal') {
                 assert.equal(await section.evaluate(node => getComputedStyle(node).paddingTop), '0px');
                 await page.locator('#checkout-offer-modal').evaluate(node => node.style.setProperty('--co-modal-width', '560px'));
+                for (const width of [1280, 375]) {
+                    await page.setViewportSize({ width, height: 900 });
+                    for (const alignment of ['left', 'center', 'right']) {
+                        await section.evaluate((node, value) => {
+                            node.dataset.contentAlignment = value;
+                            node.style.setProperty('--co-content-alignment', value);
+                        }, alignment);
+                        await page.locator('#checkout-offer-modal').evaluate((node, value) => node.style.setProperty('--co-content-alignment', value), alignment);
+                        const bounds = await product.evaluate(node => {
+                            const card = node.getBoundingClientRect();
+                            const image = node.querySelector('img').getBoundingClientRect();
+                            const button = node.querySelector('button').getBoundingClientRect();
+                            const style = getComputedStyle(node);
+                            return { imageCenter: image.left + image.width / 2, buttonCenter: button.left + button.width / 2,
+                                center: card.left + card.width / 2, left: card.left + parseFloat(style.paddingLeft) + 1,
+                                right: card.right - parseFloat(style.paddingRight) - 1, imageLeft: image.left, imageRight: image.right,
+                                buttonRight: button.right, textAlign: getComputedStyle(node.querySelector('h3')).textAlign };
+                        });
+                        assert.equal(bounds.textAlign, alignment);
+                        if (alignment === 'center') {
+                            assert.ok(Math.abs(bounds.imageCenter - bounds.center) < 2);
+                            assert.ok(Math.abs(bounds.buttonCenter - bounds.center) < 2);
+                        }
+                        if (alignment === 'left') assert.ok(Math.abs(bounds.imageLeft - bounds.left) < 2);
+                        if (alignment === 'right') {
+                            assert.ok(Math.abs(bounds.imageRight - bounds.right) < 2);
+                            assert.ok(Math.abs(bounds.buttonRight - bounds.right) < 2);
+                        }
+                        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+                    }
+                }
+                await section.evaluate(node => { node.dataset.contentAlignment = 'center'; node.style.setProperty('--co-content-alignment', 'center'); });
+                await page.locator('#checkout-offer-modal').evaluate(node => node.style.setProperty('--co-content-alignment', 'center'));
+                await page.setViewportSize({ width: 1280, height: 900 });
             }
             await page.screenshot({ path: 'build/template-' + theme + '-' + mode + '.png', fullPage: true });
             await page.setViewportSize({ width: 375, height: 812 });
