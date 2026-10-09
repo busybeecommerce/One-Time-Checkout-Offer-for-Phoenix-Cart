@@ -29,7 +29,13 @@ const { chromium } = require('playwright');
             const section = page.locator('#checkout-offer');
             assert.equal(await section.getAttribute('data-template'), theme);
             assert.equal(await page.locator('.checkout-offer-badge').isVisible(), true);
-            assert.equal(await page.locator('.checkout-offer-note').isVisible(), true);
+            assert.equal(await page.locator('.checkout-offer-note').isVisible(), mode === 'inline');
+            if (mode === 'modal') {
+                assert.equal(await page.locator('.checkout-offer-modal-footer').count(), 0);
+                assert.equal(await page.locator('.checkout-offer-dismiss').evaluate(node => node.parentElement.id), 'checkout-offer');
+                assert.equal(await page.locator('.checkout-offer-dismiss').isVisible(), true);
+            }
+            assert.equal(await page.locator('.checkout-offer-banner h2').evaluate(node => parseFloat(getComputedStyle(node).fontSize) / parseFloat(getComputedStyle(node.closest('section')).fontSize)), 1.5);
             assert.equal(await page.locator('.checkout-offer-card').first().evaluate(node => node.getBoundingClientRect().width > node.parentElement.getBoundingClientRect().width * .9), true);
             const product = page.locator('[data-offer-card]').nth(1);
             assert.equal(await product.locator('[data-offer-saving]').textContent(), '£8.40');
@@ -90,7 +96,7 @@ const { chromium } = require('playwright');
             await page.locator('.checkout-offer-image').evaluateAll(images => Promise.all(images.map(image => image.decode())));
             await page.screenshot({ path: 'build/template-' + theme + '-' + mode + '-mobile.png', fullPage: true });
             if (mode === 'modal') {
-                await page.getByRole('button', { name: 'Close checkout offers' }).click();
+                await page.getByRole('button', { name: 'No thanks, continue checkout' }).click();
                 assert.equal(await page.locator('#checkout-offer-modal').evaluate(node => node.open), false);
                 assert.equal(await page.getByRole('button', { name: 'View checkout offers' }).count(), 0);
                 await page.reload();

@@ -14,6 +14,8 @@ Generate each template fixture with `php tests/run.php <reference> --render --te
 
 Template browser checks measure Add button width and image/button positions for Left, Centre and Right at desktop and mobile widths. Centred screenshots show the thumbnail above the details. Saved alignment is rendered as a validated data attribute by the PHP hook, including when JavaScript is unavailable.
 
+The modal checks verify that footer containers are absent, the availability note is hidden only inside the modal, and the retained dismissal button belongs to the main offer content. Every styled template checks the restrained heading scale and dismissal/reload behaviour.
+
 ## Staging acceptance
 
 1. Install twice; retain tiers. Confirm administrator access controls.

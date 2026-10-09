@@ -23,14 +23,12 @@ document.addEventListener('DOMContentLoaded', function () {
             close.className = 'checkout-offer-modal-close';
             close.textContent = '×';
             close.setAttribute('aria-label', section.dataset.closeLabel);
-            const footer = document.createElement('div');
-            footer.className = 'checkout-offer-modal-footer';
             const dismiss = document.createElement('button');
             dismiss.type = 'button';
-            dismiss.className = 'btn btn-outline-secondary btn-sm';
+            dismiss.className = 'btn btn-outline-secondary btn-sm checkout-offer-dismiss';
             dismiss.textContent = section.dataset.dismissLabel;
-            footer.append(dismiss);
-            dialog.append(close, section, footer);
+            section.append(dismiss);
+            dialog.append(close, section);
             // Keep every offer field and submit button inside the original payment form.
             form.prepend(dialog);
             close.addEventListener('click', function () { dialog.close(); });
