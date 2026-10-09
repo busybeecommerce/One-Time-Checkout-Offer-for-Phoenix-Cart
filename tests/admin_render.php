@@ -85,7 +85,10 @@ if (in_array('--expect-broken', $argv, true)) {
 if (null !== $error) {
     throw $error;
 }
-$expected = 'install' === $scenario ? ['Install database tables'] : ['Setup', 'New tier', 'Uninstall', 'name="display_mode"', 'Modal popup', 'name="appearance[modal_width]"', 'name="appearance[background]"'];
+$expected = 'install' === $scenario ? ['Install database tables'] : ['Setup', 'New tier', 'Uninstall', 'name="display_mode"', 'Modal popup', 'name="appearance[modal_width]"', 'name="appearance[background]"', 'name="appearance[content_alignment]"', 'name="appearance[products_alignment]"'];
+if (str_contains($html, 'name="accent"') || str_contains($html, 'Accent colour')) {
+    throw new RuntimeException('Removed accent setting must not render.');
+}
 if ('tier' === $scenario) {
     $expected[] = 'name="products_id"';
     $expected[] = 'name="item_id" value="1"';

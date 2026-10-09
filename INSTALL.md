@@ -3,7 +3,7 @@
 1. Back up store files and database. Use staging first.
 2. Extract the release ZIP. Copy `includes/` and `ext/` into the store root and `admin/` contents into your actual admin directory (including a renamed admin). All are new files; no Phoenix files should be replaced.
 3. Open **Reports → Checkout Offers** in administration, or open `checkout_offer.php` inside your admin directory. Grant access through the store's normal administrator permissions.
-4. Click **Install database tables**. Repeat installation preserves existing rules. Creates `checkout_offer_tiers`, `checkout_offer_products` and four settings.
+4. Click **Install database tables**. Repeat installation preserves existing rules. Creates `checkout_offer_tiers`, `checkout_offer_products` and three settings.
 5. Create a titled tier with minimum, optional maximum and priority. Minimum is inclusive, maximum exclusive. Amounts use base currency and include VAT and delivery. Higher priority wins. A 50–100 tier covers baskets of at least 50 and less than 100.
 6. Attach active product IDs. Choose fixed prices excluding tax or percentages from 0 to 100. Fixed prices include all selected options. Ensure sufficient stock.
 7. Select inline or modal under **Setup → Offer display**. Expand **Appearance** for colours, buttons, shadows, borders, spacing, image size, font size, columns and modal width. Enable offers, save Setup and run TESTING.md staging checks.
@@ -13,6 +13,8 @@
 To update, replace only add-on files; do not uninstall first. To uninstall, disable offers, expand Uninstall, check its confirmation and submit. Historical orders are preserved. Remove uploaded files under `admin/`, `includes/` and `ext/` listed in `package-manifest.txt`. Documentation need not be uploaded.
 
 For v1.1.0, upload the new `ext/checkout_offer/checkout_offer.css` along with updated add-on PHP, language and JavaScript files. Save Setup to create the new settings. Existing installations keep inline display until modal is selected. Modal opens once per basket in the current browser tab; blocked storage may cause it to open on each visit. Without JavaScript or native dialog support, offers remain inline.
+
+For v1.1.1, upload the updated add-on files and save Setup. Appearance includes independent modal text/button and product row alignment (Left, Centre or Right). The modal's separate header strip is removed and the close × remains in its top-right corner. Accent colour styling is removed immediately; saving Setup removes the old accent setting. Existing rules and other appearance values are preserved.
 
 When updating from v1.0.0, overwrite `admin/includes/boxes/checkout_offer.php` as well as uploading the new `reports_checkout_offer.php` box and its language file. The old file is intentionally retained as an empty compatibility file to remove the separate top-level menu. Existing tiers/settings are preserved.
 

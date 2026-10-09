@@ -52,8 +52,6 @@ require 'includes/template_top.php';
               <option value="modal" <?= 'modal' === checkout_offer_display_mode() ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_MODAL ?></option>
             </select>
             <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_MODAL_HELP ?></p>
-            <label class="form-label" for="accent"><?= CHECKOUT_OFFER_ADMIN_ACCENT ?></label>
-            <input class="form-control form-control-color mb-3" type="color" id="accent" name="accent" value="<?= checkout_offer_escape(defined('CHECKOUT_OFFER_ACCENT') ? CHECKOUT_OFFER_ACCENT : '#6f42c1') ?>">
             <details class="mb-3"><summary class="fw-semibold"><?= CHECKOUT_OFFER_ADMIN_APPEARANCE ?></summary>
               <div class="row g-2 mt-1">
                 <?php foreach (checkout_offer_appearance_fields() as $key => $field) { ?>
