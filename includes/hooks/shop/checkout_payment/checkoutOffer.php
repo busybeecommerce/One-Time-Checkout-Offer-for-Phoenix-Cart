@@ -32,11 +32,10 @@ class hook_shop_checkout_payment_checkoutOffer {
             return '';
         }
         $appearance = checkout_offer_appearance();
-        $key = hash('sha256', checkout_offer_basket_signature() . ':' . (int)$tier['id']);
         return '<section id="checkout-offer" class="mb-4" data-display-mode="' . checkout_offer_display_mode()
-            . '" data-offer-key="' . $key . '" data-template="' . $appearance['template'] . '" data-content-alignment="' . $appearance['content_alignment']
+            . '" data-template="' . $appearance['template'] . '" data-content-alignment="' . $appearance['content_alignment']
             . '" data-shadow="' . $appearance['shadow'] . '" data-button-style="' . $appearance['button_style']
-            . '" data-open-label="' . checkout_offer_escape(CHECKOUT_OFFER_OPEN) . '" data-close-label="' . checkout_offer_escape(CHECKOUT_OFFER_CLOSE)
+            . '" data-close-label="' . checkout_offer_escape(CHECKOUT_OFFER_CLOSE)
             . '" data-dismiss-label="' . checkout_offer_escape(CHECKOUT_OFFER_DISMISS) . '" style="' . checkout_offer_escape(checkout_offer_style($appearance)) . '">'
             . '<div class="checkout-offer-banner"><span class="checkout-offer-badge">' . CHECKOUT_OFFER_BADGE . '</span>'
             . '<h2 class="h5" id="checkout-offer-title">' . ('classic' === $appearance['template'] ? CHECKOUT_OFFER_HEADING : CHECKOUT_OFFER_TEMPLATE_HEADING)

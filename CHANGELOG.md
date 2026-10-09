@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.3.0
+
+- Automatically open eligible modal offers on every payment-page entry or reload; remove launcher and session storage suppression.
+- Restore focus to checkout after dismissal without reopening on the same page.
+- Upgrade styled templates with richer promotional banners, larger product imagery, depth and compact Add buttons. Respect reduced motion.
+- Preserve Classic settings, alignment, inline fallbacks and server-side checkout accounting.
+
 ## 1.2.1
 
 - Make styled-template Add buttons fit their labels rather than filling the available width.

@@ -8,8 +8,6 @@ const { chromium } = require('playwright');
     const bootstrap = fs.readFileSync(process.env.CHECKOUT_OFFER_BOOTSTRAP_CSS || require.resolve('bootstrap/dist/css/bootstrap.min.css'), 'utf8');
     const browser = await chromium.launch({ headless: true, ...(process.env.CHECKOUT_OFFER_BROWSER ? { channel: process.env.CHECKOUT_OFFER_BROWSER } : {}) });
     const context = await browser.newContext();
-    // Each visual variant represents a fresh basket; once-per-basket behaviour has its own regression.
-    await context.addInitScript(() => sessionStorage.clear());
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
@@ -90,7 +88,8 @@ const { chromium } = require('playwright');
             if (mode === 'modal') {
                 await page.getByRole('button', { name: 'Close checkout offers' }).click();
                 assert.equal(await page.locator('#checkout-offer-modal').evaluate(node => node.open), false);
-                await page.getByRole('button', { name: 'View checkout offers' }).click();
+                assert.equal(await page.getByRole('button', { name: 'View checkout offers' }).count(), 0);
+                await page.reload();
                 assert.equal(await page.locator('#checkout-offer-modal').evaluate(node => node.open), true);
             }
         }
@@ -103,5 +102,5 @@ const { chromium } = require('playwright');
     assert.equal(await staticPage.locator('[data-offer-saving]').nth(1).textContent(), '£8.40');
     assert.deepEqual(errors, []);
     await browser.close();
-    console.log('Template browser checks passed: all four designs in inline/modal, mobile, price/savings, submission, close/reopen and no-JavaScript rendering.');
+    console.log('Template browser checks passed: all four designs in inline/modal, mobile, price/savings, submission, dismiss/reload and no-JavaScript rendering.');
 })().catch(error => { console.error(error); process.exitCode = 1; });

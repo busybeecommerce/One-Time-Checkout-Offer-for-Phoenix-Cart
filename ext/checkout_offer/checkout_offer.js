@@ -18,12 +18,6 @@ document.addEventListener('DOMContentLoaded', function () {
             dialog.dataset.template = section.dataset.template;
             dialog.style.cssText = section.style.cssText;
             dialog.setAttribute('aria-labelledby', 'checkout-offer-title');
-            const launcher = document.createElement('button');
-            launcher.type = 'button';
-            launcher.className = 'btn btn-outline-primary mb-3';
-            launcher.textContent = section.dataset.openLabel;
-            launcher.setAttribute('aria-haspopup', 'dialog');
-            launcher.setAttribute('aria-controls', dialog.id);
             const close = document.createElement('button');
             close.type = 'button';
             close.className = 'checkout-offer-modal-close';
@@ -39,11 +33,19 @@ document.addEventListener('DOMContentLoaded', function () {
             dialog.append(close, section, footer);
             // Keep every offer field and submit button inside the original payment form.
             form.prepend(dialog);
-            form.prepend(launcher);
-            launcher.addEventListener('click', function () { dialog.showModal(); });
             close.addEventListener('click', function () { dialog.close(); });
             dismiss.addEventListener('click', function () { dialog.close(); });
-            dialog.addEventListener('close', function () { launcher.focus(); });
+            dialog.addEventListener('close', function () {
+                const next = Array.from(form.querySelectorAll('input, select, textarea, button, a[href]')).find(function (control) {
+                    return !dialog.contains(control) && !control.disabled && control.type !== 'hidden' && control.getClientRects().length > 0;
+                });
+                if (next) {
+                    next.focus();
+                } else {
+                    form.setAttribute('tabindex', '-1');
+                    form.focus();
+                }
+            });
             dialog.addEventListener('click', function (event) {
                 if (event.target !== dialog) {
                     return;
@@ -53,17 +55,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     dialog.close();
                 }
             });
-            const key = 'checkout-offer-viewed:' + section.dataset.offerKey;
-            let viewed = false;
-            try {
-                viewed = sessionStorage.getItem(key) === '1';
-                sessionStorage.setItem(key, '1');
-            } catch (error) {
-                // Storage may be disabled; the modal remains usable without remembering dismissal.
-            }
-            if (!viewed) {
-                dialog.showModal();
-            }
+            dialog.showModal();
         }
     }
     section.querySelectorAll('[data-offer-card]').forEach(function (card) {
