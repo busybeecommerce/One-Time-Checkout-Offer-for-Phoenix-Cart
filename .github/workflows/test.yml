@@ -30,6 +30,7 @@ jobs:
       - run: php tests/admin_render.php reference tier
       - run: node --test tests/storefront.test.js
       - run: node --check ext/checkout_offer/checkout_offer.js
+      - run: node --check ext/checkout_offer/checkout_offer_admin.js
       - run: git diff --check
   browser:
     runs-on: ubuntu-latest
@@ -71,13 +72,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and verify release from tested main
         shell: pwsh
-        run: ./scripts/build_package.ps1 -Version 1.6.0
+        run: ./scripts/build_package.ps1 -Version 1.7.0
       - name: Publish ZIP and SHA-256
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v1.6.0 \
-            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.6.0.zip \
-            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.6.0.zip.sha256.txt \
-            --target "$GITHUB_SHA" --title "v1.6.0 — Custom offer text and typography" \
-            --notes "Compact 28px modal close control with a thin border and centred cross. Custom offer wording with per-field fallback, plus heading/description size, colour, weight and italic controls. Plain text escaping and validated settings. All ten templates, layouts and checkout accounting preserved. PHP 8.1/8.3 and pinned Phoenix 1.1.0.6/1.1.0.8 fixture tests and browser checks passed. ZIP manifest and every archived file hash verified. No live-store deployment or payment capture."
+          gh release create v1.7.0 \
+            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.7.0.zip \
+            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.7.0.zip.sha256.txt \
+            --target "$GITHUB_SHA" --title "v1.7.0 — Tabbed admin and balanced offer cards" \
+            --notes "Tabbed admin with retained edits, keyboard navigation, no-JavaScript fallback and white header text over deeper BusyBee orange. Balanced row cards align prices and Add buttons across products with and without options. Existing settings, templates and checkout accounting preserved. PHP 8.1/8.3 and pinned Phoenix 1.1.0.6/1.1.0.8 fixture tests and browser checks passed. ZIP manifest and every archived file hash verified. No live-store deployment or payment capture."

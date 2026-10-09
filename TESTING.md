@@ -1,5 +1,7 @@
 # Testing
 
+Tabbed admin checks verify one visible panel, white header text, cross-tab settings submission and retained unsaved input, active-tab submission, keyboard navigation, responsive bounds and no-JavaScript access to all six panels. Row-card browser checks measure equal price and Add-button positions when one product has options and another does not.
+
 Run README.md automated commands. PHP tests lint package files, check manifest/contracts, exercise real Phoenix order construction and test pricing, tier boundaries, VAT, delivery tax, options and isolated acceptance. Node tests verify placement and option-price updates.
 
 The admin rendering regression executes the complete add-on page using real Phoenix Form, Input and Href classes. It checks the pre-install screen, setup and tier/product forms, CSRF inputs, completion of the page and registration within Reports. Bootstrap/template wrappers and database rows are fixtures.

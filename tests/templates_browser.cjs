@@ -104,11 +104,15 @@ const { chromium } = require('playwright');
                     await page.setViewportSize({ width, height: 900 });
                     const bounds = await section.locator('.checkout-offer-card').evaluateAll(nodes => nodes.map(node => {
                         const box = node.getBoundingClientRect();
-                        return { top: box.top, left: box.left, width: box.width };
+                        return { top: box.top, left: box.left, width: box.width,
+                            buttonBottom: node.querySelector('button').getBoundingClientRect().bottom,
+                            priceTop: node.querySelector('.checkout-offer-prices').getBoundingClientRect().top };
                     }));
                     if (layout === 'row' && width === 1280) {
                         assert.ok(Math.abs(bounds[0].top - bounds[1].top) < 1, 'Row products share a row');
                         assert.ok(bounds[1].left > bounds[0].left + bounds[0].width, 'Row products sit side by side');
+                        assert.ok(Math.abs(bounds[0].buttonBottom - bounds[1].buttonBottom) < 1, 'Add buttons align across option-bearing products');
+                        assert.ok(Math.abs(bounds[0].priceTop - bounds[1].priceTop) < 1, 'Prices align across option-bearing products');
                     } else {
                         assert.ok(bounds[1].top > bounds[0].top, 'Products stack');
                         assert.ok(Math.abs(bounds[0].left - bounds[1].left) < 1, 'Stacked products align');

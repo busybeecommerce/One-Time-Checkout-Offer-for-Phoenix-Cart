@@ -121,7 +121,19 @@
     width: auto; flex: 0 0 calc((100% - (var(--co-active-columns) - 1) * var(--co-gap)) / var(--co-active-columns));
 }
 #checkout-offer[data-template]:not([data-template="classic"])[data-product-layout="row"] .checkout-offer-card { flex-direction: column; }
-#checkout-offer[data-template]:not([data-template="classic"])[data-product-layout="row"] .checkout-offer-card-content { flex: 0 0 auto; width: 100%; }
+#checkout-offer[data-template]:not([data-template="classic"])[data-product-layout="row"] .checkout-offer-card-content { flex: 1; width: 100%; }
+#checkout-offer[data-template][data-product-layout="row"] .checkout-offer-card { display: flex; flex-direction: column; }
+#checkout-offer[data-template][data-product-layout="row"] .checkout-offer-card-content { display: flex; flex-direction: column; flex: 1; width: 100%; }
+#checkout-offer[data-template][data-product-layout="row"] .checkout-offer-prices { margin-top: auto; padding-top: .65em; margin-bottom: .85em; }
+#checkout-offer[data-template][data-product-layout="row"] .checkout-offer-add { align-self: flex-start; }
+#checkout-offer-modal #checkout-offer[data-template][data-product-layout="row"][data-content-alignment="center"] .checkout-offer-card-content { flex: 1; }
+#checkout-offer-modal #checkout-offer[data-template][data-product-layout="row"][data-content-alignment="right"] .checkout-offer-card-content { flex: 1; }
+#checkout-offer-modal #checkout-offer[data-product-layout="row"][data-content-alignment="center"] .checkout-offer-add { align-self: center; }
+#checkout-offer-modal #checkout-offer[data-product-layout="row"][data-content-alignment="right"] .checkout-offer-add { align-self: flex-end; }
+#checkout-offer[data-template="classic"] h3 { font-weight: 600; }
+#checkout-offer[data-template="classic"] [data-normal-price] { font-size: .85em; }
+#checkout-offer[data-template="classic"] [data-offer-price] { font-size: 1.1em; }
+#checkout-offer[data-template="classic"] .checkout-offer-card { box-shadow: 0 2px 8px #16233408; }
 #checkout-offer[data-template][data-product-layout="stacked"] .checkout-offer-grid,
 #checkout-offer-modal #checkout-offer[data-product-layout="stacked"] .checkout-offer-grid { display: flex; flex-direction: column; }
 #checkout-offer[data-template][data-product-layout="stacked"] .checkout-offer-card,

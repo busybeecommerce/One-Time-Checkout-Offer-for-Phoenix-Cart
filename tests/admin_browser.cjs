@@ -15,6 +15,9 @@ const { chromium } = require('playwright');
         if (url.includes('checkout_offer_admin.css')) {
             return route.fulfill({ contentType: 'text/css', body: fs.readFileSync('ext/checkout_offer/checkout_offer_admin.css') });
         }
+        if (url.includes('checkout_offer_admin.js')) {
+            return route.fulfill({ contentType: 'text/javascript', body: fs.readFileSync('ext/checkout_offer/checkout_offer_admin.js') });
+        }
         if (url.endsWith('busybee-logo.png')) {
             return route.fulfill({ contentType: 'image/png', body: fs.readFileSync('images/checkout_offer/busybee-logo.png') });
         }
@@ -31,15 +34,20 @@ const { chromium } = require('playwright');
         assert.equal(await logo.locator('img').evaluate(node => node.complete && node.naturalWidth), 1500);
         assert.equal(await page.locator('#outside').evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(13, 110, 253)');
         assert.ok(await page.locator('.co-admin-header h1').evaluate(node => parseFloat(getComputedStyle(node).fontSize) <= 32));
+        assert.equal(await page.locator('.co-admin-header h1').evaluate(node => getComputedStyle(node).color), 'rgb(255, 255, 255)');
+        if (scenario !== 'install') assert.equal(await page.locator('[data-co-panel]:visible').count(), 1);
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
         await page.screenshot({ path: 'build/admin-' + scenario + '-desktop.png', fullPage: true });
     }
     assert.equal(await page.locator('[aria-current="page"]').textContent(), 'Medium basket');
-    await page.locator('.co-admin-appearance summary').first().click();
-    assert.equal(await page.locator('[name="appearance[content_alignment]"]').isVisible(), true);
+    await page.getByRole('tab', { name: 'Setup', exact: true }).click();
     await page.locator('[name="display_mode"]').selectOption('modal');
+    await page.getByRole('tab', { name: 'Appearance', exact: true }).click();
+    assert.equal(await page.locator('[name="appearance[content_alignment]"]').isVisible(), true);
     await page.locator('[name="appearance[content_alignment]"]').selectOption('center');
+    await page.getByRole('tab', { name: 'Offer template', exact: true }).click();
     await page.locator('[name="appearance[template]"][value="red"]').check();
+    await page.getByRole('tab', { name: 'Appearance', exact: true }).click();
     await page.locator('[name="appearance[product_layout]"]').selectOption('row');
     for (const width of [1440, 1200, 768]) {
         await page.setViewportSize({ width, height: 1000 });
@@ -67,6 +75,7 @@ const { chromium } = require('playwright');
     assert.equal(submission['appearance[template]'], 'red');
     assert.equal(submission['appearance[product_layout]'], 'row');
     assert.equal(Object.hasOwn(submission, 'accent'), false);
+    await page.getByRole('tab', { name: 'Offer template', exact: true }).click();
     await page.getByText('No template / Custom', { exact: true }).click();
     await page.locator('form:has(input[value="settings"]) button').click();
     submission = await page.evaluate(() => window.submission);
@@ -74,9 +83,10 @@ const { chromium } = require('playwright');
     assert.equal(submission['appearance[product_layout]'], 'row');
     assert.equal(submission['appearance[button_background]'], '#0d6efd');
     assert.equal(await page.locator('[name="appearance[template]"]:checked').count(), 1);
-    await page.getByText('Custom offer text', { exact: true }).click();
+    await page.getByRole('tab', { name: 'Custom offer text', exact: true }).click();
     await page.locator('[name="appearance[heading_text]"]').fill('An offer for you');
     await page.locator('[name="appearance[description_text]"]').fill('');
+    await page.getByRole('tab', { name: 'Appearance', exact: true }).click();
     await page.locator('[name="appearance[heading_size]"]').fill('28');
     await page.locator('[name="appearance[heading_colour]"]').fill('#254a68');
     await page.locator('form:has(input[value="settings"]) button').click();
@@ -85,6 +95,8 @@ const { chromium } = require('playwright');
     assert.equal(submission['appearance[description_text]'], '');
     assert.equal(submission['appearance[heading_size]'], '28');
     assert.equal(submission['appearance[heading_colour]'], '#254a68');
+    assert.equal(submission.admin_tab, 'appearance');
+    await page.getByRole('tab', { name: 'Tiers & products', exact: true }).click();
     const productForm = page.locator('form:has(input[value="save_product"])').first();
     await productForm.locator('button').click();
     submission = await page.evaluate(() => window.submission);
@@ -95,10 +107,25 @@ const { chromium } = require('playwright');
     assert.equal(submission.value, '25');
     await page.setViewportSize({ width: 375, height: 812 });
     assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
-    for (const control of await page.locator('.co-admin-appearance input, .co-admin-appearance select').all()) {
+    await page.getByRole('tab', { name: 'Appearance', exact: true }).click();
+    for (const control of await page.locator('#co-panel-appearance input, #co-panel-appearance select').all()) {
         assert.ok(await control.evaluate(node => node.getBoundingClientRect().right <= innerWidth));
     }
     await page.screenshot({ path: 'build/admin-tier-mobile.png', fullPage: true });
+    for (const tab of await page.getByRole('tab').all()) {
+        await tab.click();
+        assert.equal(await page.locator('[data-co-panel]:visible').count(), 1);
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+    }
+    await page.getByRole('tab', { name: 'Setup', exact: true }).focus();
+    await page.keyboard.press('ArrowRight');
+    assert.equal(await page.getByRole('tab', { name: 'Offer template', exact: true }).getAttribute('aria-selected'), 'true');
+    assert.equal(await page.locator('[name="appearance[heading_text]"]').inputValue(), 'An offer for you');
+    const noScriptContext = await browser.newContext({ javaScriptEnabled: false });
+    await noScriptContext.route('https://fallback.test/**', route => route.fulfill({ contentType: 'text/html', body: fs.readFileSync('build/admin-tier.html', 'utf8') }));
+    const fallbackPage = await noScriptContext.newPage();
+    await fallbackPage.goto('https://fallback.test/');
+    assert.equal(await fallbackPage.locator('[data-co-panel]:visible').count(), 6);
     assert.deepEqual(errors, []);
     await browser.close();
     console.log('Admin browser checks passed: local linked logo, scoped styling, responsive layout, appearance and product submission.');

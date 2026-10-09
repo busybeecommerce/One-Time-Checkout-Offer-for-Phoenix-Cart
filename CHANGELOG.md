@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.7.0
+
+- Organise administration into Setup, Templates, Appearance, Custom text, Tiers & products and Maintenance tabs. Preserve unsaved settings when switching tabs and return to the active tab after saving.
+- Add keyboard tab navigation and a complete no-JavaScript fallback. Keep existing forms and validation.
+- Use white admin header text over a deeper BusyBee orange background.
+- Align offer prices and Add buttons across row cards, including products with options, and refine Classic typography and card depth.
+
 ## 1.6.0
 
 - Reduce the modal close control to 28px with a 1px border and a precisely centred drawn cross.

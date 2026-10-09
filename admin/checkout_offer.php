@@ -22,7 +22,11 @@ if ('POST' === ($_SERVER['REQUEST_METHOD'] ?? '')) {
         error_log('Checkout Offer admin: ' . $exception->getMessage());
         $messageStack->add_session(CHECKOUT_OFFER_ADMIN_ERROR, 'error');
     }
-    Href::redirect($Admin->link('checkout_offer.php', ['tier_id' => (int)($_POST['tier_id'] ?? 0)]));
+    $returnTab = $_POST['admin_tab'] ?? ('settings' === $action ? 'setup' : ('uninstall' === $action ? 'maintenance' : 'offers'));
+    if (!is_string($returnTab) || !in_array($returnTab, ['setup', 'templates', 'appearance', 'text', 'offers', 'maintenance'], true)) {
+        $returnTab = 'setup';
+    }
+    Href::redirect($Admin->link('checkout_offer.php', ['tier_id' => (int)($_POST['tier_id'] ?? 0), 'tab' => $returnTab]));
 }
 
 $ready = checkout_offer_schema_ready();
@@ -30,9 +34,14 @@ $tierId = (int)($_GET['tier_id'] ?? 0);
 $tier = $ready && $tierId > 0 ? checkout_offer_admin_tier($tierId) : null;
 $editTier = $tier ?? ['id' => 0, 'title' => '', 'minimum' => '0', 'maximum' => '', 'priority' => '0', 'enabled' => 1];
 $appearance = checkout_offer_appearance();
+$activeTab = $_GET['tab'] ?? ($tierId > 0 ? 'offers' : 'setup');
+if (!is_string($activeTab) || !in_array($activeTab, ['setup', 'templates', 'appearance', 'text', 'offers', 'maintenance'], true)) {
+    $activeTab = 'setup';
+}
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.6.0')) ?>">
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.0')) ?>">
+<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.0')) ?>" defer></script>
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
     <div class="co-admin-heading">
@@ -50,66 +59,73 @@ require 'includes/template_top.php';
     </form>
     </div></section>
   <?php } else { ?>
-    <div class="row g-4">
-      <div class="col-lg-4">
-        <section class="card mb-4"><div class="card-body">
-          <h2 class="h5"><?= CHECKOUT_OFFER_ADMIN_SETUP ?></h2>
-          <?= checkout_offer_admin_form('settings') ?>
-            <label class="form-check mb-3"><input class="form-check-input" type="checkbox" name="enabled" <?= checkout_offer_enabled() ? 'checked' : '' ?>> <?= CHECKOUT_OFFER_ADMIN_ENABLED ?></label>
-            <label class="form-label" for="display-mode"><?= CHECKOUT_OFFER_ADMIN_DISPLAY_MODE ?></label>
-            <select class="form-select form-select-sm mb-3" id="display-mode" name="display_mode">
-              <option value="inline" <?= 'inline' === checkout_offer_display_mode() ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_INLINE ?></option>
-              <option value="modal" <?= 'modal' === checkout_offer_display_mode() ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_MODAL ?></option>
-            </select>
-            <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_MODAL_HELP ?></p>
-            <details class="co-admin-appearance mb-3"><summary class="fw-semibold"><?= CHECKOUT_OFFER_ADMIN_APPEARANCE ?></summary>
-              <fieldset class="co-template-picker">
-                <legend><?= CHECKOUT_OFFER_ADMIN_STYLE_TEMPLATE ?></legend>
-                <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_TEMPLATE_HELP ?></p>
-                <div class="co-template-choices">
-                  <?php foreach (checkout_offer_templates() as $name => $palette) { ?>
-                    <label class="co-template-choice">
-                      <input type="radio" name="appearance[template]" value="<?= $name ?>" <?= $appearance['template'] === $name ? 'checked' : '' ?>>
-                      <span class="co-template-name"><?= constant('CHECKOUT_OFFER_ADMIN_CHOICE_' . strtoupper($name)) ?></span>
-                      <span class="co-template-preview" aria-hidden="true" style="--co-preview-colour:<?= $palette['banner_background'] ?? '#e9edf1' ?>;--co-preview-button:<?= $palette['button_background'] ?? '#0d6efd' ?>">
-                        <span class="co-template-preview-header"></span><span class="co-template-preview-product"></span><span class="co-template-preview-button"></span>
-                      </span>
-                    </label>
-                  <?php } ?>
-                </div>
-              </fieldset>
-              <div class="co-appearance-fields mt-1">
-                <?php foreach (checkout_offer_appearance_fields() as $key => $field) { ?>
-                  <?php if ('template' === $key || 'text' === $field['type']) { continue; } ?>
-                  <div class="co-appearance-field">
-                    <label class="form-label small" for="style-<?= $key ?>"><?= constant('CHECKOUT_OFFER_ADMIN_STYLE_' . strtoupper($key)) ?></label>
-                    <?php if ('select' === $field['type']) { ?>
-                      <select class="form-select form-select-sm" id="style-<?= $key ?>" name="appearance[<?= $key ?>]">
-                        <?php foreach ($field['choices'] as $choice) { ?>
-                          <option value="<?= $choice ?>" <?= $appearance[$key] === $choice ? 'selected' : '' ?>><?= constant('CHECKOUT_OFFER_ADMIN_CHOICE_' . strtoupper($choice)) ?></option>
-                        <?php } ?>
-                      </select>
-                    <?php } else { ?>
-                      <input class="form-control form-control-sm<?= 'color' === $field['type'] ? ' form-control-color' : '' ?>" id="style-<?= $key ?>" type="<?= 'optional_color' === $field['type'] ? 'text' : $field['type'] ?>" name="appearance[<?= $key ?>]" value="<?= checkout_offer_escape((string)$appearance[$key]) ?>" <?= 'optional_color' === $field['type'] ? 'placeholder="#rrggbb" maxlength="7"' : '' ?> <?= 'number' === $field['type'] ? 'min="' . $field['min'] . '" max="' . $field['max'] . '" step="1"' : '' ?>>
+    <div class="co-admin-workspace" data-initial-tab="<?= $activeTab ?>">
+      <nav class="co-admin-tabs" role="tablist" aria-label="<?= CHECKOUT_OFFER_ADMIN_NAVIGATION ?>" hidden>
+        <?php foreach (['setup' => CHECKOUT_OFFER_ADMIN_SETUP, 'templates' => CHECKOUT_OFFER_ADMIN_STYLE_TEMPLATE, 'appearance' => CHECKOUT_OFFER_ADMIN_APPEARANCE, 'text' => CHECKOUT_OFFER_ADMIN_CUSTOM_TEXT, 'offers' => CHECKOUT_OFFER_ADMIN_OFFERS, 'maintenance' => CHECKOUT_OFFER_ADMIN_MAINTENANCE] as $key => $label) { ?>
+          <button type="button" id="co-tab-<?= $key ?>" role="tab" aria-controls="co-panel-<?= $key ?>" data-co-tab="<?= $key ?>"><?= $label ?></button>
+        <?php } ?>
+      </nav>
+      <?= checkout_offer_admin_form('settings') ?>
+        <section id="co-panel-setup" class="co-admin-panel" data-co-panel="setup"><h2><?= CHECKOUT_OFFER_ADMIN_SETUP ?></h2>
+          <label class="form-check mb-3"><input class="form-check-input" type="checkbox" name="enabled" <?= checkout_offer_enabled() ? 'checked' : '' ?>> <?= CHECKOUT_OFFER_ADMIN_ENABLED ?></label>
+          <label class="form-label" for="display-mode"><?= CHECKOUT_OFFER_ADMIN_DISPLAY_MODE ?></label>
+          <select class="form-select form-select-sm mb-3" id="display-mode" name="display_mode">
+            <option value="inline" <?= 'inline' === checkout_offer_display_mode() ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_INLINE ?></option>
+            <option value="modal" <?= 'modal' === checkout_offer_display_mode() ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_MODAL ?></option>
+          </select>
+          <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_MODAL_HELP ?></p>
+        </section>
+        <section id="co-panel-templates" class="co-admin-panel" data-co-panel="templates"><h2><?= CHECKOUT_OFFER_ADMIN_STYLE_TEMPLATE ?></h2>
+          <fieldset class="co-template-picker">
+            <legend><?= CHECKOUT_OFFER_ADMIN_STYLE_TEMPLATE ?></legend>
+            <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_TEMPLATE_HELP ?></p>
+            <div class="co-template-choices">
+              <?php foreach (checkout_offer_templates() as $name => $palette) { ?>
+                <label class="co-template-choice">
+                  <input type="radio" name="appearance[template]" value="<?= $name ?>" <?= $appearance['template'] === $name ? 'checked' : '' ?>>
+                  <span class="co-template-name"><?= constant('CHECKOUT_OFFER_ADMIN_CHOICE_' . strtoupper($name)) ?></span>
+                  <span class="co-template-preview" aria-hidden="true" style="--co-preview-colour:<?= $palette['banner_background'] ?? '#e9edf1' ?>;--co-preview-button:<?= $palette['button_background'] ?? '#0d6efd' ?>">
+                    <span class="co-template-preview-header"></span><span class="co-template-preview-product"></span><span class="co-template-preview-button"></span>
+                  </span>
+                </label>
+              <?php } ?>
+            </div>
+          </fieldset>
+        </section>
+        <section id="co-panel-appearance" class="co-admin-panel" data-co-panel="appearance"><h2><?= CHECKOUT_OFFER_ADMIN_APPEARANCE ?></h2>
+          <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_TEXT_STYLE_HELP ?></p>
+          <div class="co-appearance-fields mt-1">
+            <?php foreach (checkout_offer_appearance_fields() as $key => $field) { ?>
+              <?php if ('template' === $key || 'text' === $field['type']) { continue; } ?>
+              <div class="co-appearance-field">
+                <label class="form-label small" for="style-<?= $key ?>"><?= constant('CHECKOUT_OFFER_ADMIN_STYLE_' . strtoupper($key)) ?></label>
+                <?php if ('select' === $field['type']) { ?>
+                  <select class="form-select form-select-sm" id="style-<?= $key ?>" name="appearance[<?= $key ?>]">
+                    <?php foreach ($field['choices'] as $choice) { ?>
+                      <option value="<?= $choice ?>" <?= $appearance[$key] === $choice ? 'selected' : '' ?>><?= constant('CHECKOUT_OFFER_ADMIN_CHOICE_' . strtoupper($choice)) ?></option>
                     <?php } ?>
-                  </div>
+                  </select>
+                <?php } else { ?>
+                  <input class="form-control form-control-sm<?= 'color' === $field['type'] ? ' form-control-color' : '' ?>" id="style-<?= $key ?>" type="<?= 'optional_color' === $field['type'] ? 'text' : $field['type'] ?>" name="appearance[<?= $key ?>]" value="<?= checkout_offer_escape((string)$appearance[$key]) ?>" <?= 'optional_color' === $field['type'] ? 'placeholder="#rrggbb" maxlength="7"' : '' ?> <?= 'number' === $field['type'] ? 'min="' . $field['min'] . '" max="' . $field['max'] . '" step="1"' : '' ?>>
                 <?php } ?>
               </div>
-            </details>
-            <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_TEXT_STYLE_HELP ?></p>
-            <details class="co-admin-appearance mb-3"><summary class="fw-semibold"><?= CHECKOUT_OFFER_ADMIN_CUSTOM_TEXT ?></summary>
-              <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_TEXT_HELP ?></p>
-              <?php foreach (checkout_offer_appearance_fields() as $key => $field) { if ('text' !== $field['type']) { continue; } ?>
-                <label class="form-label" for="style-<?= $key ?>"><?= constant('CHECKOUT_OFFER_ADMIN_STYLE_' . strtoupper($key)) ?></label>
-                <textarea class="form-control form-control-sm mb-3" id="style-<?= $key ?>" name="appearance[<?= $key ?>]" rows="<?= $field['max'] > 200 ? 3 : 1 ?>" maxlength="<?= $field['max'] ?>"><?= checkout_offer_escape($appearance[$key]) ?></textarea>
-              <?php } ?>
-            </details>
-            <button class="btn btn-primary btn-sm"><?= CHECKOUT_OFFER_ADMIN_SAVE ?></button>
-          </form>
-        </div></section>
+            <?php } ?>
+          </div>
+        </section>
+
+        <section id="co-panel-text" class="co-admin-panel" data-co-panel="text"><h2><?= CHECKOUT_OFFER_ADMIN_CUSTOM_TEXT ?></h2>
+          <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_TEXT_HELP ?></p>
+          <?php foreach (checkout_offer_appearance_fields() as $key => $field) { if ('text' !== $field['type']) { continue; } ?>
+            <label class="form-label" for="style-<?= $key ?>"><?= constant('CHECKOUT_OFFER_ADMIN_STYLE_' . strtoupper($key)) ?></label>
+            <textarea class="form-control form-control-sm mb-3" id="style-<?= $key ?>" name="appearance[<?= $key ?>]" rows="<?= $field['max'] > 200 ? 3 : 1 ?>" maxlength="<?= $field['max'] ?>"><?= checkout_offer_escape($appearance[$key]) ?></textarea>
+          <?php } ?>
+        </section>
+        <button class="btn btn-primary btn-sm"><?= CHECKOUT_OFFER_ADMIN_SAVE ?></button>
+      </form>
+      <section id="co-panel-offers" class="co-admin-panel" data-co-panel="offers"><div class="row g-4"><div class="col-lg-4">
         <section class="card"><div class="card-body">
           <h2 class="h5"><?= CHECKOUT_OFFER_ADMIN_TIERS ?></h2>
-          <a class="btn btn-outline-primary btn-sm mb-3" href="<?= $Admin->link('checkout_offer.php') ?>"><?= CHECKOUT_OFFER_ADMIN_NEW ?></a>
+          <a class="btn btn-outline-primary btn-sm mb-3" href="<?= $Admin->link('checkout_offer.php', ['tab' => 'offers']) ?>"><?= CHECKOUT_OFFER_ADMIN_NEW ?></a>
           <ul class="list-group list-group-flush">
             <?php $allTiers = $db->query('SELECT * FROM checkout_offer_tiers ORDER BY priority DESC, id'); while ($row = $allTiers->fetch_assoc()) { ?>
               <li class="list-group-item co-admin-tier<?= (int)$row['id'] === $tierId ? ' co-admin-tier-selected' : '' ?>"><a href="<?= $Admin->link('checkout_offer.php', ['tier_id' => $row['id']]) ?>" <?= (int)$row['id'] === $tierId ? 'aria-current="page"' : '' ?>><?= checkout_offer_escape($row['title']) ?></a>
@@ -170,6 +186,8 @@ require 'includes/template_top.php';
         <?php } ?>
       </div>
     </div>
+    </section>
+    <section id="co-panel-maintenance" class="co-admin-panel" data-co-panel="maintenance"><h2><?= CHECKOUT_OFFER_ADMIN_UNINSTALL ?></h2>
     <details class="co-admin-uninstall mt-4"><summary><?= CHECKOUT_OFFER_ADMIN_UNINSTALL ?></summary>
       <p class="small mt-3"><?= CHECKOUT_OFFER_ADMIN_UNINSTALL_HELP ?></p>
       <?= checkout_offer_admin_form('uninstall') ?>
@@ -177,6 +195,8 @@ require 'includes/template_top.php';
         <button class="btn btn-danger btn-sm"><?= CHECKOUT_OFFER_ADMIN_UNINSTALL ?></button>
       </form>
     </details>
+    </section>
+    </div>
   <?php } ?>
 </div>
 <?php

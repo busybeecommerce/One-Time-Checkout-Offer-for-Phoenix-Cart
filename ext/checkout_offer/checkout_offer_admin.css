@@ -10,11 +10,23 @@
     color: var(--co-admin-ink);
     font-size: .925rem;
 }
-.checkout-offer-admin .co-admin-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.25rem; padding: 1.5rem; border-radius: .875rem; background: linear-gradient(120deg, var(--co-admin-brand), #ffc107); box-shadow: 0 4px 16px #9e4a001a; }
+.checkout-offer-admin .co-admin-header { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 1.25rem; padding: 1.5rem; border-radius: .875rem; background: linear-gradient(120deg, #a94d00, #b56b00); box-shadow: 0 4px 16px #9e4a001a; }
 .checkout-offer-admin .co-admin-heading { flex: 1 1 20rem; min-width: 0; }
+.checkout-offer-admin .co-admin-heading h1, .checkout-offer-admin .co-admin-eyebrow { color: #fff; }
 .checkout-offer-admin .co-admin-eyebrow { margin: 0 0 .4rem; font-size: .75rem; font-weight: 700; text-transform: uppercase; letter-spacing: .08em; }
 .checkout-offer-admin .co-admin-header h1 { margin: 0 0 .75rem; font-size: clamp(1.35rem, 2.2vw, 1.85rem); font-weight: 700; line-height: 1.2; }
 .checkout-offer-admin .co-admin-status { display: inline-block; padding: .3rem .65rem; border: 1px solid #21252926; border-radius: 2rem; background: #ffffffd9; font-size: .75rem; font-weight: 600; }
+.checkout-offer-admin .co-admin-status { color: #fff; background: #733400; border-color: #ffffff70; }
+.checkout-offer-admin .co-admin-workspace { background: #fff; border: 1px solid var(--co-admin-border); border-radius: .75rem; overflow: hidden; }
+.checkout-offer-admin .co-admin-tabs { display: flex; flex-wrap: wrap; gap: .25rem; padding: .5rem .75rem 0; background: #fff8ef; border-bottom: 1px solid var(--co-admin-border); }
+.checkout-offer-admin .co-admin-tabs[hidden], .checkout-offer-admin [data-co-panel][hidden], .checkout-offer-admin .co-admin-workspace form[hidden] { display: none; }
+.checkout-offer-admin .co-admin-tabs button { border: 0; border-bottom: 3px solid transparent; border-radius: .4rem .4rem 0 0; background: transparent; color: #52606d; padding: .75rem 1rem; font-size: .85rem; font-weight: 600; }
+.checkout-offer-admin .co-admin-tabs button[aria-selected="true"] { color: #914400; border-bottom-color: #b95500; background: #fff; }
+.checkout-offer-admin .co-admin-tabs button:focus-visible { outline: 2px solid #914400; outline-offset: -3px; }
+.checkout-offer-admin .co-admin-panel { padding: 1.25rem; }
+.checkout-offer-admin .co-admin-panel > h2 { font-size: 1.1rem; margin-bottom: 1.25rem; font-weight: 700; }
+.checkout-offer-admin .co-admin-workspace > form > .btn { margin: 0 1.25rem 1.25rem; }
+.checkout-offer-admin .co-admin-workspace .co-template-choices { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .checkout-offer-admin .co-admin-logo { display: block; width: 16rem; max-width: 100%; padding: .5rem .75rem; border-radius: .75rem; background: #fff; }
 .checkout-offer-admin .co-admin-logo img { display: block; width: 100%; height: auto; }
 .checkout-offer-admin .co-admin-intro { margin: 1.25rem .25rem; color: #52606d; line-height: 1.6; }
@@ -60,6 +72,8 @@
 .checkout-offer-admin .co-template-preview-product { position: absolute; top: 29px; left: 8px; width: 22px; height: 24px; border-radius: 3px; background: #e9edf1; }
 .checkout-offer-admin .co-template-preview-button { position: absolute; left: 36px; right: 8px; bottom: 8px; height: 12px; border-radius: 2px; background: var(--co-preview-button); }
 @media (max-width: 575px) {
+    .checkout-offer-admin .co-admin-workspace .co-template-choices { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .checkout-offer-admin .co-admin-tabs button { padding: .65rem .5rem; font-size: .75rem; }
     .checkout-offer-admin { padding: .75rem; }
     .checkout-offer-admin .co-admin-header { padding: 1rem; }
     .checkout-offer-admin .co-admin-heading { flex-basis: 100%; }
