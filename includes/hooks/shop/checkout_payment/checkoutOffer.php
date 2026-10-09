@@ -77,12 +77,12 @@ class hook_shop_checkout_payment_checkoutOffer {
         return '<article class="checkout-offer-card" data-offer-card data-currency="' . $format . '" data-tax-included="' . ('true' === DISPLAY_PRICE_WITH_TAX ? '1' : '0') . '" data-base="' . (float)$product->get('base_price')
             . '" data-mode="' . checkout_offer_escape($rule['mode']) . '" data-value="' . (float)$rule['value'] . '" data-tax="' . $rate . '">'
             . $imageHtml . '<div class="checkout-offer-card-content"><h3 class="h6">' . checkout_offer_escape((string)$product->get('name')) . '</h3>' . $options
-            . '<p class="checkout-offer-prices"><del class="text-body-secondary me-2" data-normal-price>' . $GLOBALS['currencies']->display_price($normal, $rate)
+            . '<div class="checkout-offer-actions"><p class="checkout-offer-prices"><del class="text-body-secondary me-2" data-normal-price>' . $GLOBALS['currencies']->display_price($normal, $rate)
             . '</del><strong data-offer-price>' . $GLOBALS['currencies']->display_price($offer, $rate) . '</strong>'
             . '<span class="checkout-offer-saving">' . checkout_offer_text('saving_text', CHECKOUT_OFFER_SAVE) . ' <span data-offer-saving>' . $GLOBALS['currencies']->format($saving, false) . '</span></span></p>'
             . '<button type="submit" class="btn checkout-offer-add" name="checkout_offer_product" value="' . $id
             . '" formaction="' . checkout_offer_escape((string)$GLOBALS['Linker']->build('checkout_payment.php')) . '" formnovalidate>'
             . '<span class="checkout-offer-classic-label">' . checkout_offer_text('add_text', CHECKOUT_OFFER_ADD) . '</span><span class="checkout-offer-template-label">' . checkout_offer_text('add_text', CHECKOUT_OFFER_ADD_PRICE)
-            . ' <span data-button-price>' . $GLOBALS['currencies']->display_price($offer, $rate) . '</span></span></button></div></article>';
+            . ' <span data-button-price>' . $GLOBALS['currencies']->display_price($offer, $rate) . '</span></span></button></div></div></article>';
     }
 }

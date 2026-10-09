@@ -72,13 +72,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and verify release from tested main
         shell: pwsh
-        run: ./scripts/build_package.ps1 -Version 1.7.2
+        run: ./scripts/build_package.ps1 -Version 1.7.3
       - name: Publish ZIP and SHA-256
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v1.7.2 \
-            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.7.2.zip \
-            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.7.2.zip.sha256.txt \
-            --target "$GITHUB_SHA" --title "v1.7.2 — BusyBee header and timed save notices" \
-            --notes "Restore BusyBee orange header with white text. Align admin notifications with the content width and fade successful saves after six seconds; warnings and errors remain visible. Existing settings, templates and checkout accounting preserved. PHP 8.1/8.3 and pinned Phoenix 1.1.0.6/1.1.0.8 fixture tests and browser checks passed. ZIP manifest and every archived file hash verified. No live-store deployment or payment capture."
+          gh release create v1.7.3 \
+            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.7.3.zip \
+            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.7.3.zip.sha256.txt \
+            --target "$GITHUB_SHA" --title "v1.7.3 — Refined inline offer cards" \
+            --notes "Refine Classic inline offers with a separated introduction, subtle product image surfaces, clearer typography and compact price/action rows. Preserve configured appearance, custom copy, product options and modal/template behaviour. Existing settings, templates and checkout accounting preserved. PHP 8.1/8.3 and pinned Phoenix 1.1.0.6/1.1.0.8 fixture tests and browser checks passed. ZIP manifest and every archived file hash verified. No live-store deployment or payment capture."

@@ -12,6 +12,7 @@
 #checkout-offer .checkout-offer-description { font-size: .9em; margin-bottom: var(--co-gap); }
 #checkout-offer .checkout-offer-grid { display: grid; grid-template-columns: repeat(var(--co-columns), minmax(0, 1fr)); gap: var(--co-gap); }
 #checkout-offer .checkout-offer-card { background: var(--co-card-background); border: var(--co-border-width) solid var(--co-border); border-radius: var(--co-radius); padding: var(--co-padding); min-width: 0; }
+#checkout-offer .checkout-offer-actions { display: contents; }
 #checkout-offer .checkout-offer-image { display: block; width: 100%; height: var(--co-image-height); object-fit: contain; margin-bottom: 12px; }
 #checkout-offer .checkout-offer-add { border: 1px solid var(--co-button-background); background: var(--co-button-background); color: var(--co-button-text); border-radius: var(--co-radius); font-size: .9em; }
 #checkout-offer[data-button-style="outline"] .checkout-offer-add { background: transparent; color: var(--co-button-background); }
@@ -146,3 +147,18 @@
     #checkout-offer[data-template][data-product-layout="row"] .checkout-offer-grid,
     #checkout-offer-modal #checkout-offer[data-product-layout="row"] .checkout-offer-grid { --co-active-columns: 1; }
 }
+/* Classic inline offers: a clear introduction, quiet media surface and compact purchase row. */
+#checkout-offer[data-template="classic"][data-display-mode="inline"] { padding: 0; overflow: hidden; }
+#checkout-offer[data-template="classic"][data-display-mode="inline"] .checkout-offer-banner { padding: var(--co-padding); border-bottom: var(--co-border-width) solid var(--co-border); background: color-mix(in srgb, var(--co-text) 3%, var(--co-background)); }
+#checkout-offer[data-template="classic"][data-display-mode="inline"] #checkout-offer-title { font-size: var(--co-heading-size, 1.45em); font-weight: var(--co-heading-weight, 700); line-height: 1.3; margin-bottom: .35em; }
+#checkout-offer[data-template="classic"][data-display-mode="inline"] .checkout-offer-description { margin: 0; line-height: 1.6; max-width: 65ch; }
+#checkout-offer[data-template="classic"][data-display-mode="inline"] .checkout-offer-grid { padding: var(--co-padding); }
+#checkout-offer[data-template="classic"][data-display-mode="inline"] .checkout-offer-image { box-sizing: border-box; padding: 12px; margin-bottom: 1rem; border-radius: var(--co-radius); background: color-mix(in srgb, var(--co-text) 3%, var(--co-card-background)); }
+#checkout-offer[data-template="classic"][data-display-mode="inline"] h3 { font-size: 1.1em; line-height: 1.35; margin-bottom: .6em; }
+#checkout-offer[data-template="classic"][data-display-mode="inline"] .form-label { margin-bottom: .35em; font-weight: 500; }
+#checkout-offer[data-template="classic"][data-display-mode="inline"] .form-select { border-radius: var(--co-radius); }
+#checkout-offer[data-template="classic"][data-display-mode="inline"] .checkout-offer-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-top: auto; padding-top: 1rem; border-top: var(--co-border-width) solid var(--co-border); }
+#checkout-offer[data-template="classic"][data-display-mode="inline"] .checkout-offer-actions .checkout-offer-prices { margin: 0; padding: 0; line-height: 1.4; }
+#checkout-offer[data-template="classic"][data-display-mode="inline"] [data-offer-price] { font-size: 1.25em; font-weight: 700; }
+#checkout-offer[data-template="classic"][data-display-mode="inline"] .checkout-offer-add { align-self: auto; flex: 0 1 auto; max-width: 100%; padding: .65em 1em; font-weight: 600; line-height: 1.35; }
+#checkout-offer[data-template="classic"][data-display-mode="inline"] .checkout-offer-card-content > .form-select:last-of-type { margin-bottom: 1rem !important; }

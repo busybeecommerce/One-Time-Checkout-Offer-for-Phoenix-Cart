@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.3
+
+- Refine Classic inline offer cards with a separated introduction, subtle image surfaces, stronger price hierarchy and compact purchase rows. Retain option-bearing card alignment, configured colours/sizes, custom text and existing modal/template styling.
+
 ## 1.7.2
 
 - Restore the BusyBee orange admin header with white text. Match notification width to the admin content and fade successful save messages after six seconds, including on the installation screen. Keep warnings/errors visible and respect reduced motion.

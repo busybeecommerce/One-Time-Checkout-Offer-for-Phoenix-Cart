@@ -41,7 +41,7 @@ const { chromium } = require('playwright');
             assert.equal(await product.locator('[data-offer-saving]').textContent(), '£8.40');
             assert.equal(await product.locator('[data-button-price]').textContent(), '£9.60');
             assert.equal(await product.locator('button').evaluate(node => node.form.id), 'check_form');
-            assert.ok(await product.locator('button').evaluate(node => node.getBoundingClientRect().width < node.parentElement.getBoundingClientRect().width * .85));
+            assert.ok(await product.locator('button').evaluate(node => node.getBoundingClientRect().width < node.closest('.checkout-offer-card-content').getBoundingClientRect().width * .85));
             await page.evaluate(() => document.querySelector('form').addEventListener('submit', event => {
                 event.preventDefault(); window.submission = Object.fromEntries(new FormData(event.target, event.submitter));
             }));
@@ -72,7 +72,7 @@ const { chromium } = require('playwright');
                                 buttonRight: button.right, textAlign: getComputedStyle(node.querySelector('h3')).textAlign };
                         });
                         assert.equal(bounds.textAlign, alignment);
-                        assert.ok(await product.locator('button').evaluate(node => node.getBoundingClientRect().width < node.parentElement.getBoundingClientRect().width * .85));
+                        assert.ok(await product.locator('button').evaluate(node => node.getBoundingClientRect().width < node.closest('.checkout-offer-card-content').getBoundingClientRect().width * .85));
                         if (alignment === 'center') {
                             assert.ok(Math.abs(bounds.imageCenter - bounds.center) < 2);
                             assert.ok(Math.abs(bounds.buttonCenter - bounds.center) < 2);
