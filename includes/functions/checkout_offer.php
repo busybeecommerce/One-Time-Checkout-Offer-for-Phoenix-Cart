@@ -44,6 +44,7 @@ function checkout_offer_appearance_fields(): array
         'shadow' => ['type' => 'select', 'default' => 'none', 'choices' => ['none', 'soft', 'strong']],
         'content_alignment' => ['type' => 'select', 'default' => 'left', 'choices' => ['left', 'center', 'right']],
         'products_alignment' => ['type' => 'select', 'default' => 'left', 'choices' => ['left', 'center', 'right']],
+        'product_layout' => ['type' => 'select', 'default' => 'row', 'choices' => ['row', 'stacked']],
     ];
 }
 
@@ -51,7 +52,8 @@ function checkout_offer_sanitise_appearance(array $input, bool $strict = false):
 {
     $appearance = [];
     foreach (checkout_offer_appearance_fields() as $key => $field) {
-        $value = $input[$key] ?? $field['default'];
+        // Preserve the previous styled-template stack until a layout is explicitly saved.
+        $value = $input[$key] ?? ('product_layout' === $key && 'classic' !== $appearance['template'] ? 'stacked' : $field['default']);
         if ('number' === $field['type']) {
             $value = filter_var($value, FILTER_VALIDATE_INT);
             $valid = false !== $value && $value >= $field['min'] && $value <= $field['max'];

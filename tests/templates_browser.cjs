@@ -95,6 +95,29 @@ const { chromium } = require('playwright');
             assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
             await page.locator('.checkout-offer-image').evaluateAll(images => Promise.all(images.map(image => image.decode())));
             await page.screenshot({ path: 'build/template-' + theme + '-' + mode + '-mobile.png', fullPage: true });
+            for (const layout of ['row', 'stacked']) {
+                await section.evaluate((node, value) => {
+                    node.dataset.productLayout = value;
+                    node.style.setProperty('--co-columns', '2');
+                }, layout);
+                for (const width of [1280, 375]) {
+                    await page.setViewportSize({ width, height: 900 });
+                    const bounds = await section.locator('.checkout-offer-card').evaluateAll(nodes => nodes.map(node => {
+                        const box = node.getBoundingClientRect();
+                        return { top: box.top, left: box.left, width: box.width };
+                    }));
+                    if (layout === 'row' && width === 1280) {
+                        assert.ok(Math.abs(bounds[0].top - bounds[1].top) < 1, 'Row products share a row');
+                        assert.ok(bounds[1].left > bounds[0].left + bounds[0].width, 'Row products sit side by side');
+                    } else {
+                        assert.ok(bounds[1].top > bounds[0].top, 'Products stack');
+                        assert.ok(Math.abs(bounds[0].left - bounds[1].left) < 1, 'Stacked products align');
+                    }
+                    assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+                }
+                await page.setViewportSize({ width: 1280, height: 900 });
+                await page.screenshot({ path: 'build/template-' + theme + '-' + mode + '-' + layout + '.png', fullPage: true });
+            }
             if (mode === 'modal') {
                 await page.getByRole('button', { name: 'No thanks, continue checkout' }).click();
                 assert.equal(await page.locator('#checkout-offer-modal').evaluate(node => node.open), false);

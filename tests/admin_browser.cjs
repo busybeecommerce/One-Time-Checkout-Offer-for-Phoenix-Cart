@@ -40,6 +40,20 @@ const { chromium } = require('playwright');
     await page.locator('[name="display_mode"]').selectOption('modal');
     await page.locator('[name="appearance[content_alignment]"]').selectOption('center');
     await page.locator('[name="appearance[template]"][value="red"]').check();
+    await page.locator('[name="appearance[product_layout]"]').selectOption('row');
+    for (const width of [1440, 1200, 768]) {
+        await page.setViewportSize({ width, height: 1000 });
+        const fields = await page.locator('.co-appearance-field').evaluateAll(nodes => nodes.map(node => {
+            const control = node.querySelector('input, select').getBoundingClientRect();
+            return { top: control.top, bottom: control.bottom };
+        }));
+        for (let index = 0; index + 1 < fields.length; index += 2) {
+            assert.ok(Math.abs(fields[index].top - fields[index + 1].top) < 1, 'Paired field tops align at ' + width);
+            assert.ok(Math.abs(fields[index].bottom - fields[index + 1].bottom) < 1, 'Paired field bottoms align at ' + width);
+        }
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    await page.screenshot({ path: 'build/admin-appearance-desktop.png', fullPage: true });
     await page.evaluate(() => document.querySelectorAll('form').forEach(form => form.addEventListener('submit', event => {
         event.preventDefault();
         window.submission = Object.fromEntries(new FormData(event.target, event.submitter));
@@ -51,6 +65,7 @@ const { chromium } = require('playwright');
     assert.equal(submission.display_mode, 'modal');
     assert.equal(submission['appearance[content_alignment]'], 'center');
     assert.equal(submission['appearance[template]'], 'red');
+    assert.equal(submission['appearance[product_layout]'], 'row');
     assert.equal(Object.hasOwn(submission, 'accent'), false);
     const productForm = page.locator('form:has(input[value="save_product"])').first();
     await productForm.locator('button').click();

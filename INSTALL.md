@@ -33,3 +33,5 @@ Phoenix 1.1.0.6 is also tested at reference commit `69ba8de85ec03c809a14f0bb2c7c
 For v1.3.0, upload the updated add-on files. Eligible modal offers open on each payment-page entry or reload, with no View button. Styled designs have richer banners and larger imagery. No database changes are required; saved templates and settings remain valid.
 
 For v1.3.1, upload the updated stylesheet, JavaScript and site-wide checkout offer hook. All predefined templates use cleaner solid banners and restrained typography. Modal footer strips are removed, while the close and continue-checkout buttons remain. Inline offers retain their availability note. No reinstallation or settings changes are required.
+
+For v1.4.0, upload the updated add-on files, including the admin stylesheet and language file. Under **Setup → Appearance → Product layout**, choose **Row** or **Stacked** and save. Row uses **Desktop columns** and wraps to two columns on tablets and one on phones. Stacked shows full-width product cards. Both apply to inline offers and modals, for every template. Existing installations retain their current layout until saved; no reinstallation is required.
