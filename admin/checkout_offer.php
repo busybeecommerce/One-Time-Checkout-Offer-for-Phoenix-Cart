@@ -32,13 +32,23 @@ $editTier = $tier ?? ['id' => 0, 'title' => '', 'minimum' => '0', 'maximum' => '
 $appearance = checkout_offer_appearance();
 require 'includes/template_top.php';
 ?>
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.1.2')) ?>">
 <div class="checkout-offer-admin">
-  <h1 class="h3 mb-3"><?= HEADING_TITLE ?></h1>
-  <p class="text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_HELP ?></p>
+  <header class="co-admin-header">
+    <div class="co-admin-heading">
+      <p class="co-admin-eyebrow">BusyBee Commerce</p>
+      <h1><?= HEADING_TITLE ?></h1>
+      <span class="co-admin-status"><?= !$ready ? CHECKOUT_OFFER_ADMIN_SETUP_REQUIRED : (checkout_offer_enabled() ? CHECKOUT_OFFER_ADMIN_ACTIVE : CHECKOUT_OFFER_ADMIN_INACTIVE) ?></span>
+    </div>
+    <a class="co-admin-logo" href="https://busybeecommerce.co.uk" target="_blank" rel="noopener noreferrer"><img src="<?= checkout_offer_escape((string)$Admin->catalog('images/checkout_offer/busybee-logo.png')) ?>" alt="BusyBee Commerce" width="1500" height="600"></a>
+  </header>
+  <p class="co-admin-intro"><?= CHECKOUT_OFFER_ADMIN_HELP ?></p>
   <?php if (!$ready) { ?>
+    <section class="card"><div class="card-body">
     <?= checkout_offer_admin_form('install') ?>
       <button class="btn btn-primary"><?= CHECKOUT_OFFER_ADMIN_INSTALL ?></button>
     </form>
+    </div></section>
   <?php } else { ?>
     <div class="row g-4">
       <div class="col-lg-4">
@@ -52,7 +62,7 @@ require 'includes/template_top.php';
               <option value="modal" <?= 'modal' === checkout_offer_display_mode() ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_MODAL ?></option>
             </select>
             <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_MODAL_HELP ?></p>
-            <details class="mb-3"><summary class="fw-semibold"><?= CHECKOUT_OFFER_ADMIN_APPEARANCE ?></summary>
+            <details class="co-admin-appearance mb-3"><summary class="fw-semibold"><?= CHECKOUT_OFFER_ADMIN_APPEARANCE ?></summary>
               <div class="row g-2 mt-1">
                 <?php foreach (checkout_offer_appearance_fields() as $key => $field) { ?>
                   <div class="col-6">
@@ -78,7 +88,7 @@ require 'includes/template_top.php';
           <a class="btn btn-outline-primary btn-sm mb-3" href="<?= $Admin->link('checkout_offer.php') ?>"><?= CHECKOUT_OFFER_ADMIN_NEW ?></a>
           <ul class="list-group list-group-flush">
             <?php $allTiers = $db->query('SELECT * FROM checkout_offer_tiers ORDER BY priority DESC, id'); while ($row = $allTiers->fetch_assoc()) { ?>
-              <li class="list-group-item px-0"><a href="<?= $Admin->link('checkout_offer.php', ['tier_id' => $row['id']]) ?>"><?= checkout_offer_escape($row['title']) ?></a>
+              <li class="list-group-item co-admin-tier<?= (int)$row['id'] === $tierId ? ' co-admin-tier-selected' : '' ?>"><a href="<?= $Admin->link('checkout_offer.php', ['tier_id' => $row['id']]) ?>" <?= (int)$row['id'] === $tierId ? 'aria-current="page"' : '' ?>><?= checkout_offer_escape($row['title']) ?></a>
                 <div class="small text-body-secondary"><?= checkout_offer_escape((string)$row['minimum']) ?> – <?= null === $row['maximum'] ? '∞' : checkout_offer_escape((string)$row['maximum']) ?> · <?= (int)$row['priority'] ?> <?= empty($row['enabled']) ? '(disabled)' : '' ?></div>
               </li>
             <?php } ?>
@@ -89,10 +99,14 @@ require 'includes/template_top.php';
         <section class="card mb-4"><div class="card-body">
           <h2 class="h5"><?= $tier ? CHECKOUT_OFFER_ADMIN_EDIT : CHECKOUT_OFFER_ADMIN_NEW ?></h2>
           <?= checkout_offer_admin_form('save_tier', ['tier_id' => $editTier['id']]) ?>
+            <div class="row g-3">
             <?php foreach (['title' => CHECKOUT_OFFER_ADMIN_TITLE, 'minimum' => CHECKOUT_OFFER_ADMIN_MINIMUM, 'maximum' => CHECKOUT_OFFER_ADMIN_MAXIMUM, 'priority' => CHECKOUT_OFFER_ADMIN_PRIORITY] as $key => $label) { ?>
-              <label class="form-label small mt-2" for="<?= $key ?>"><?= $label ?></label>
+              <div class="<?= 'title' === $key ? 'col-12' : 'col-md-6' ?>">
+              <label class="form-label small" for="<?= $key ?>"><?= $label ?></label>
               <input class="form-control form-control-sm" id="<?= $key ?>" name="<?= $key ?>" value="<?= checkout_offer_escape((string)$editTier[$key]) ?>" <?= 'title' === $key ? 'maxlength="120" required' : 'inputmode="decimal"' ?>>
+              </div>
             <?php } ?>
+            </div>
             <label class="form-check my-3"><input class="form-check-input" type="checkbox" name="enabled" <?= $editTier['enabled'] ? 'checked' : '' ?>> <?= CHECKOUT_OFFER_ADMIN_ENABLED ?></label>
             <button class="btn btn-primary btn-sm"><?= CHECKOUT_OFFER_ADMIN_SAVE ?></button>
           </form>
@@ -106,7 +120,8 @@ require 'includes/template_top.php';
           <section class="card mb-4"><div class="card-body">
             <h2 class="h5"><?= CHECKOUT_OFFER_ADMIN_PRODUCTS ?></h2>
             <?php $rules = checkout_offer_items($tierId); $rules[] = ['id' => 0, 'products_id' => '', 'mode' => 'percent', 'value' => '10']; foreach ($rules as $rule) { ?>
-              <div class="border rounded p-3 mb-3">
+              <div class="co-admin-product-rule">
+                <h3><?= $rule['id'] ? CHECKOUT_OFFER_ADMIN_PRODUCT_RULE : CHECKOUT_OFFER_ADMIN_ADD_PRODUCT ?></h3>
                 <?= checkout_offer_admin_form('save_product', ['tier_id' => $tierId, 'item_id' => $rule['id']]) ?>
                   <div class="row g-2">
                     <div class="col-md-3"><label class="form-label small"><?= CHECKOUT_OFFER_ADMIN_PRODUCT_ID ?><input class="form-control form-control-sm" type="number" min="1" required name="products_id" value="<?= checkout_offer_escape((string)$rule['products_id']) ?>"></label></div>
@@ -123,10 +138,15 @@ require 'includes/template_top.php';
               </div>
             <?php } ?>
           </div></section>
+        <?php } else { ?>
+          <section class="card co-admin-empty"><div class="card-body">
+            <h2 class="h5"><?= CHECKOUT_OFFER_ADMIN_PRODUCTS ?></h2>
+            <p><?= CHECKOUT_OFFER_ADMIN_PRODUCTS_HELP ?></p>
+          </div></section>
         <?php } ?>
       </div>
     </div>
-    <details class="mt-4 border rounded p-3"><summary><?= CHECKOUT_OFFER_ADMIN_UNINSTALL ?></summary>
+    <details class="co-admin-uninstall mt-4"><summary><?= CHECKOUT_OFFER_ADMIN_UNINSTALL ?></summary>
       <p class="small mt-3"><?= CHECKOUT_OFFER_ADMIN_UNINSTALL_HELP ?></p>
       <?= checkout_offer_admin_form('uninstall') ?>
         <label class="form-check my-3"><input class="form-check-input" type="checkbox" name="confirm_remove" value="yes" required> <?= CHECKOUT_OFFER_ADMIN_CONFIRM_REMOVE ?></label>

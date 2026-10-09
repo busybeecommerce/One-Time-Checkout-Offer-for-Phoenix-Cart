@@ -1,6 +1,6 @@
 # One-Time Checkout Offer for Phoenix Cart
 
-Version **1.1.1** · Tested CE Phoenix Cart **1.1.0.6 / 1.1.0.8** · PHP **8.1–8.3**
+Version **1.1.2** · Tested CE Phoenix Cart **1.1.0.6 / 1.1.0.8** · PHP **8.1–8.3**
 
 Present discounted products at the payment step of checkout. This independent Phoenix implementation follows [PrestaChamps' published feature description](https://shop.prestachamps.com/en/prestashop-modules/118-one-time-checkout-offer.html). No PrestaShop module code or assets are included.
 
@@ -20,6 +20,7 @@ Present discounted products at the payment step of checkout. This independent Ph
 - Server-side eligibility, stock, options and CSRF checks.
 - Discounted order lines, taxes and totals using Phoenix's own order builder.
 - Admin installation, editable rules, enable/disable controls and uninstallation.
+- BusyBee-branded admin workspace with a linked local logo, status indicator, selected-tier highlighting and clearer product forms.
 - English language files, tested installable ZIP and PHP 8.1/8.3 CI.
 
 ## Installation
@@ -52,10 +53,11 @@ node --check ext/checkout_offer/checkout_offer.js
 php tests/run.php ../tmp/PhoenixCart-reference --render
 php tests/run.php ../tmp/PhoenixCart-reference --render --modal --styled
 node tests/browser.cjs
+node tests/admin_browser.cjs
 git diff --check
-powershell -File scripts/build_package.ps1 -Version 1.1.1
+powershell -File scripts/build_package.ps1 -Version 1.1.2
 ```
 
-The harness uses real Phoenix order/tax/currency classes with deterministic database/cart fixtures, without defining legacy image constants. CI repeats checks on PHP 8.1 and 8.3 against pinned Phoenix 1.1.0.6 and 1.1.0.8 references. Browser checks require Playwright 1.62.1 and Chromium (`npm install --no-save --package-lock=false playwright@1.62.1`, then `npx playwright install chromium`). No live store or payment capture was tested. See [TESTING.md](TESTING.md) for staging checks.
+The harness uses real Phoenix order/tax/currency classes with deterministic database/cart fixtures, without defining legacy image constants. CI repeats checks on PHP 8.1 and 8.3 against pinned Phoenix 1.1.0.6 and 1.1.0.8 references. Browser checks require Playwright 1.62.1, Bootstrap 5.3.8 and Chromium (`npm install --no-save --package-lock=false playwright@1.62.1 bootstrap@5.3.8`, then `npx playwright install chromium`). No live store or payment capture was tested. See [TESTING.md](TESTING.md) for staging checks.
 
 GPL-3.0-or-later. See [LICENSE](LICENSE).
