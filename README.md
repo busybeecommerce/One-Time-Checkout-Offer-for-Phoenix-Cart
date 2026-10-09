@@ -1,6 +1,6 @@
 # One-Time Checkout Offer for Phoenix Cart
 
-Version **1.4.0** · Tested CE Phoenix Cart **1.1.0.6 / 1.1.0.8** · PHP **8.1–8.3**
+Version **1.5.0** · Tested CE Phoenix Cart **1.1.0.6 / 1.1.0.8** · PHP **8.1–8.3**
 
 Present discounted products at the payment step of checkout. This independent Phoenix implementation follows [PrestaChamps' published feature description](https://shop.prestachamps.com/en/prestashop-modules/118-one-time-checkout-offer.html). No PrestaShop module code or assets are included.
 
@@ -14,7 +14,7 @@ Present discounted products at the payment step of checkout. This independent Ph
 - Colours for the panel, text, cards, borders and buttons; solid/outline buttons and shadows.
 - Configurable corners, border width, spacing, image height, font size, columns and modal width.
 - Header-free modal with a corner close button, plus independent left/centre/right alignment for modal text/buttons and product rows.
-- Selectable Red special offer, BusyBee honey, Midnight and Fresh green templates with banners, compact product rows, savings badges and price-labelled Add buttons.
+- Ten selectable designs: Red special offer, BusyBee honey, Midnight, Fresh green, Ocean blue, Soft plum, Slate minimal, Warm coral, Clean teal and Champagne templates with banners, compact product rows, savings badges and price-labelled Add buttons.
 - Clean solid-colour banners and readable typography; modals keep the continue-checkout button without separate footer strips.
 - Responsive cards, images and product option selectors.
 - Row or Stacked product layout for every template, with responsive wrapping and aligned admin appearance fields.
@@ -42,7 +42,7 @@ Choose **Reports → Checkout Offers → Setup → Offer display** and save. Inl
 
 Under Appearance, **Modal image, text and button alignment** and **Modal product row alignment** each offer Left, Centre and Right. Product row alignment positions incomplete Classic rows within the configured columns. Styled templates keep the compact image-left layout when Left is selected; Centre and Right stack the image above the details at the chosen position. Add buttons fit their labels. Alignment affects the modal only. The former accent setting and coloured top border have been removed; saving Setup cleans up the obsolete setting.
 
-Choose a design under **Setup → Appearance → Offer template**, then save. **Custom / Classic** preserves your current design and manual colour/button/column settings. Styled templates supply their own colours, solid buttons and thumbnail sizes. Choose Product layout: Row places cards side by side using Desktop columns; Stacked places one full-width card on each row. Rows wrap responsively. Existing Classic rows and styled stacks are preserved until a layout is saved. Spacing, corners, text size, modal width and modal text alignment remain configurable. Templates work inline and in modals; the classic modal remains header-free while styled designs include a promotional banner. Savings and button prices update with selected options, tax display and currency, and also render without JavaScript.
+Choose a design under **Setup → Appearance → Offer template**, then save. **No template / Custom** unselects the predefined design and restores your manual colour/button/column settings when Setup is saved. This choice retains the existing Classic configuration identifier, so saved settings remain compatible. Styled templates supply their own colours, solid buttons and thumbnail sizes. Choose Product layout: Row places cards side by side using Desktop columns; Stacked places one full-width card on each row. Rows wrap responsively. Existing Classic rows and styled stacks are preserved until a layout is saved. Spacing, corners, text size, modal width and modal text alignment remain configurable. Templates work inline and in modals; the classic modal remains header-free while styled designs include a promotional banner. Savings and button prices update with selected options, tax display and currency, and also render without JavaScript.
 
 JavaScript moves inline offers above payment methods. Without JavaScript or native dialog support, offers remain inline and product addition still works. Modal fields stay inside Phoenix's payment form. Themes must retain the standard payment form and hooks. Alternate checkouts and payment gateways that bypass Phoenix order construction require integration testing.
 
@@ -59,13 +59,13 @@ php tests/run.php ../tmp/PhoenixCart-reference --render
 php tests/run.php ../tmp/PhoenixCart-reference --render --modal --styled
 node tests/browser.cjs
 node tests/admin_browser.cjs
-foreach ($template in @('red','honey','midnight','green')) {
+foreach ($template in @('red','honey','midnight','green','ocean','plum','slate','coral','teal','champagne')) {
   php tests/run.php ../tmp/PhoenixCart-reference --render --template=$template
   php tests/run.php ../tmp/PhoenixCart-reference --render --modal --template=$template
 }
 node tests/templates_browser.cjs
 git diff --check
-powershell -File scripts/build_package.ps1 -Version 1.4.0
+powershell -File scripts/build_package.ps1 -Version 1.5.0
 ```
 
 The harness uses real Phoenix order/tax/currency classes with deterministic database/cart fixtures, without defining legacy image constants. CI repeats checks on PHP 8.1 and 8.3 against pinned Phoenix 1.1.0.6 and 1.1.0.8 references. Browser checks require Playwright 1.62.1, Bootstrap 5.3.8 and Chromium (`npm install --no-save --package-lock=false playwright@1.62.1 bootstrap@5.3.8`, then `npx playwright install chromium`). No live store or payment capture was tested. See [TESTING.md](TESTING.md) for staging checks.

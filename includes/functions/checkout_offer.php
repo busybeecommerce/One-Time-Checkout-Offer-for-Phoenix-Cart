@@ -19,6 +19,12 @@ function checkout_offer_templates(): array
         'honey' => ['background' => '#fff8e8', 'text' => '#29231b', 'card_background' => '#ffffff', 'border' => '#eccb83', 'button_background' => '#a94d00', 'button_text' => '#ffffff', 'banner_background' => '#ffb900', 'banner_text' => '#212529'],
         'midnight' => ['background' => '#111827', 'text' => '#f9fafb', 'card_background' => '#1f2937', 'border' => '#475569', 'button_background' => '#fbbf24', 'button_text' => '#111827', 'banner_background' => '#17243b', 'banner_text' => '#ffffff'],
         'green' => ['background' => '#effaf5', 'text' => '#18372c', 'card_background' => '#ffffff', 'border' => '#a3d6bf', 'button_background' => '#12734b', 'button_text' => '#ffffff', 'banner_background' => '#19865a', 'banner_text' => '#ffffff'],
+        'ocean' => ['background' => '#f0f6fc', 'text' => '#20354b', 'card_background' => '#ffffff', 'border' => '#bdd1e6', 'button_background' => '#1459a0', 'button_text' => '#ffffff', 'banner_background' => '#174a7e', 'banner_text' => '#ffffff'],
+        'plum' => ['background' => '#f7f2fa', 'text' => '#35283f', 'card_background' => '#ffffff', 'border' => '#d7c5e2', 'button_background' => '#693b88', 'button_text' => '#ffffff', 'banner_background' => '#5b327a', 'banner_text' => '#ffffff'],
+        'slate' => ['background' => '#f4f6f8', 'text' => '#273444', 'card_background' => '#ffffff', 'border' => '#cbd3dd', 'button_background' => '#334155', 'button_text' => '#ffffff', 'banner_background' => '#334155', 'banner_text' => '#ffffff'],
+        'coral' => ['background' => '#fff5f1', 'text' => '#49302c', 'card_background' => '#ffffff', 'border' => '#edc5bb', 'button_background' => '#ad3931', 'button_text' => '#ffffff', 'banner_background' => '#b83b32', 'banner_text' => '#ffffff'],
+        'teal' => ['background' => '#eff8f7', 'text' => '#203d3b', 'card_background' => '#ffffff', 'border' => '#b5d7d3', 'button_background' => '#0f6664', 'button_text' => '#ffffff', 'banner_background' => '#0f6664', 'banner_text' => '#ffffff'],
+        'champagne' => ['background' => '#fcf9f3', 'text' => '#3a3025', 'card_background' => '#ffffff', 'border' => '#d9c9ad', 'button_background' => '#745021', 'button_text' => '#ffffff', 'banner_background' => '#efe3ce', 'banner_text' => '#3a3025'],
     ];
 }
 
