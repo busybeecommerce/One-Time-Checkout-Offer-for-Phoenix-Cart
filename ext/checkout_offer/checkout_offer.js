@@ -56,6 +56,12 @@ document.addEventListener('DOMContentLoaded', function () {
                 }
             });
             dialog.showModal();
+            // A history entry restored from the browser's page cache is a new checkout visit.
+            window.addEventListener('pageshow', function (event) {
+                if (event.persisted && !dialog.open) {
+                    dialog.showModal();
+                }
+            });
         }
     }
     section.querySelectorAll('[data-offer-card]').forEach(function (card) {

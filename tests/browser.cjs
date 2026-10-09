@@ -10,6 +10,7 @@ const { chromium } = require('playwright');
     const page = await context.newPage();
     const errors = [];
     page.on('pageerror', error => errors.push(error.message));
+    const bootstrap = fs.readFileSync(process.env.CHECKOUT_OFFER_BOOTSTRAP_CSS || require.resolve('bootstrap/dist/css/bootstrap.min.css'), 'utf8');
     const css = fs.readFileSync('ext/checkout_offer/checkout_offer.css', 'utf8');
     const script = fs.readFileSync('ext/checkout_offer/checkout_offer.js', 'utf8');
     await context.route('http://checkout-offer.test/**', route => {
@@ -21,7 +22,7 @@ const { chromium } = require('playwright');
         if (route.request().url().includes('new-basket')) {
             html = html.replace(/data-offer-key="[^"]+"/, 'data-offer-key="new-basket"');
         }
-        return route.fulfill({ contentType: 'text/html', body: '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>body{font:16px Arial;margin:24px}.btn{padding:8px 12px;cursor:pointer}select{max-width:100%}.me-2{margin-right:8px}' + css + '</style>' + html + '<script>' + script + '</script>' });
+        return route.fulfill({ contentType: 'text/html', body: '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>' + bootstrap + 'body{font:16px Arial;margin:24px}.btn{padding:8px 12px;cursor:pointer}select{max-width:100%}.me-2{margin-right:8px}' + css + '</style>' + html + '<script>' + script + '</script>' });
     });
     await page.goto('http://checkout-offer.test/modal');
     const dialog = page.locator('#checkout-offer-modal');
@@ -71,6 +72,12 @@ const { chromium } = require('playwright');
     assert.equal(await page.getByRole('button', { name: 'View checkout offers' }).count(), 0);
     await page.reload();
     await page.getByRole('button', { name: 'No thanks, continue checkout' }).click();
+    await page.waitForFunction(() => document.activeElement.name === 'payment');
+    assert.equal(await dialog.evaluate(node => node.open), false);
+    await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: false })));
+    assert.equal(await dialog.evaluate(node => node.open), false);
+    await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })));
+    assert.equal(await dialog.evaluate(node => node.open), true);
     await page.reload();
     assert.equal(await dialog.evaluate(node => node.open), true);
     await page.goto('http://checkout-offer.test/modal?new-basket');

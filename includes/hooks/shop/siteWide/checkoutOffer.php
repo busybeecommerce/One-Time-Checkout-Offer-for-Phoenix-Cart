@@ -49,7 +49,7 @@ class hook_shop_siteWide_checkoutOffer {
         if ('checkout_payment.php' !== Request::get_page() || !checkout_offer_enabled()) {
             return '';
         }
-        return '<script src="ext/checkout_offer/checkout_offer.js?v=1.2.0" defer></script>';
+        return '<script src="ext/checkout_offer/checkout_offer.js?v=1.3.0" defer></script>';
     }
 
     public function listen_injectSiteStart(): string
