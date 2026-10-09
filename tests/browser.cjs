@@ -74,6 +74,12 @@ const { chromium } = require('playwright');
     await page.locator('#checkout-offer').evaluate(node => { node.dataset.productLayout = 'stacked'; });
     assert.ok(await page.locator('.checkout-offer-card').first().evaluate(node => node.getBoundingClientRect().width > node.parentElement.getBoundingClientRect().width * .95));
     await page.locator('#checkout-offer').evaluate(node => { node.dataset.productLayout = 'row'; });
+    const rowFooters = await page.locator('.checkout-offer-card').evaluateAll(nodes => nodes.map(node => ({
+        button: node.querySelector('button').getBoundingClientRect().bottom,
+        price: node.querySelector('.checkout-offer-prices').getBoundingClientRect().top
+    })));
+    assert.ok(Math.abs(rowFooters[0].button - rowFooters[1].button) < 1);
+    assert.ok(Math.abs(rowFooters[0].price - rowFooters[1].price) < 1);
     await page.emulateMedia({ reducedMotion: 'reduce' });
     assert.equal(await dialog.evaluate(node => getComputedStyle(node).animationName), 'none');
     await page.keyboard.press('Tab');
