@@ -21,7 +21,10 @@ document.addEventListener('DOMContentLoaded', function () {
             const close = document.createElement('button');
             close.type = 'button';
             close.className = 'checkout-offer-modal-close';
-            close.textContent = '×';
+            const closeIcon = document.createElement('span');
+            closeIcon.className = 'checkout-offer-close-icon';
+            closeIcon.setAttribute('aria-hidden', 'true');
+            close.append(closeIcon);
             close.setAttribute('aria-label', section.dataset.closeLabel);
             const dismiss = document.createElement('button');
             dismiss.type = 'button';

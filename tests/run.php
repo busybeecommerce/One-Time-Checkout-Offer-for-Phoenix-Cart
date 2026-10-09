@@ -77,6 +77,9 @@ if (in_array('--modal', $argv, true)) {
     define('CHECKOUT_OFFER_DISPLAY_MODE', 'modal');
 }
 $fixtureAppearance = in_array('--styled', $argv, true) ? ['background' => '#eef6ff', 'radius' => 18, 'padding' => 24, 'image_height' => 180, 'columns' => 2, 'button_style' => 'solid', 'modal_width' => 800, 'content_alignment' => 'center', 'products_alignment' => 'center'] : [];
+if (in_array('--custom-text', $argv, true)) {
+    $fixtureAppearance += ['heading_text' => 'Your <b>exclusive</b> offer', 'description_text' => "Chosen for you\nAdd something special", 'add_text' => 'Choose this offer', 'dismiss_text' => 'Continue without an offer', 'heading_size' => 26, 'description_size' => 17, 'heading_weight' => '600', 'description_style' => 'italic', 'heading_colour' => '#254a68'];
+}
 foreach ($argv as $argument) {
     if (str_starts_with($argument, '--template=')) {
         $fixtureAppearance['template'] = substr($argument, 11);
@@ -265,6 +268,8 @@ expect(str_contains($html, '--co-image-height:'), 'Appearance values rendered as
 expect(str_contains($html, 'data-template="' . checkout_offer_appearance()['template'] . '"'), 'Validated template is rendered');
 expect(str_contains($html, 'data-content-alignment="' . checkout_offer_appearance()['content_alignment'] . '"'), 'Validated image/content alignment is rendered');
 expect(str_contains($html, 'data-product-layout="' . checkout_offer_appearance()['product_layout'] . '"'), 'Validated product layout is rendered');
+expect(str_contains($html, checkout_offer_text('heading_text', 'classic' === checkout_offer_appearance()['template'] ? CHECKOUT_OFFER_HEADING : CHECKOUT_OFFER_TEMPLATE_HEADING)), 'Custom heading or language fallback rendered');
+expect(!str_contains($html, '<b>exclusive</b>'), 'Custom text cannot inject markup');
 expect(str_contains($html, 'data-offer-saving') && str_contains($html, 'data-button-price'), 'Savings and price-labelled button render without JavaScript');
 expect(str_contains((new hook_shop_siteWide_checkoutOffer())->listen_injectSiteStart(), 'checkout_offer.css'), 'Appearance stylesheet is loaded');
 if (in_array('--render', $argv, true)) {
@@ -275,6 +280,9 @@ if (in_array('--render', $argv, true)) {
     $suffix = in_array('--modal', $argv, true) ? 'modal' : 'inline';
     if ('classic' !== checkout_offer_appearance()['template']) {
         $suffix .= '-' . checkout_offer_appearance()['template'];
+    }
+    if (in_array('--custom-text', $argv, true)) {
+        $suffix .= '-custom';
     }
     file_put_contents($renderDirectory . '/storefront-' . $suffix . '.html',
         '<form id="check_form" method="post" action="checkout_confirmation.php"><input type="hidden" name="formid" value="secret">'
@@ -411,6 +419,16 @@ expect('classic' === $clearedSettings['template'], 'No-template choice saved');
 expect('row' === $clearedSettings['product_layout'], 'Clearing template preserves selected layout');
 expect(str_contains(checkout_offer_style($clearedSettings), '--co-button-background:#234567;'), 'Clearing template restores custom colours');
 expect(!str_contains(checkout_offer_style($clearedSettings), '--co-banner-background:'), 'No template has no predefined banner palette');
+checkout_offer_admin_action('settings', ['appearance' => ['heading_text' => 'My offer', 'description_text' => '   ', 'heading_size' => 28, 'heading_weight' => '600']]);
+$textSettings = json_decode(array_slice($GLOBALS['db']->writes, -4, 3)[2][1]['configuration_value'], true);
+expect('My offer' === $textSettings['heading_text'] && '' === $textSettings['description_text'], 'Custom text saved and blank text cleared');
+expect(str_contains(checkout_offer_style($textSettings), '--co-heading-size:28px;') && !str_contains(checkout_offer_style($textSettings), 'My offer'), 'Text styling is scoped and content excluded from CSS');
+expect('' === checkout_offer_sanitise_appearance(['heading_text' => '   '], true)['heading_text'], 'Whitespace-only text uses fallback');
+expect('你好' === checkout_offer_sanitise_appearance(['heading_text' => '你好'], true)['heading_text'], 'Unicode custom text accepted');
+foreach (['heading_text' => str_repeat('x', 201), 'description_text' => [], 'heading_colour' => 'red;display:none', 'heading_size' => 61, 'heading_weight' => '900', 'description_style' => 'bad'] as $key => $value) {
+    rejected(static fn() => checkout_offer_sanitise_appearance([$key => $value], true), 'Invalid custom text or typography rejected');
+}
+expect(!str_contains(checkout_offer_style(checkout_offer_sanitise_appearance([])), '--co-heading-size:'), 'Default heading size preserves template');
 checkout_offer_admin_action('save_tier', ['title' => 'Unlimited', 'minimum' => '0', 'maximum' => '', 'priority' => '3', 'enabled' => 'on']);
 $tierWrite = $GLOBALS['db']->writes[count($GLOBALS['db']->writes) - 1];
 expect('NULL' === $tierWrite[1]['maximum'], 'Unlimited tiers use Phoenix SQL NULL marker');

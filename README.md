@@ -1,6 +1,6 @@
 # One-Time Checkout Offer for Phoenix Cart
 
-Version **1.5.0** · Tested CE Phoenix Cart **1.1.0.6 / 1.1.0.8** · PHP **8.1–8.3**
+Version **1.6.0** · Tested CE Phoenix Cart **1.1.0.6 / 1.1.0.8** · PHP **8.1–8.3**
 
 Present discounted products at the payment step of checkout. This independent Phoenix implementation follows [PrestaChamps' published feature description](https://shop.prestachamps.com/en/prestashop-modules/118-one-time-checkout-offer.html). No PrestaShop module code or assets are included.
 
@@ -16,6 +16,9 @@ Present discounted products at the payment step of checkout. This independent Ph
 - Header-free modal with a corner close button, plus independent left/centre/right alignment for modal text/buttons and product rows.
 - Ten selectable designs: Red special offer, BusyBee honey, Midnight, Fresh green, Ocean blue, Soft plum, Slate minimal, Warm coral, Clean teal and Champagne templates with banners, compact product rows, savings badges and price-labelled Add buttons.
 - Clean solid-colour banners and readable typography; modals keep the continue-checkout button without separate footer strips.
+- Custom heading, description, badge, button labels, savings label and inline note with predefined wording as a per-field fallback.
+- Heading/description size, colour, weight and normal/italic styling with design-preserving automatic defaults.
+- Compact, centred modal close icon and thin border.
 - Responsive cards, images and product option selectors.
 - Row or Stacked product layout for every template, with responsive wrapping and aligned admin appearance fields.
 - One-click addition followed by delivery recalculation.
@@ -65,7 +68,7 @@ foreach ($template in @('red','honey','midnight','green','ocean','plum','slate',
 }
 node tests/templates_browser.cjs
 git diff --check
-powershell -File scripts/build_package.ps1 -Version 1.5.0
+powershell -File scripts/build_package.ps1 -Version 1.6.0
 ```
 
 The harness uses real Phoenix order/tax/currency classes with deterministic database/cart fixtures, without defining legacy image constants. CI repeats checks on PHP 8.1 and 8.3 against pinned Phoenix 1.1.0.6 and 1.1.0.8 references. Browser checks require Playwright 1.62.1, Bootstrap 5.3.8 and Chromium (`npm install --no-save --package-lock=false playwright@1.62.1 bootstrap@5.3.8`, then `npx playwright install chromium`). No live store or payment capture was tested. See [TESTING.md](TESTING.md) for staging checks.
