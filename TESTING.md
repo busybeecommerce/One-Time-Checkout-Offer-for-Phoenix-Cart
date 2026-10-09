@@ -1,7 +1,5 @@
 # Testing
 
-`node tests/alignment_browser.cjs` checks 330 combinations of Classic/all ten templates, inline/modal, Left/Centre/Right and five viewport widths (375–1736px). It measures image positioning, heading/product text, compact button placement, incomplete row alignment and equal price/button positions with and without product options. Classic inline buttons sit beneath prices consistently rather than wrapping independently within each card.
-
 Tabbed admin checks verify one visible panel, white header text, cross-tab settings submission and retained unsaved input, active-tab submission, keyboard navigation, responsive bounds and no-JavaScript access to all six panels. Row-card browser checks measure equal price and Add-button positions when one product has options and another does not.
 
 Run README.md automated commands. PHP tests lint package files, check manifest/contracts, exercise real Phoenix order construction and test pricing, tier boundaries, VAT, delivery tax, options and isolated acceptance. Node tests verify placement and option-price updates.

@@ -148,7 +148,7 @@ const { chromium } = require('playwright');
         return { bottom: button.bottom, priceCentre: price.top + price.height / 2, buttonCentre: button.top + button.height / 2, width: card.width, buttonWidth: button.width };
     }));
     assert.ok(Math.abs(inlineCards[0].bottom - inlineCards[1].bottom) < 1, 'Inline card buttons remain aligned with product options');
-    assert.ok(inlineCards.every(card => card.buttonCentre > card.priceCentre), 'Inline Add buttons sit beneath prices consistently');
+    assert.ok(inlineCards.every(card => Math.abs(card.priceCentre - card.buttonCentre) < 1), 'Inline price and Add button share a compact purchase row');
     assert.ok(inlineCards.every(card => card.buttonWidth < card.width * .75), 'Inline buttons stay compact');
     await page.screenshot({ path: 'build/inline-desktop.png', fullPage: true });
     await page.setViewportSize({ width: 375, height: 812 });
