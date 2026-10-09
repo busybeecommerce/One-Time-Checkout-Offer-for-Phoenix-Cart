@@ -66,6 +66,7 @@ const { chromium } = require('playwright');
                                 buttonRight: button.right, textAlign: getComputedStyle(node.querySelector('h3')).textAlign };
                         });
                         assert.equal(bounds.textAlign, alignment);
+                        assert.ok(await product.locator('button').evaluate(node => node.getBoundingClientRect().width < node.parentElement.getBoundingClientRect().width * .85));
                         if (alignment === 'center') {
                             assert.ok(Math.abs(bounds.imageCenter - bounds.center) < 2);
                             assert.ok(Math.abs(bounds.buttonCenter - bounds.center) < 2);

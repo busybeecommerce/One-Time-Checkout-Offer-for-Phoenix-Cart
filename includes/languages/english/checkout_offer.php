@@ -13,5 +13,5 @@ const CHECKOUT_OFFER_BADGE = 'Special offer';
 const CHECKOUT_OFFER_TEMPLATE_HEADING = 'Special offer just for you!';
 const CHECKOUT_OFFER_TEMPLATE_DESCRIPTION = 'Add these products to your order at a reduced price.';
 const CHECKOUT_OFFER_SAVE = 'You save:';
-const CHECKOUT_OFFER_ADD_PRICE = 'Add for only';
+const CHECKOUT_OFFER_ADD_PRICE = 'Add';
 const CHECKOUT_OFFER_NOTE = 'Available only with this order. One unit per offered product; delivery is recalculated after adding.';
