@@ -18,10 +18,7 @@ const { chromium } = require('playwright');
             return route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="140"><circle cx="100" cy="70" r="55" fill="#87b840"/></svg>' });
         }
         const mode = route.request().url().includes('inline') ? 'inline' : 'modal';
-        let html = fs.readFileSync('build/storefront-' + mode + '.html', 'utf8');
-        if (route.request().url().includes('new-basket')) {
-            html = html.replace(/data-offer-key="[^"]+"/, 'data-offer-key="new-basket"');
-        }
+        const html = fs.readFileSync('build/storefront-' + mode + '.html', 'utf8');
         return route.fulfill({ contentType: 'text/html', body: '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>' + bootstrap + 'body{font:16px Arial;margin:24px}.btn{padding:8px 12px;cursor:pointer}select{max-width:100%}.me-2{margin-right:8px}' + css + '</style>' + html + '<script>' + script + '</script>' });
     });
     await page.goto('http://checkout-offer.test/modal');
@@ -80,7 +77,7 @@ const { chromium } = require('playwright');
     assert.equal(await dialog.evaluate(node => node.open), true);
     await page.reload();
     assert.equal(await dialog.evaluate(node => node.open), true);
-    await page.goto('http://checkout-offer.test/modal?new-basket');
+    await page.goto('http://checkout-offer.test/modal?repeat-entry');
     assert.equal(await dialog.evaluate(node => node.open), true);
     await page.getByRole('button', { name: 'Close checkout offers' }).click();
     await page.waitForTimeout(100);

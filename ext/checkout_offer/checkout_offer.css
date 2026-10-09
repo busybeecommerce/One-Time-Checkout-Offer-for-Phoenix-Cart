@@ -97,6 +97,9 @@
 #checkout-offer-modal .checkout-offer-modal-close { width: 36px; height: 36px; padding: 4px; border-radius: 50%; }
 #checkout-offer-modal .checkout-offer-modal-close:focus-visible { outline: 3px solid currentColor; outline-offset: 2px; }
 #checkout-offer-modal .checkout-offer-modal-footer { position: sticky; bottom: 0; background: var(--co-background); border-top: 1px solid var(--co-border); padding: 14px var(--co-padding); }
+#checkout-offer-modal .checkout-offer-modal-footer .btn { color: var(--co-text); border-color: currentColor; background: transparent; }
+#checkout-offer-modal .checkout-offer-modal-footer .btn:hover { color: var(--co-background); background: var(--co-text); }
+#checkout-offer-modal .checkout-offer-modal-footer .btn:focus-visible { outline: 3px solid var(--co-text); outline-offset: 2px; }
 @media (max-width: 575px) {
     #checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-image { flex-basis: 80px; width: 80px; height: 80px; padding: 5px; }
     #checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-card { gap: 12px; }
