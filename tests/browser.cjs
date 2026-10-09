@@ -41,7 +41,9 @@ const { chromium } = require('playwright');
         }, alignment);
         await dialog.evaluate((node, value) => node.style.setProperty('--co-content-alignment', value), alignment);
         assert.equal(await page.locator('#checkout-offer h2').evaluate(node => getComputedStyle(node).textAlign), alignment);
-        assert.equal(await page.locator('.checkout-offer-modal-footer').evaluate(node => getComputedStyle(node).justifyContent), alignment);
+        assert.equal(await page.locator('.checkout-offer-modal-footer').count(), 0);
+        assert.equal(await page.locator('.checkout-offer-dismiss').evaluate(node => node.parentElement.id), 'checkout-offer');
+        assert.equal(await page.locator('.checkout-offer-dismiss').evaluate(node => getComputedStyle(node.parentElement).textAlign), alignment);
         const bounds = await page.locator('.checkout-offer-grid').evaluate(node => {
             const grid = node.getBoundingClientRect();
             const card = node.firstElementChild.getBoundingClientRect();

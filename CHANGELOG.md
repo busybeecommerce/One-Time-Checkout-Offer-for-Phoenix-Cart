@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.1
+
+- Refine all four predefined templates with solid colour banners, restrained typography, clean image tiles and compact buttons.
+- Remove modal footer strips and the availability-note footer; keep the dismissal button inside the main offer content. Inline offers retain their availability note.
+- Preserve automatic opening, image/content alignment, focus restoration and checkout submission.
+
 ## 1.3.0
 
 - Automatically open eligible modal offers on every payment-page entry or reload; remove launcher and session storage suppression.
