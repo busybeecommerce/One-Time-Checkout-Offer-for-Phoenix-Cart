@@ -33,7 +33,7 @@ class hook_shop_checkout_payment_checkoutOffer {
         }
         $appearance = checkout_offer_appearance();
         return '<section id="checkout-offer" class="mb-4" data-display-mode="' . checkout_offer_display_mode()
-            . '" data-template="' . $appearance['template'] . '" data-content-alignment="' . $appearance['content_alignment']
+            . '" data-template="' . $appearance['template'] . '" data-product-layout="' . $appearance['product_layout'] . '" data-content-alignment="' . $appearance['content_alignment']
             . '" data-shadow="' . $appearance['shadow'] . '" data-button-style="' . $appearance['button_style']
             . '" data-close-label="' . checkout_offer_escape(CHECKOUT_OFFER_CLOSE)
             . '" data-dismiss-label="' . checkout_offer_escape(CHECKOUT_OFFER_DISMISS) . '" style="' . checkout_offer_escape(checkout_offer_style($appearance)) . '">'

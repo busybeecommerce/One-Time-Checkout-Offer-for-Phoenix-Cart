@@ -16,6 +16,8 @@ Template browser checks measure Add button width and image/button positions for 
 
 The modal checks verify that footer containers are absent, the availability note is hidden only inside the modal, and the retained dismissal button belongs to the main offer content. Every styled template checks the restrained heading scale and dismissal/reload behaviour.
 
+Admin browser checks measure paired appearance field tops and bottoms at 1440, 1200 and 768 pixels, including wrapped labels. They submit the new Product layout setting. PHP checks validate layout persistence and legacy defaults. Browser checks measure Row and Stacked card positions in all templates, inline and modal, and confirm mobile wrapping without horizontal overflow.
+
 ## Staging acceptance
 
 1. Install twice; retain tiers. Confirm administrator access controls.

@@ -35,6 +35,11 @@
 .checkout-offer-admin .co-admin-appearance { padding: .85rem; border: 1px solid #f1d7bb; border-radius: .65rem; background: #fffaf4; }
 .checkout-offer-admin summary { cursor: pointer; font-size: .875rem; }
 .checkout-offer-admin .co-admin-appearance[open] summary { margin-bottom: .75rem; }
+.checkout-offer-admin .co-appearance-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem .65rem; }
+.checkout-offer-admin .co-appearance-field { display: flex; flex-direction: column; min-width: 0; }
+.checkout-offer-admin .co-appearance-field:last-child:nth-child(odd) { grid-column: 1 / -1; }
+.checkout-offer-admin .co-appearance-field .form-label { flex: 1; }
+.checkout-offer-admin .co-appearance-field .form-control, .checkout-offer-admin .co-appearance-field .form-select { flex: 0 0 auto; }
 .checkout-offer-admin .co-admin-tier { margin-bottom: .5rem; padding: .85rem; border: 1px solid var(--co-admin-border); border-radius: .6rem; background: #fafbfc; }
 .checkout-offer-admin .co-admin-tier-selected { border-color: #dc8b42; background: #fff4e7; }
 .checkout-offer-admin .co-admin-tier a { display: block; margin-bottom: .25rem; color: #914400; font-weight: 600; text-decoration: none; }
@@ -60,5 +65,5 @@
     .checkout-offer-admin .co-admin-heading { flex-basis: 100%; }
     .checkout-offer-admin .co-admin-logo { width: 14rem; }
     .checkout-offer-admin .card-body { padding: 1rem; }
-    .checkout-offer-admin .co-admin-appearance .col-6 { width: 100%; }
+    .checkout-offer-admin .co-appearance-fields { grid-template-columns: minmax(0, 1fr); }
 }

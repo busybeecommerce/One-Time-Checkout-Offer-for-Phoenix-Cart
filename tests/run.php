@@ -264,6 +264,7 @@ expect(str_contains($html, 'data-display-mode="' . checkout_offer_display_mode()
 expect(str_contains($html, '--co-image-height:'), 'Appearance values rendered as scoped CSS properties');
 expect(str_contains($html, 'data-template="' . checkout_offer_appearance()['template'] . '"'), 'Validated template is rendered');
 expect(str_contains($html, 'data-content-alignment="' . checkout_offer_appearance()['content_alignment'] . '"'), 'Validated image/content alignment is rendered');
+expect(str_contains($html, 'data-product-layout="' . checkout_offer_appearance()['product_layout'] . '"'), 'Validated product layout is rendered');
 expect(str_contains($html, 'data-offer-saving') && str_contains($html, 'data-button-price'), 'Savings and price-labelled button render without JavaScript');
 expect(str_contains((new hook_shop_siteWide_checkoutOffer())->listen_injectSiteStart(), 'checkout_offer.css'), 'Appearance stylesheet is loaded');
 if (in_array('--render', $argv, true)) {
@@ -380,11 +381,16 @@ checkout_offer_admin_action('settings', ['enabled' => 'on']);
 $settingsWrites = array_slice($GLOBALS['db']->writes, -4, 3);
 expect('True' === $settingsWrites[0][1]['configuration_value'], 'Enable setting saved');
 rejected(static fn() => checkout_offer_admin_action('settings', ['display_mode' => 'invalid']), 'Reject invalid display mode');
-checkout_offer_admin_action('settings', ['display_mode' => 'modal', 'appearance' => ['radius' => 20, 'background' => '#fafafa', 'content_alignment' => 'right', 'products_alignment' => 'center']]);
+checkout_offer_admin_action('settings', ['display_mode' => 'modal', 'appearance' => ['radius' => 20, 'background' => '#fafafa', 'content_alignment' => 'right', 'products_alignment' => 'center', 'product_layout' => 'stacked']]);
 $settingsWrites = array_slice($GLOBALS['db']->writes, -4, 3);
 expect('modal' === $settingsWrites[1][1]['configuration_value'], 'Modal choice saved');
 expect(20 === json_decode($settingsWrites[2][1]['configuration_value'], true)['radius'], 'Appearance saved');
 expect('right' === json_decode($settingsWrites[2][1]['configuration_value'], true)['content_alignment'], 'Modal alignment saved');
+expect('stacked' === json_decode($settingsWrites[2][1]['configuration_value'], true)['product_layout'], 'Product layout saved');
+expect('row' === checkout_offer_sanitise_appearance([])['product_layout'], 'Existing Classic layout preserved');
+expect('stacked' === checkout_offer_sanitise_appearance(['template' => 'red'])['product_layout'], 'Existing styled stack preserved');
+expect('row' === checkout_offer_sanitise_appearance(['template' => 'red', 'product_layout' => 'row'], true)['product_layout'], 'Styled row selected explicitly');
+rejected(static fn() => checkout_offer_sanitise_appearance(['product_layout' => 'row" onclick="bad'], true), 'Reject unsafe product layout');
 expect('update' === $settingsWrites[2][2], 'Appearance updates store configuration');
 expect(str_contains($GLOBALS['db']->writes[count($GLOBALS['db']->writes) - 1], "configuration_key = 'CHECKOUT_OFFER_ACCENT'"), 'Saving Setup removes legacy accent setting');
 expect(!str_contains(checkout_offer_style(checkout_offer_appearance()), 'accent'), 'Legacy accent has no styling effect');

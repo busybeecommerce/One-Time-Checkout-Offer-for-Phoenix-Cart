@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.0
+
+- Align paired admin appearance controls even when labels wrap onto multiple lines.
+- Add Row / Stacked product layout for Classic and all predefined templates, in inline and modal display. Row uses Desktop columns and wraps responsively.
+- Preserve existing Classic rows and predefined-template stacks until a layout is explicitly saved.
+- Update modal help text to describe automatic opening and dismissal.
+
 ## 1.3.1
 
 - Refine all four predefined templates with solid colour banners, restrained typography, clean image tiles and compact buttons.

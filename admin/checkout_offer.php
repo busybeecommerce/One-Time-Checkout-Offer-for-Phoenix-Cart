@@ -32,7 +32,7 @@ $editTier = $tier ?? ['id' => 0, 'title' => '', 'minimum' => '0', 'maximum' => '
 $appearance = checkout_offer_appearance();
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.2.0')) ?>">
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.4.0')) ?>">
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
     <div class="co-admin-heading">
@@ -78,10 +78,10 @@ require 'includes/template_top.php';
                   <?php } ?>
                 </div>
               </fieldset>
-              <div class="row g-2 mt-1">
+              <div class="co-appearance-fields mt-1">
                 <?php foreach (checkout_offer_appearance_fields() as $key => $field) { ?>
                   <?php if ('template' === $key) { continue; } ?>
-                  <div class="col-6">
+                  <div class="co-appearance-field">
                     <label class="form-label small" for="style-<?= $key ?>"><?= constant('CHECKOUT_OFFER_ADMIN_STYLE_' . strtoupper($key)) ?></label>
                     <?php if ('select' === $field['type']) { ?>
                       <select class="form-select form-select-sm" id="style-<?= $key ?>" name="appearance[<?= $key ?>]">
