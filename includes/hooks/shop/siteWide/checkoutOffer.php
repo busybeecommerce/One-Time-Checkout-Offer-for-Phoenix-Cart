@@ -55,6 +55,6 @@ class hook_shop_siteWide_checkoutOffer {
     public function listen_injectSiteStart(): string
     {
         return 'checkout_payment.php' === Request::get_page() && checkout_offer_enabled()
-            ? '<link rel="stylesheet" href="ext/checkout_offer/checkout_offer.css?v=1.7.4">' : '';
+            ? '<link rel="stylesheet" href="ext/checkout_offer/checkout_offer.css?v=1.7.6">' : '';
     }
 }

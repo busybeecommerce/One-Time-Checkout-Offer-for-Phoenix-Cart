@@ -161,5 +161,6 @@
 #checkout-offer[data-template="classic"][data-display-mode="inline"] .checkout-offer-actions { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: .75rem; margin-top: auto; padding-top: 1rem; border-top: var(--co-border-width) solid var(--co-border); }
 #checkout-offer[data-template="classic"][data-display-mode="inline"] .checkout-offer-actions .checkout-offer-prices { margin: 0; padding: 0; line-height: 1.4; }
 #checkout-offer[data-template="classic"][data-display-mode="inline"] [data-offer-price] { font-size: 1.25em; font-weight: 700; }
+#checkout-offer[data-template="classic"][data-display-mode="inline"] .checkout-offer-saving { display: block; margin-top: .35em; color: #166534; font-size: .75em; font-weight: 600; }
 #checkout-offer[data-template="classic"][data-display-mode="inline"] .checkout-offer-add { align-self: auto; flex: 0 1 auto; max-width: 100%; padding: .65em 1em; font-weight: 600; line-height: 1.35; }
 #checkout-offer[data-template="classic"][data-display-mode="inline"] .checkout-offer-card-content > .form-select:last-of-type { margin-bottom: 1rem !important; }

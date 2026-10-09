@@ -126,6 +126,13 @@ const { chromium } = require('playwright');
     await page.goto('http://checkout-offer.test/inline');
     assert.equal(await page.locator('#checkout-offer').evaluate(node => node.parentElement.firstElementChild === node), true);
     assert.equal(await page.locator('dialog').count(), 0);
+    assert.equal(await page.locator('.checkout-offer-saving').first().isVisible(), true);
+    assert.equal(await page.locator('.checkout-offer-saving').first().textContent(), 'You save: £6.00');
+    const savingBounds = await page.locator('.checkout-offer-prices').first().evaluate(node => ({
+        priceBottom: node.querySelector('[data-offer-price]').getBoundingClientRect().bottom,
+        savingTop: node.querySelector('.checkout-offer-saving').getBoundingClientRect().top,
+    }));
+    assert.ok(savingBounds.savingTop > savingBounds.priceBottom, 'Saving appears beneath the price');
     await page.setViewportSize({ width: 1440, height: 1000 });
     const inlineCards = await page.locator('.checkout-offer-card').evaluateAll(nodes => nodes.map(node => {
         const card = node.getBoundingClientRect();
