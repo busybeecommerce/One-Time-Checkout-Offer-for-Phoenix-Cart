@@ -127,7 +127,11 @@
 #checkout-offer[data-template]:not([data-template="classic"])[data-product-layout="row"] .checkout-offer-card-content { flex: 1; width: 100%; }
 #checkout-offer[data-template][data-product-layout="row"] .checkout-offer-card { display: flex; flex-direction: column; }
 #checkout-offer[data-template][data-product-layout="row"] .checkout-offer-card-content { display: flex; flex-direction: column; flex: 1; width: 100%; }
-#checkout-offer[data-template][data-product-layout="row"] .checkout-offer-prices { margin-top: auto; padding-top: .65em; margin-bottom: .85em; }
+#checkout-offer[data-template][data-product-layout="row"] .checkout-offer-actions { display: flex; flex-direction: column; margin-top: auto; }
+#checkout-offer[data-template][data-product-layout="row"] .checkout-offer-prices { margin-top: 0; padding-top: .65em; margin-bottom: .85em; }
+#checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-saving { display: block; width: fit-content; margin: .4em 0 0; }
+#checkout-offer[data-template]:not([data-template="classic"])[data-content-alignment="center"] .checkout-offer-saving { margin-left: auto; margin-right: auto; }
+#checkout-offer[data-template]:not([data-template="classic"])[data-content-alignment="right"] .checkout-offer-saving { margin-left: auto; }
 #checkout-offer[data-template][data-product-layout="row"] .checkout-offer-add { align-self: flex-start; }
 #checkout-offer[data-template][data-product-layout="row"][data-content-alignment="center"] .checkout-offer-card-content { flex: 1; }
 #checkout-offer[data-template][data-product-layout="row"][data-content-alignment="right"] .checkout-offer-card-content { flex: 1; }

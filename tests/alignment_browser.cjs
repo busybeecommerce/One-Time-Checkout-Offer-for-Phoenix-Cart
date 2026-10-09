@@ -38,6 +38,8 @@ let browser;
                         const card = node.getBoundingClientRect();
                         const button = node.querySelector('button').getBoundingClientRect();
                         const price = node.querySelector('.checkout-offer-prices').getBoundingClientRect();
+                        const saving = node.querySelector('.checkout-offer-saving').getBoundingClientRect();
+                        const offer = node.querySelector('[data-offer-price]').getBoundingClientRect();
                         const grid = node.parentElement.getBoundingClientRect();
                         const gridStyle = getComputedStyle(node.parentElement);
                         return { top: card.top, priceTop: price.top, buttonBottom: button.bottom,
@@ -47,12 +49,15 @@ let browser;
                             right: card.right - parseFloat(style.paddingRight) - 1,
                             center: (card.left + card.right) / 2,
                             buttonLeft: button.left, buttonRight: button.right, buttonCenter: (button.left + button.right) / 2,
+                            savingTop: saving.top, savingBottom: saving.bottom, offerBottom: offer.bottom, buttonTop: button.top,
                             gridLeft: grid.left + parseFloat(gridStyle.paddingLeft),
                             gridRight: grid.right - parseFloat(gridStyle.paddingRight), cardLeft: card.left, cardRight: card.right };
                     }));
                     for (const card of cards) {
                         assert.equal(card.textAlign, alignment);
                         assert.equal(card.imagePosition, { left: '0% 50%', center: '50% 50%', right: '100% 50%' }[alignment]);
+                        assert.ok(card.savingTop >= card.offerBottom, 'Savings appear beneath the offer price');
+                        assert.ok(card.buttonTop >= card.savingBottom, 'Buttons appear beneath savings');
                         if (alignment === 'left') assert.ok(Math.abs(card.buttonLeft - card.left) < 2);
                         if (alignment === 'center') assert.ok(Math.abs(card.buttonCenter - card.center) < 2);
                         if (alignment === 'right') assert.ok(Math.abs(card.buttonRight - card.right) < 2);
