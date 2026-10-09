@@ -58,3 +58,24 @@ jobs:
             php tests/run.php reference --render --modal --template=$template
           done
       - run: node tests/templates_browser.cjs
+
+  release:
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    needs: [php, browser]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - name: Build and verify release from tested main
+        shell: pwsh
+        run: ./scripts/build_package.ps1 -Version 1.3.0
+      - name: Publish ZIP and SHA-256
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: |
+          gh release create v1.3.0 \
+            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.3.0.zip \
+            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.3.0.zip.sha256.txt \
+            --target "$GITHUB_SHA" --title "v1.3.0 — Automatic checkout offers" \
+            --notes "Eligible modal offers open on every payment-page entry or reload, with no launcher or storage suppression. Richer styled templates, larger imagery, compact Add buttons and reduced-motion-aware animation. Saved settings, alignment, inline fallbacks and checkout accounting are preserved. PHP 8.1/8.3 and pinned Phoenix 1.1.0.6/1.1.0.8 fixture tests and browser checks passed. ZIP manifest and every archived file hash verified. No live-store deployment or payment capture."

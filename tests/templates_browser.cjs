@@ -25,6 +25,7 @@ const { chromium } = require('playwright');
         for (const mode of ['inline', 'modal']) {
             await page.setViewportSize({ width: 1280, height: 900 });
             await page.goto('http://templates.test/' + mode + '-' + theme);
+            if (mode === 'modal') await page.locator('#checkout-offer-modal').evaluate(node => Promise.all(node.getAnimations().map(animation => animation.finished)));
             const section = page.locator('#checkout-offer');
             assert.equal(await section.getAttribute('data-template'), theme);
             assert.equal(await page.locator('.checkout-offer-badge').isVisible(), true);
@@ -81,9 +82,11 @@ const { chromium } = require('playwright');
                 await page.locator('#checkout-offer-modal').evaluate(node => node.style.setProperty('--co-content-alignment', 'center'));
                 await page.setViewportSize({ width: 1280, height: 900 });
             }
+            await page.locator('.checkout-offer-image').evaluateAll(images => Promise.all(images.map(image => image.decode())));
             await page.screenshot({ path: 'build/template-' + theme + '-' + mode + '.png', fullPage: true });
             await page.setViewportSize({ width: 375, height: 812 });
             assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+            await page.locator('.checkout-offer-image').evaluateAll(images => Promise.all(images.map(image => image.decode())));
             await page.screenshot({ path: 'build/template-' + theme + '-' + mode + '-mobile.png', fullPage: true });
             if (mode === 'modal') {
                 await page.getByRole('button', { name: 'Close checkout offers' }).click();

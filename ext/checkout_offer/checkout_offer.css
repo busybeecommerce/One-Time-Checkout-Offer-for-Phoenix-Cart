@@ -90,13 +90,13 @@
     display: inline-flex; align-items: center; justify-content: center; padding: .6em 1em; line-height: 1.3;
     border-radius: min(10px, var(--co-radius)); box-shadow: 0 4px 10px #00000024; white-space: normal;
 }
-#checkout-offer[data-template="red"] .checkout-offer-banner { background: radial-gradient(ellipse at top right, #ff7c6e70, transparent 65%), linear-gradient(125deg, #850e26, #d7193f); }
-#checkout-offer[data-template="honey"] .checkout-offer-banner { background: radial-gradient(ellipse at top right, #fff3bfa6, transparent 65%), linear-gradient(125deg, #ffbb24, #f7941d); }
-#checkout-offer[data-template="midnight"] .checkout-offer-banner { background: radial-gradient(ellipse at top right, #7c3aed66, transparent 65%), linear-gradient(125deg, #101827, #263751); }
-#checkout-offer[data-template="green"] .checkout-offer-banner { background: radial-gradient(ellipse at top right, #4ade804d, transparent 65%), linear-gradient(125deg, #064e3b, #15803d); }
+#checkout-offer[data-template][data-template="red"] .checkout-offer-banner { background: radial-gradient(ellipse at top right, #ff7c6e70, transparent 65%), linear-gradient(125deg, #850e26, #d7193f); }
+#checkout-offer[data-template][data-template="honey"] .checkout-offer-banner { background: radial-gradient(ellipse at top right, #fff3bfa6, transparent 65%), linear-gradient(125deg, #ffbb24, #f7941d); }
+#checkout-offer[data-template][data-template="midnight"] .checkout-offer-banner { background: radial-gradient(ellipse at top right, #7c3aed66, transparent 65%), linear-gradient(125deg, #101827, #263751); }
+#checkout-offer[data-template][data-template="green"] .checkout-offer-banner { background: radial-gradient(ellipse at top right, #4ade804d, transparent 65%), linear-gradient(125deg, #064e3b, #15803d); }
 #checkout-offer-modal .checkout-offer-modal-close { width: 36px; height: 36px; padding: 4px; border-radius: 50%; }
 #checkout-offer-modal .checkout-offer-modal-close:focus-visible { outline: 3px solid currentColor; outline-offset: 2px; }
-#checkout-offer-modal .checkout-offer-modal-footer { padding: 14px var(--co-padding); }
+#checkout-offer-modal .checkout-offer-modal-footer { position: sticky; bottom: 0; background: var(--co-background); border-top: 1px solid var(--co-border); padding: 14px var(--co-padding); }
 @media (max-width: 575px) {
     #checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-image { flex-basis: 80px; width: 80px; height: 80px; padding: 5px; }
     #checkout-offer[data-template]:not([data-template="classic"]) .checkout-offer-card { gap: 12px; }

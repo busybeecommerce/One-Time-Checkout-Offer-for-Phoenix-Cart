@@ -25,6 +25,7 @@ const { chromium } = require('playwright');
     });
     await page.goto('http://checkout-offer.test/modal');
     const dialog = page.locator('#checkout-offer-modal');
+    await dialog.evaluate(node => Promise.all(node.getAnimations().map(animation => animation.finished)));
     assert.equal(await dialog.evaluate(node => node.open), true);
     assert.equal(await dialog.evaluate(node => Math.round(node.getBoundingClientRect().width)), 800);
     assert.equal(await page.locator('#checkout-offer').evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(238, 246, 255)');
