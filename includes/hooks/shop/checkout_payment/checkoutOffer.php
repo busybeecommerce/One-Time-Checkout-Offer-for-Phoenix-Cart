@@ -36,11 +36,11 @@ class hook_shop_checkout_payment_checkoutOffer {
             . '" data-template="' . $appearance['template'] . '" data-product-layout="' . $appearance['product_layout'] . '" data-content-alignment="' . $appearance['content_alignment']
             . '" data-shadow="' . $appearance['shadow'] . '" data-button-style="' . $appearance['button_style']
             . '" data-close-label="' . checkout_offer_escape(CHECKOUT_OFFER_CLOSE)
-            . '" data-dismiss-label="' . checkout_offer_escape(CHECKOUT_OFFER_DISMISS) . '" style="' . checkout_offer_escape(checkout_offer_style($appearance)) . '">'
-            . '<div class="checkout-offer-banner"><span class="checkout-offer-badge">' . CHECKOUT_OFFER_BADGE . '</span>'
-            . '<h2 class="h5" id="checkout-offer-title">' . ('classic' === $appearance['template'] ? CHECKOUT_OFFER_HEADING : CHECKOUT_OFFER_TEMPLATE_HEADING)
-            . '</h2><p class="checkout-offer-description">' . ('classic' === $appearance['template'] ? CHECKOUT_OFFER_DESCRIPTION : CHECKOUT_OFFER_TEMPLATE_DESCRIPTION)
-            . '</p></div><div class="checkout-offer-grid">' . $cards . '</div><p class="checkout-offer-note">' . CHECKOUT_OFFER_NOTE . '</p></section>';
+            . '" data-dismiss-label="' . checkout_offer_text('dismiss_text', CHECKOUT_OFFER_DISMISS) . '" style="' . checkout_offer_escape(checkout_offer_style($appearance)) . '">'
+            . '<div class="checkout-offer-banner"><span class="checkout-offer-badge">' . checkout_offer_text('badge_text', CHECKOUT_OFFER_BADGE) . '</span>'
+            . '<h2 class="h5" id="checkout-offer-title">' . checkout_offer_text('heading_text', 'classic' === $appearance['template'] ? CHECKOUT_OFFER_HEADING : CHECKOUT_OFFER_TEMPLATE_HEADING)
+            . '</h2><p class="checkout-offer-description">' . checkout_offer_text('description_text', 'classic' === $appearance['template'] ? CHECKOUT_OFFER_DESCRIPTION : CHECKOUT_OFFER_TEMPLATE_DESCRIPTION)
+            . '</p></div><div class="checkout-offer-grid">' . $cards . '</div><p class="checkout-offer-note">' . checkout_offer_text('note_text', CHECKOUT_OFFER_NOTE) . '</p></section>';
     }
 
     private function card(Product $product, array $rule): string
@@ -79,10 +79,10 @@ class hook_shop_checkout_payment_checkoutOffer {
             . $imageHtml . '<div class="checkout-offer-card-content"><h3 class="h6">' . checkout_offer_escape((string)$product->get('name')) . '</h3>' . $options
             . '<p><del class="text-body-secondary me-2" data-normal-price>' . $GLOBALS['currencies']->display_price($normal, $rate)
             . '</del><strong data-offer-price>' . $GLOBALS['currencies']->display_price($offer, $rate) . '</strong>'
-            . '<span class="checkout-offer-saving">' . CHECKOUT_OFFER_SAVE . ' <span data-offer-saving>' . $GLOBALS['currencies']->format($saving, false) . '</span></span></p>'
+            . '<span class="checkout-offer-saving">' . checkout_offer_text('saving_text', CHECKOUT_OFFER_SAVE) . ' <span data-offer-saving>' . $GLOBALS['currencies']->format($saving, false) . '</span></span></p>'
             . '<button type="submit" class="btn checkout-offer-add" name="checkout_offer_product" value="' . $id
             . '" formaction="' . checkout_offer_escape((string)$GLOBALS['Linker']->build('checkout_payment.php')) . '" formnovalidate>'
-            . '<span class="checkout-offer-classic-label">' . CHECKOUT_OFFER_ADD . '</span><span class="checkout-offer-template-label">' . CHECKOUT_OFFER_ADD_PRICE
+            . '<span class="checkout-offer-classic-label">' . checkout_offer_text('add_text', CHECKOUT_OFFER_ADD) . '</span><span class="checkout-offer-template-label">' . checkout_offer_text('add_text', CHECKOUT_OFFER_ADD_PRICE)
             . ' <span data-button-price>' . $GLOBALS['currencies']->display_price($offer, $rate) . '</span></span></button></div></article>';
     }
 }

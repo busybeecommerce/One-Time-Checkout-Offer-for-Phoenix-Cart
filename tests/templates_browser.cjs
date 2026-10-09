@@ -125,6 +125,18 @@ const { chromium } = require('playwright');
                 await page.reload();
                 assert.equal(await page.locator('#checkout-offer-modal').evaluate(node => node.open), true);
             }
+            await section.evaluate(node => {
+                node.style.setProperty('--co-heading-size', '29px');
+                node.style.setProperty('--co-heading-weight', '500');
+                node.style.setProperty('--co-heading-colour', '#254a68');
+                node.style.setProperty('--co-description-size', '18px');
+                node.style.setProperty('--co-description-style', 'italic');
+            });
+            assert.equal(await section.locator('h2').evaluate(node => getComputedStyle(node).fontSize), '29px');
+            assert.equal(await section.locator('h2').evaluate(node => getComputedStyle(node).fontWeight), '500');
+            assert.equal(await section.locator('h2').evaluate(node => getComputedStyle(node).color), 'rgb(37, 74, 104)');
+            assert.equal(await section.locator('.checkout-offer-description').evaluate(node => getComputedStyle(node).fontSize), '18px');
+            assert.equal(await section.locator('.checkout-offer-description').evaluate(node => getComputedStyle(node).fontStyle), 'italic');
         }
     }
     const staticContext = await browser.newContext({ javaScriptEnabled: false });

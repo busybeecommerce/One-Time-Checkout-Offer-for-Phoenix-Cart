@@ -18,7 +18,7 @@ const { chromium } = require('playwright');
             return route.fulfill({ contentType: 'image/svg+xml', body: '<svg xmlns="http://www.w3.org/2000/svg" width="200" height="140"><circle cx="100" cy="70" r="55" fill="#87b840"/></svg>' });
         }
         const mode = route.request().url().includes('inline') ? 'inline' : 'modal';
-        const html = fs.readFileSync('build/storefront-' + mode + '.html', 'utf8');
+        const html = fs.readFileSync('build/storefront-' + mode + (route.request().url().includes('custom') ? '-custom' : '') + '.html', 'utf8');
         return route.fulfill({ contentType: 'text/html', body: '<!doctype html><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><style>' + bootstrap + 'body{font:16px Arial;margin:24px}.btn{padding:8px 12px;cursor:pointer}select{max-width:100%}.me-2{margin-right:8px}' + css + '</style>' + html + '<script>' + script + '</script>' });
     });
     await page.goto('http://checkout-offer.test/modal');
@@ -32,6 +32,17 @@ const { chromium } = require('playwright');
     assert.equal(await page.locator('[data-offer-option]').evaluate(node => node.form.id), 'check_form');
     assert.equal(await page.locator('.checkout-offer-modal-controls').count(), 0);
     assert.equal(await page.locator('.checkout-offer-modal-close').evaluate(node => getComputedStyle(node).position), 'absolute');
+    const closeBounds = await page.locator('.checkout-offer-modal-close').evaluate(node => {
+        const button = node.getBoundingClientRect();
+        const icon = node.firstElementChild.getBoundingClientRect();
+        return { width: button.width, height: button.height, border: getComputedStyle(node).borderTopWidth,
+            x: icon.left + icon.width / 2 - button.left - button.width / 2,
+            y: icon.top + icon.height / 2 - button.top - button.height / 2 };
+    });
+    assert.equal(closeBounds.width, 28);
+    assert.equal(closeBounds.height, 28);
+    assert.equal(closeBounds.border, '1px');
+    assert.ok(Math.abs(closeBounds.x) < .5 && Math.abs(closeBounds.y) < .5);
     assert.equal(await page.locator('#checkout-offer').evaluate(node => getComputedStyle(node).borderTopWidth), '1px');
     for (const alignment of ['left', 'center', 'right']) {
         await page.locator('#checkout-offer').evaluate((node, value) => {
@@ -124,6 +135,18 @@ const { chromium } = require('playwright');
     const staticPage = await noScript.newPage();
     await staticPage.goto('http://checkout-offer.test/modal');
     assert.equal(await staticPage.locator('#checkout-offer').isVisible(), true);
+    await page.goto('http://checkout-offer.test/modal-custom');
+    assert.equal(await page.locator('#checkout-offer-title').textContent(), 'Your <b>exclusive</b> offer');
+    assert.equal(await page.locator('#checkout-offer-title b').count(), 0);
+    assert.equal(await page.locator('#checkout-offer-title').evaluate(node => getComputedStyle(node).fontSize), '26px');
+    assert.equal(await page.locator('#checkout-offer-title').evaluate(node => getComputedStyle(node).fontWeight), '600');
+    assert.equal(await page.locator('#checkout-offer-title').evaluate(node => getComputedStyle(node).color), 'rgb(37, 74, 104)');
+    assert.equal(await page.locator('.checkout-offer-description').evaluate(node => getComputedStyle(node).fontStyle), 'italic');
+    assert.equal(await page.locator('.checkout-offer-description').evaluate(node => getComputedStyle(node).fontSize), '17px');
+    assert.equal(await page.locator('.checkout-offer-classic-label').first().textContent(), 'Choose this offer');
+    await page.screenshot({ path: 'build/modal-custom-text.png', fullPage: true });
+    await page.getByRole('button', { name: 'Continue without an offer' }).click();
+    assert.equal(await dialog.evaluate(node => node.open), false);
     assert.deepEqual(errors, []);
     await browser.close();
     console.log('Browser checks passed: modal, dismissal, repeat entry/reload, focus, reduced motion, form submission, mobile, storage and inline fallbacks.');

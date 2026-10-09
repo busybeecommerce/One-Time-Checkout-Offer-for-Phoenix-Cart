@@ -33,3 +33,5 @@ Admin browser checks measure paired appearance field tops and bottoms at 1440, 1
 No live store installation or real payment capture was exercised during release validation.
 
 The admin regression selects a predefined design, then chooses No template / Custom and submits Setup. It verifies the saved custom configuration identifier, manual colours and Row setting remain present. PHP tests confirm the no-template palette uses custom colours without a predefined banner.
+
+Generate `php tests/run.php <reference> --render --modal --custom-text` before `node tests/browser.cjs`. The browser measures the 28px close control, 1px border and cross centre. It verifies escaped custom wording, configured typography and a custom dismissal label. PHP checks text persistence, whitespace fallback, Unicode, limits and unsafe style rejection. Admin tests submit custom/blank text and typography; all ten template tests verify typography overrides.

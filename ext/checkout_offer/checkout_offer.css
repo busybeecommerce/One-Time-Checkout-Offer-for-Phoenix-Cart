@@ -85,8 +85,11 @@
     display: inline-flex; align-items: center; justify-content: center; padding: .65em 1.1em; line-height: 1.3;
     border-radius: min(6px, var(--co-radius)); white-space: normal;
 }
-#checkout-offer-modal .checkout-offer-modal-close { width: 32px; height: 32px; padding: 4px; border-radius: 4px; }
-#checkout-offer-modal .checkout-offer-modal-close:focus-visible { outline: 2px solid currentColor; outline-offset: 2px; }
+#checkout-offer-modal .checkout-offer-modal-close { display: grid; place-items: center; box-sizing: border-box; width: 28px; height: 28px; min-width: 28px; min-height: 28px; padding: 0; border: 1px solid currentColor; border-radius: 4px; }
+#checkout-offer-modal .checkout-offer-close-icon { display: block; position: relative; width: 12px; height: 12px; }
+#checkout-offer-modal .checkout-offer-close-icon::before, #checkout-offer-modal .checkout-offer-close-icon::after { content: ''; position: absolute; top: 50%; left: 50%; width: 12px; height: 1px; background: currentColor; transform: translate(-50%, -50%) rotate(45deg); }
+#checkout-offer-modal .checkout-offer-close-icon::after { transform: translate(-50%, -50%) rotate(-45deg); }
+#checkout-offer-modal .checkout-offer-modal-close:focus-visible { outline: 1px solid currentColor; outline-offset: 2px; }
 #checkout-offer-modal #checkout-offer .checkout-offer-note { display: none; }
 #checkout-offer-modal .checkout-offer-dismiss {
     max-width: 100%; margin-top: var(--co-gap); color: var(--co-text); border-color: var(--co-border);
@@ -106,6 +109,9 @@
     #checkout-offer-modal[open] { animation: none; }
 }
 /* Product layout applies to Classic and every predefined template. */
+#checkout-offer #checkout-offer-title { font-size: var(--co-heading-size, 1.25em); font-weight: var(--co-heading-weight, 500); color: var(--co-heading-colour, inherit); font-style: var(--co-heading-style, normal); }
+#checkout-offer[data-template]:not([data-template="classic"]) #checkout-offer-title { font-size: var(--co-heading-size, 1.5em); font-weight: var(--co-heading-weight, 700); }
+#checkout-offer[data-template] .checkout-offer-description { font-size: var(--co-description-size, .9em); font-weight: var(--co-description-weight, 400); color: var(--co-description-colour, inherit); font-style: var(--co-description-style, normal); white-space: pre-line; }
 #checkout-offer[data-template][data-product-layout="row"] .checkout-offer-grid,
 #checkout-offer-modal #checkout-offer[data-product-layout="row"] .checkout-offer-grid {
     display: flex; flex-direction: row; flex-wrap: wrap; --co-active-columns: var(--co-columns);

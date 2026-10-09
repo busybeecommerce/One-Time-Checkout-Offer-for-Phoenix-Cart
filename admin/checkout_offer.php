@@ -32,7 +32,7 @@ $editTier = $tier ?? ['id' => 0, 'title' => '', 'minimum' => '0', 'maximum' => '
 $appearance = checkout_offer_appearance();
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.5.0')) ?>">
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.6.0')) ?>">
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
     <div class="co-admin-heading">
@@ -80,7 +80,7 @@ require 'includes/template_top.php';
               </fieldset>
               <div class="co-appearance-fields mt-1">
                 <?php foreach (checkout_offer_appearance_fields() as $key => $field) { ?>
-                  <?php if ('template' === $key) { continue; } ?>
+                  <?php if ('template' === $key || 'text' === $field['type']) { continue; } ?>
                   <div class="co-appearance-field">
                     <label class="form-label small" for="style-<?= $key ?>"><?= constant('CHECKOUT_OFFER_ADMIN_STYLE_' . strtoupper($key)) ?></label>
                     <?php if ('select' === $field['type']) { ?>
@@ -90,11 +90,19 @@ require 'includes/template_top.php';
                         <?php } ?>
                       </select>
                     <?php } else { ?>
-                      <input class="form-control form-control-sm<?= 'color' === $field['type'] ? ' form-control-color' : '' ?>" id="style-<?= $key ?>" type="<?= $field['type'] ?>" name="appearance[<?= $key ?>]" value="<?= checkout_offer_escape((string)$appearance[$key]) ?>" <?= 'number' === $field['type'] ? 'min="' . $field['min'] . '" max="' . $field['max'] . '" step="1"' : '' ?>>
+                      <input class="form-control form-control-sm<?= 'color' === $field['type'] ? ' form-control-color' : '' ?>" id="style-<?= $key ?>" type="<?= 'optional_color' === $field['type'] ? 'text' : $field['type'] ?>" name="appearance[<?= $key ?>]" value="<?= checkout_offer_escape((string)$appearance[$key]) ?>" <?= 'optional_color' === $field['type'] ? 'placeholder="#rrggbb" maxlength="7"' : '' ?> <?= 'number' === $field['type'] ? 'min="' . $field['min'] . '" max="' . $field['max'] . '" step="1"' : '' ?>>
                     <?php } ?>
                   </div>
                 <?php } ?>
               </div>
+            </details>
+            <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_TEXT_STYLE_HELP ?></p>
+            <details class="co-admin-appearance mb-3"><summary class="fw-semibold"><?= CHECKOUT_OFFER_ADMIN_CUSTOM_TEXT ?></summary>
+              <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_TEXT_HELP ?></p>
+              <?php foreach (checkout_offer_appearance_fields() as $key => $field) { if ('text' !== $field['type']) { continue; } ?>
+                <label class="form-label" for="style-<?= $key ?>"><?= constant('CHECKOUT_OFFER_ADMIN_STYLE_' . strtoupper($key)) ?></label>
+                <textarea class="form-control form-control-sm mb-3" id="style-<?= $key ?>" name="appearance[<?= $key ?>]" rows="<?= $field['max'] > 200 ? 3 : 1 ?>" maxlength="<?= $field['max'] ?>"><?= checkout_offer_escape($appearance[$key]) ?></textarea>
+              <?php } ?>
             </details>
             <button class="btn btn-primary btn-sm"><?= CHECKOUT_OFFER_ADMIN_SAVE ?></button>
           </form>

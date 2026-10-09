@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0
+
+- Reduce the modal close control to 28px with a 1px border and a precisely centred drawn cross.
+- Add custom heading, description, badge, Add/continue buttons, savings label and inline note; blank fields retain language-file fallback wording. Custom text is escaped as plain text.
+- Add independent heading/description sizes, colours, weights and normal/italic styling. Automatic defaults preserve existing templates.
+- Validate text lengths, Unicode and typography values; test saving/clearing text and actual browser rendering in all ten templates.
+
 ## 1.5.0
 
 - Add Ocean blue, Soft plum, Slate minimal, Warm coral, Clean teal and Champagne predefined templates.

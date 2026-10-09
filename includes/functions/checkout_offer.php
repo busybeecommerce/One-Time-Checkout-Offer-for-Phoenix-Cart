@@ -51,6 +51,21 @@ function checkout_offer_appearance_fields(): array
         'content_alignment' => ['type' => 'select', 'default' => 'left', 'choices' => ['left', 'center', 'right']],
         'products_alignment' => ['type' => 'select', 'default' => 'left', 'choices' => ['left', 'center', 'right']],
         'product_layout' => ['type' => 'select', 'default' => 'row', 'choices' => ['row', 'stacked']],
+        'heading_size' => ['type' => 'number', 'default' => 0, 'min' => 0, 'max' => 60],
+        'description_size' => ['type' => 'number', 'default' => 0, 'min' => 0, 'max' => 36],
+        'heading_weight' => ['type' => 'select', 'default' => 'auto', 'choices' => ['auto', '400', '500', '600', '700', '800']],
+        'description_weight' => ['type' => 'select', 'default' => 'auto', 'choices' => ['auto', '400', '500', '600', '700']],
+        'heading_colour' => ['type' => 'optional_color', 'default' => ''],
+        'description_colour' => ['type' => 'optional_color', 'default' => ''],
+        'heading_style' => ['type' => 'select', 'default' => 'normal', 'choices' => ['normal', 'italic']],
+        'description_style' => ['type' => 'select', 'default' => 'normal', 'choices' => ['normal', 'italic']],
+        'heading_text' => ['type' => 'text', 'default' => '', 'max' => 200],
+        'description_text' => ['type' => 'text', 'default' => '', 'max' => 1000],
+        'badge_text' => ['type' => 'text', 'default' => '', 'max' => 80],
+        'add_text' => ['type' => 'text', 'default' => '', 'max' => 100],
+        'dismiss_text' => ['type' => 'text', 'default' => '', 'max' => 150],
+        'note_text' => ['type' => 'text', 'default' => '', 'max' => 1000],
+        'saving_text' => ['type' => 'text', 'default' => '', 'max' => 80],
     ];
 }
 
@@ -63,6 +78,11 @@ function checkout_offer_sanitise_appearance(array $input, bool $strict = false):
         if ('number' === $field['type']) {
             $value = filter_var($value, FILTER_VALIDATE_INT);
             $valid = false !== $value && $value >= $field['min'] && $value <= $field['max'];
+        } elseif ('text' === $field['type']) {
+            $value = is_string($value) ? trim($value) : $value;
+            $valid = is_string($value) && 1 === preg_match('/^.{0,' . $field['max'] . '}$/usD', $value) && !str_contains($value, "\0");
+        } elseif ('optional_color' === $field['type']) {
+            $valid = is_string($value) && ('' === $value || 1 === preg_match('/^#[0-9a-f]{6}$/i', $value));
         } elseif ('color' === $field['type']) {
             $valid = is_string($value) && 1 === preg_match('/^#[0-9a-f]{6}$/i', $value);
         } else {
@@ -93,7 +113,11 @@ function checkout_offer_style(array $appearance): string
     $appearance = array_replace($appearance, $palette);
     $style = '';
     foreach (checkout_offer_appearance_fields() as $key => $field) {
-        if ('select' !== $field['type'] || in_array($key, ['content_alignment', 'products_alignment'], true)) {
+        if ('text' === $field['type'] || '' === $appearance[$key] || (in_array($key, ['heading_size', 'description_size'], true) && 0 === $appearance[$key])) {
+            continue;
+        }
+        if ('select' !== $field['type'] || in_array($key, ['content_alignment', 'products_alignment', 'heading_style', 'description_style'], true)
+            || (in_array($key, ['heading_weight', 'description_weight'], true) && 'auto' !== $appearance[$key])) {
             $unit = 'number' === $field['type'] && 'columns' !== $key ? 'px' : '';
             $style .= '--co-' . str_replace('_', '-', $key) . ':' . $appearance[$key] . $unit . ';';
         }
@@ -104,6 +128,12 @@ function checkout_offer_style(array $appearance): string
         }
     }
     return $style;
+}
+
+function checkout_offer_text(string $key, string $fallback): string
+{
+    $appearance = checkout_offer_appearance();
+    return checkout_offer_escape('' === $appearance[$key] ? $fallback : $appearance[$key]);
 }
 
 function checkout_offer_language(): void
