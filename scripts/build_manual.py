@@ -19,31 +19,36 @@ def render(content: str) -> str:
 
 def build(source: str) -> str:
     parts = re.split(r"^## (.+)\n", source, flags=re.MULTILINE)
-    sections = list(zip(parts[1::2], parts[2::2]))
-    if not sections or sections[0][0] != "Contents":
-        raise ValueError("Manual must begin with Contents and task sections")
-    tasks = sections[1:]
-    quick = next((task for task in tasks if task[0] == "Create your first offer"), None)
-    if quick is None:
-        raise ValueError("Manual quick-start section is missing")
-    introduction = parts[0].strip().split("\n\n", 2)
-    if len(introduction) != 3:
+    sections = dict(zip(parts[1::2], parts[2::2]))
+    if len(sections) != len(parts[1::2]):
+        raise ValueError("Manual section headings must be unique")
+    groups = [
+        ("Get started", ["Install and open the add-on", "Create your first offer", "Use the administration tabs"]),
+        ("Offers & pricing", ["Set basket-value tiers", "Add products and offer prices", "Understand the customer checkout journey"]),
+        ("Design & wording", ["Choose inline or modal display", "Choose a template", "Customise appearance and alignment", "Change the wording"]),
+        ("Check & maintain", ["Check an offer before enabling it", "Troubleshooting", "Update, disable or remove the add-on"]),
+    ]
+    titles = [title for _, tasks in groups for title in tasks]
+    if set(sections) != set(titles + ["Contents", "Quick start"]):
+        raise ValueError("Manual sections do not match the grouped guides")
+    introduction = parts[0].strip().split("\n\n", 1)
+    if len(introduction) != 2:
         raise ValueError("Manual introduction is incomplete")
-    output = [render("\n\n".join(introduction[:2]))]
-    output.append('<details class="co-manual-about"><summary>About this guide</summary>' + render(introduction[2]) + '</details>')
-    output.append('<a class="co-manual-browse" href="#co-manual-navigation">Browse all tasks ↓</a>')
-    navigation = '<nav class="co-manual-nav" id="co-manual-navigation" tabindex="-1" aria-label="Manual tasks"><h3>Find a task</h3>' + render(sections[0][1]) + '</nav>'
-    output.append('<div class="co-manual-search" hidden><label for="co-manual-query">Search this guide</label><input id="co-manual-query" type="search" placeholder="Try pricing, stock or alignment" aria-controls="co-manual-tasks"><p role="status" aria-live="polite"></p></div>')
-    output.append('<div id="co-manual-tasks">')
-    for title, body in [quick] + [task for task in tasks if task != quick]:
-        anchor = slugify(title, "-")
-        safe_title = html.escape(title)
-        if (title, body) == quick:
-            output.append(f'<section class="co-manual-quick" id="{anchor}" tabindex="-1"><span class="co-manual-kicker">Quick start · your first offer</span><h3>{safe_title}</h3>{render(body)}</section>')
-            output.append(navigation)
-        else:
-            output.append(f'<details class="co-manual-task" id="{anchor}"><summary><h3>{safe_title}</h3><span>View guide</span></summary><div class="co-manual-detail">{render(body)}</div></details>')
-    output.append('</div>')
+    output = ['<header class="co-manual-header"><div><span class="co-manual-kicker">Checkout Offers · Help centre</span>' + render(introduction[0]) + '<p>Set up, style and maintain your checkout offers.</p></div>']
+    output.append('<div class="co-manual-search" hidden><label for="co-manual-query">Find help</label><input id="co-manual-query" type="search" placeholder="Search pricing, stock, alignment…" aria-controls="co-manual-topics"><p role="status" aria-live="polite"></p></div></header>')
+    output.append('<div class="co-manual-tools"><button type="button" class="co-manual-home" hidden>Quick start</button><a href="#co-manual-topics">Browse topics ↓</a></div>')
+    output.append('<div class="co-manual-grid"><section class="co-manual-reader" id="co-manual-reader" tabindex="-1" role="region" aria-label="Getting started"><div class="co-manual-welcome">')
+    output.append('<span class="co-manual-kicker">Your first offer in three steps</span>' + render("## Quick start\n" + sections["Quick start"]))
+    output.append('<details class="co-manual-about"><summary>About this add-on and guide</summary>' + render(introduction[1]) + '</details></div></section>')
+    output.append('<div id="co-manual-topics" tabindex="-1" class="co-manual-topics" aria-label="Guide topics">')
+    for label, tasks in groups:
+        output.append('<section class="co-manual-group"><h3>' + html.escape(label) + '</h3>')
+        for title in tasks:
+            anchor = slugify(title, "-")
+            safe_title = html.escape(title)
+            output.append(f'<details class="co-manual-task" id="{anchor}"><summary id="co-guide-{anchor}">{safe_title}</summary><div class="co-manual-detail"><h3>{safe_title}</h3>{render(sections[title])}</div></details>')
+        output.append('</section>')
+    output.append('</div></div>')
     digest = hashlib.sha256(source.encode("utf-8")).hexdigest()
     return "<!-- USER_MANUAL.md sha256: " + digest + " -->\n" + "\n".join(output) + "\n"
 

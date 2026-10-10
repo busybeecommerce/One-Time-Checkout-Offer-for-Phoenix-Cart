@@ -8,7 +8,7 @@ The runtime/manual contract checks the SHA-256 source marker in `admin/includes/
 
 Run README.md automated commands. PHP tests lint package files, check manifest/contracts, exercise real Phoenix order construction and test pricing, tier boundaries, VAT, delivery tax, options and isolated acceptance. Node tests verify placement and option-price updates.
 
-The admin rendering regression executes the complete add-on page using real Phoenix Form, Input and Href classes. It checks the pre-install screen, setup and tier/product forms, CSRF inputs, completion of the page and registration within Reports. Bootstrap/template wrappers and database rows are fixtures.
+The admin rendering regression executes the complete add-on page using real Phoenix Form, Input and Href classes. It checks the pre-install screen, setup and tier/product forms, CSRF inputs, completion of the page and registration within Catalog. Bootstrap/template wrappers and database rows are fixtures.
 
 After generating all three admin fixtures, `node tests/admin_browser.cjs` checks the packaged logo and BusyBee link, page-scoped colours, responsive bounds, appearance controls and unchanged settings/product form submissions. It uses Bootstrap 5.3.8, matching Phoenix's admin hook, and saves desktop/mobile screenshots under `build/`. `CHECKOUT_OFFER_BOOTSTRAP_CSS` can point to the same stylesheet locally instead of an npm installation.
 
@@ -41,3 +41,5 @@ No live store installation or real payment capture was exercised during release 
 The admin regression selects a predefined design, then chooses No template / Custom and submits Setup. It verifies the saved custom configuration identifier, manual colours and Row setting remain present. PHP tests confirm the no-template palette uses custom colours without a predefined banner.
 
 Generate `php tests/run.php <reference> --render --modal --custom-text` before `node tests/browser.cjs`. The browser measures the 28px close control, 1px border and cross centre. It verifies escaped custom wording, configured typography and a custom dismissal label. PHP checks text persistence, whitespace fallback, Unicode, limits and unsafe style rejection. Admin tests submit custom/blank text and typography; all ten template tests verify typography overrides.
+
+The manual browser regression checks a single grouped topic navigator, a compact initial desktop workspace, moving/restoring complete guide bodies, search across full instructions, keyboard focus in the reading pane, quick-start links, no-JavaScript disclosures, mobile bounds down to 320px and preserved unsaved settings. Menu fixtures load Catalog, Reports and all retained legacy files in Phoenix filename order and verify exactly one Catalog registration even after repeated inclusion.

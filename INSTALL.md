@@ -1,10 +1,10 @@
 # Installation
 
-For the current administration tabs, pricing examples and troubleshooting, open **Reports → Checkout Offers → User manual**, or see [USER_MANUAL.md](USER_MANUAL.md). The Markdown document need not be uploaded to the storefront. The admin tab uses the packaged `admin/includes/manuals/checkout_offer.html` file.
+For the current administration tabs, pricing examples and troubleshooting, open **Catalog → Checkout Offers → User manual**, or see [USER_MANUAL.md](USER_MANUAL.md). The Markdown document need not be uploaded to the storefront. The admin tab uses the packaged `admin/includes/manuals/checkout_offer.html` file.
 
 1. Back up store files and database. Use staging first.
 2. Extract the release ZIP. Copy `includes/`, `ext/` and `images/` into the store root and `admin/` contents into your actual admin directory (including a renamed admin). All are new files; no Phoenix files should be replaced.
-3. Open **Reports → Checkout Offers** in administration, or open `checkout_offer.php` inside your admin directory. Grant access through the store's normal administrator permissions.
+3. Open **Catalog → Checkout Offers** in administration, or open `checkout_offer.php` inside your admin directory. Grant access through the store's normal administrator permissions.
 4. Click **Install database tables**. Repeat installation preserves existing rules. Creates `checkout_offer_tiers`, `checkout_offer_products` and three settings.
 5. Create a titled tier with minimum, optional maximum and priority. Minimum is inclusive, maximum exclusive. Amounts use base currency and include VAT and delivery. Higher priority wins. A 50–100 tier covers baskets of at least 50 and less than 100.
 6. Attach active product IDs. Choose fixed prices excluding tax or percentages from 0 to 100. Fixed prices include all selected options. Ensure sufficient stock.
@@ -24,7 +24,7 @@ For v1.2.0, upload the updated add-on PHP/language, CSS and JavaScript files. Se
 
 For v1.2.1, upload the updated add-on files, particularly the checkout offer hook, site-wide hook and stylesheet. Styled Add buttons now fit their labels. The modal image/text/button alignment setting also positions thumbnails: Centre and Right show the image above the details at the chosen position; Left retains compact image-left rows. Existing saved alignment settings apply automatically. No database changes are required.
 
-When updating from v1.0.0, overwrite `admin/includes/boxes/checkout_offer.php` as well as uploading the new `reports_checkout_offer.php` box and its language file. The old file is intentionally retained as an empty compatibility file to remove the separate top-level menu. Existing tiers/settings are preserved.
+For upgrades from any earlier version, upload `admin/includes/boxes/catalog_checkout_offer.php` and its matching English language file, and overwrite both `checkout_offer.php` and `reports_checkout_offer.php` in the admin boxes folder. These two legacy files are intentionally inert so old top-level/Reports entries disappear when overwritten. Keep the inert Reports language file in the upload as well. Checkout Offers is registered once under Catalog. Existing tiers/settings are preserved.
 
 ## Integration contract
 
@@ -51,3 +51,5 @@ For v1.7.8 and later, upload the storefront stylesheet and checkout-payment hook
 For v1.7.10, upload the complete runtime package, including the new `admin/includes/manuals/checkout_offer.html` file into the same relative folder inside your actual admin directory. Upload the updated admin page, English language file, admin stylesheet and JavaScript together. The **User manual** tab will appear beside Maintenance. No database migration or reinstall is required.
 
 For v1.7.11, upload the complete runtime package, including the generated admin manual, admin page and admin CSS/JavaScript together. The manual now provides task cards, a quick start, expandable reference guides and local search. Existing settings are retained; no database migration or reinstall is required. Python and Markdown are used only to regenerate documentation during maintenance.
+
+For v1.7.12, upload the full runtime package, including the Catalog registration/language files, retained inert compatibility files, admin page, generated manual and admin CSS/JavaScript. The manual uses one grouped topic navigator and a reading pane, with native expandable guides without JavaScript. No database migration, reinstall or Phoenix core edits are required.

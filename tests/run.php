@@ -63,8 +63,8 @@ preg_match_all('/href="#([^"]+)"/', $manualHtml, $manualLinks);
 foreach ($manualLinks[1] as $anchor) {
     expect(in_array($anchor, $manualIds[1], true), 'Manual task link has a target: ' . $anchor);
 }
-expect(12 === substr_count($manualHtml, '<details class="co-manual-task"'), 'All reference guides have native disclosures');
-expect(str_contains($manualHtml, 'class="co-manual-quick"') && str_contains($manualHtml, 'role="status"'), 'Manual includes quick start and accessible search status');
+expect(13 === substr_count($manualHtml, '<details class="co-manual-task"'), 'All reference guides have native disclosures');
+expect(str_contains($manualHtml, 'class="co-manual-welcome"') && str_contains($manualHtml, 'role="status"'), 'Manual includes quick start and accessible search status');
 foreach ($manifest as $file) {
     expect(is_file($root . '/' . $file), "Missing package file: $file");
 }
