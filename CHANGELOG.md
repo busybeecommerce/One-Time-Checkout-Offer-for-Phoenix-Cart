@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.9
+
+- Add a packaged user manual with installation, tab-by-tab administration, tier and pricing examples, display/template/appearance controls, customer checkout behaviour, troubleshooting and maintenance instructions. Refresh README/install guidance for current alignment and modal behaviour. No runtime or database changes.
+
 ## 1.7.8
 
 - Restore Left/Centre/Right image, text, button and incomplete product row alignment in inline offers as well as modals. Keep prices, savings and buttons in consistent vertical purchase areas across Classic and every template, preventing independent savings wrapping from shifting prices on option-bearing cards.
