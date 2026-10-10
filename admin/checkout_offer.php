@@ -40,8 +40,8 @@ if (!is_string($activeTab) || !in_array($activeTab, ['setup', 'templates', 'appe
 }
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.16')) ?>">
-<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.16')) ?>" defer></script>
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.17')) ?>">
+<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.17')) ?>" defer></script>
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
     <div class="co-admin-heading">
@@ -182,7 +182,8 @@ require 'includes/template_top.php';
                     <div class="col-12 co-admin-product-picker">
                       <label class="form-label" for="co-category-<?= (int)$rule['id'] ?>"><?= CHECKOUT_OFFER_ADMIN_CATEGORY ?></label>
                       <select class="form-select form-select-sm" id="co-category-<?= (int)$rule['id'] ?>" data-co-category disabled>
-                        <option value=""><?= CHECKOUT_OFFER_ADMIN_ALL_CATEGORIES ?></option>
+                        <option value=""><?= CHECKOUT_OFFER_ADMIN_SELECT_CATEGORY ?></option>
+                        <option value="0"><?= CHECKOUT_OFFER_ADMIN_UNCATEGORISED ?></option>
                         <?php foreach ($catalogue['categories'] as $category) { ?>
                           <option value="<?= (int)$category['categories_id'] ?>"><?= checkout_offer_escape($category['categories_name']) ?> (#<?= (int)$category['categories_id'] ?>)</option>
                         <?php } ?>
@@ -193,10 +194,16 @@ require 'includes/template_top.php';
                         <?php if ($rule['products_id'] && !isset($catalogue['products'][(int)$rule['products_id']])) { ?>
                           <option value="<?= (int)$rule['products_id'] ?>" selected disabled><?= CHECKOUT_OFFER_ADMIN_UNAVAILABLE_PRODUCT ?> (#<?= (int)$rule['products_id'] ?>)</option>
                         <?php } ?>
-                        <?php foreach ($catalogue['products'] as $productId => $product) { ?>
-                          <option value="<?= $productId ?>" data-categories="<?= checkout_offer_escape(json_encode($product['categories'], JSON_THROW_ON_ERROR)) ?>" <?= (int)$rule['products_id'] === $productId ? 'selected' : '' ?>><?= checkout_offer_escape($product['name']) ?> (#<?= $productId ?>)</option>
+                        <?php if ($rule['products_id'] && isset($catalogue['products'][(int)$rule['products_id']])) { ?>
+                          <option value="<?= (int)$rule['products_id'] ?>" selected><?= checkout_offer_escape($catalogue['products'][(int)$rule['products_id']]['name']) ?> (#<?= (int)$rule['products_id'] ?>)</option>
                         <?php } ?>
                       </select>
+                      <template data-co-products>
+                        <?php foreach ($catalogue['products'] as $productId => $product) { ?>
+                          <option value="<?= $productId ?>" data-categories="<?= checkout_offer_escape(json_encode($product['categories'] ?: [0], JSON_THROW_ON_ERROR)) ?>"><?= checkout_offer_escape($product['name']) ?> (#<?= $productId ?>)</option>
+                        <?php } ?>
+                      </template>
+                      <noscript><p class="small"><?= CHECKOUT_OFFER_ADMIN_CATEGORY_SCRIPT_HELP ?></p></noscript>
                     </div>
                     <div class="col-md-6"><label class="form-label small"><?= CHECKOUT_OFFER_ADMIN_MODE ?><select class="form-select form-select-sm" name="mode"><option value="fixed" <?= 'fixed' === $rule['mode'] ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_FIXED ?></option><option value="percent" <?= 'percent' === $rule['mode'] ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_PERCENT ?></option></select></label></div>
                     <div class="col-md-6"><label class="form-label small"><?= CHECKOUT_OFFER_ADMIN_VALUE ?><input class="form-control form-control-sm" type="number" min="0" step="0.0001" required name="value" value="<?= checkout_offer_escape((string)$rule['value']) ?>"></label></div>
