@@ -45,6 +45,9 @@ $GLOBALS['db'] = $db = new class($scenario) {
         } elseif (str_contains($sql, 'FROM products p')) {
             $rows = [['products_id' => 2, 'products_name' => 'Lime <fresh>', 'categories_id' => 10], ['products_id' => 2, 'products_name' => 'Lime <fresh>', 'categories_id' => 20], ['products_id' => 3, 'products_name' => 'Tomato', 'categories_id' => 10], ['products_id' => 4, 'products_name' => 'Uncategorised', 'categories_id' => null]];
         }
+        if (in_array('--without-uncategorised', $GLOBALS['argv'], true) && str_contains($sql, 'FROM products p')) {
+            $rows = array_values(array_filter($rows, static fn(array $row): bool => null !== $row['categories_id']));
+        }
         return new class($rows) {
             private array $rows;
             public function __construct(array $rows) { $this->rows = $rows; }
@@ -87,6 +90,12 @@ try {
     $html = ob_get_clean();
     chdir($previousDirectory);
 }
+if ('tier' === $scenario) {
+    $hasOption = str_contains($html, '<option value="0">Uncategorised</option>');
+    if ($hasOption === in_array('--without-uncategorised', $argv, true)) {
+        throw new RuntimeException('Uncategorised must appear only when active uncategorised products exist.');
+    }
+}
 if (in_array('--expect-broken', $argv, true)) {
     if (!$error instanceof TypeError || !str_contains($error->getMessage(), 'Form::__construct()')) {
         throw new RuntimeException('Expected the reported strict-type Form rendering failure.');
@@ -113,7 +122,7 @@ if ('install' !== $scenario) {
 if ('install' !== $scenario) {
     $expected = array_merge($expected, ['data-co-tab="manual"', 'id="co-panel-manual"', 'id="troubleshooting"', 'Create your first offer']);
 }
-foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.7.17']) as $text) {
+foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.7.18']) as $text) {
     if (!str_contains($html, $text)) {
         throw new RuntimeException("Admin $scenario output missing: $text");
     }

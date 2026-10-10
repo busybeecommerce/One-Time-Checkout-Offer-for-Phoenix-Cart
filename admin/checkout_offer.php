@@ -40,8 +40,8 @@ if (!is_string($activeTab) || !in_array($activeTab, ['setup', 'templates', 'appe
 }
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.17')) ?>">
-<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.17')) ?>" defer></script>
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.18')) ?>">
+<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.18')) ?>" defer></script>
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
     <div class="co-admin-heading">
@@ -141,8 +141,16 @@ require 'includes/template_top.php';
           <a class="btn btn-outline-primary btn-sm mb-3" href="<?= $Admin->link('checkout_offer.php', ['tab' => 'offers']) ?>"><?= CHECKOUT_OFFER_ADMIN_NEW ?></a>
           <ul class="list-group co-admin-tier-list">
             <?php $allTiers = $db->query('SELECT * FROM checkout_offer_tiers ORDER BY priority DESC, id'); while ($row = $allTiers->fetch_assoc()) { ?>
-              <li class="list-group-item co-admin-tier<?= (int)$row['id'] === $tierId ? ' co-admin-tier-selected' : '' ?>"><a href="<?= $Admin->link('checkout_offer.php', ['tier_id' => $row['id']]) ?>" <?= (int)$row['id'] === $tierId ? 'aria-current="page"' : '' ?>><?= checkout_offer_escape($row['title']) ?></a>
+              <li class="list-group-item co-admin-tier<?= (int)$row['id'] === $tierId ? ' co-admin-tier-selected' : '' ?>">
+                <div class="co-admin-tier-icons">
+                  <a class="co-admin-tier-icon" href="<?= $Admin->link('checkout_offer.php', ['tier_id' => $row['id']]) ?>" aria-label="<?= checkout_offer_escape(CHECKOUT_OFFER_ADMIN_EDIT . ': ' . $row['title']) ?>" title="<?= CHECKOUT_OFFER_ADMIN_EDIT ?>"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m16 3 5 5-12 12-6 1 1-6Z M14 5l5 5"/></svg></a>
+                  <?= checkout_offer_admin_form('delete_tier', ['tier_id' => $row['id']]) ?>
+                    <button class="co-admin-tier-icon co-admin-tier-delete" aria-label="<?= checkout_offer_escape(CHECKOUT_OFFER_ADMIN_DELETE . ': ' . $row['title']) ?>" title="<?= CHECKOUT_OFFER_ADMIN_DELETE ?>"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18 M9 6V3h6v3 M5 6l1 15h12l1-15 M10 10v7 M14 10v7"/></svg></button>
+                  </form>
+                </div>
+                <div class="co-admin-tier-description"><a href="<?= $Admin->link('checkout_offer.php', ['tier_id' => $row['id']]) ?>" <?= (int)$row['id'] === $tierId ? 'aria-current="page"' : '' ?>><?= checkout_offer_escape($row['title']) ?></a>
                 <div class="small text-body-secondary"><?= checkout_offer_escape((string)$row['minimum']) ?> – <?= null === $row['maximum'] ? '∞' : checkout_offer_escape((string)$row['maximum']) ?> · <?= (int)$row['priority'] ?> <?= empty($row['enabled']) ? '(disabled)' : '' ?></div>
+                </div>
               </li>
             <?php } ?>
           </ul>
@@ -183,7 +191,7 @@ require 'includes/template_top.php';
                       <label class="form-label" for="co-category-<?= (int)$rule['id'] ?>"><?= CHECKOUT_OFFER_ADMIN_CATEGORY ?></label>
                       <select class="form-select form-select-sm" id="co-category-<?= (int)$rule['id'] ?>" data-co-category disabled>
                         <option value=""><?= CHECKOUT_OFFER_ADMIN_SELECT_CATEGORY ?></option>
-                        <option value="0"><?= CHECKOUT_OFFER_ADMIN_UNCATEGORISED ?></option>
+                        <?php if ($catalogue['has_uncategorised']) { ?><option value="0"><?= CHECKOUT_OFFER_ADMIN_UNCATEGORISED ?></option><?php } ?>
                         <?php foreach ($catalogue['categories'] as $category) { ?>
                           <option value="<?= (int)$category['categories_id'] ?>"><?= checkout_offer_escape($category['categories_name']) ?> (#<?= (int)$category['categories_id'] ?>)</option>
                         <?php } ?>

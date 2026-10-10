@@ -161,5 +161,6 @@ function checkout_offer_admin_catalogue(int $languageId): array
             $products[$id]['categories'][] = (int)$row['categories_id'];
         }
     }
-    return ['categories' => $categories, 'products' => $products];
+    return ['categories' => $categories, 'products' => $products,
+        'has_uncategorised' => (bool)array_filter($products, static fn(array $product): bool => [] === $product['categories'])];
 }
