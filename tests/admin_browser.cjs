@@ -143,6 +143,13 @@ const { chromium } = require('playwright');
     for (const width of [1440, 1024, 375]) {
         await page.setViewportSize({ width, height: 1000 });
         assert.equal(await page.locator('.co-admin-tier').last().evaluate(node => getComputedStyle(node).borderBottomWidth), '1px');
+        assert.ok(await page.locator('.co-admin-tier').first().evaluate(node => {
+            const tier = node.getBoundingClientRect();
+            const icons = node.querySelector('.co-admin-tier-icons').getBoundingClientRect();
+            const description = node.querySelector('.co-admin-tier-description').getBoundingClientRect();
+            return icons.left >= description.right && tier.right - icons.right < 16;
+        }), 'Tier icons sit at the far right at ' + width);
+
         const actions = await page.locator('.co-admin-actions').first().locator('button').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top));
         assert.ok(Math.abs(actions[0] - actions[1]) < 1, 'Save and Delete share a row at ' + width);
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
