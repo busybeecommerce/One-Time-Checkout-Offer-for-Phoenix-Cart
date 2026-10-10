@@ -206,8 +206,8 @@
 .checkout-offer-admin .co-admin-tier-fields .form-label { flex: 1; }
 
 .checkout-offer-admin .co-admin-tier-list .co-admin-tier { display: flex; align-items: center; gap: .65rem; }
-.checkout-offer-admin .co-admin-tier-description { min-width: 0; overflow-wrap: anywhere; }
-.checkout-offer-admin .co-admin-tier-icons { display: flex; flex: 0 0 auto; gap: .2rem; align-items: center; }
+.checkout-offer-admin .co-admin-tier-description { flex: 1 1 auto; min-width: 0; overflow-wrap: anywhere; }
+.checkout-offer-admin .co-admin-tier-icons { display: flex; flex: 0 0 auto; margin-left: auto; gap: .2rem; align-items: center; }
 .checkout-offer-admin .co-admin-tier-icons form { margin: 0; }
 .checkout-offer-admin .co-admin-tier-icons .co-admin-tier-icon { display: grid; place-items: center; width: 2rem; height: 2rem; margin: 0; padding: .35rem; border: 1px solid #d7b997; border-radius: .4rem; color: #914400; background: #fff; }
 .checkout-offer-admin .co-admin-tier-icons .co-admin-tier-delete { color: #b02a37; border-color: #e2adb3; }

@@ -40,8 +40,8 @@ if (!is_string($activeTab) || !in_array($activeTab, ['setup', 'templates', 'appe
 }
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.18')) ?>">
-<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.18')) ?>" defer></script>
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.19')) ?>">
+<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.19')) ?>" defer></script>
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
     <div class="co-admin-heading">
@@ -140,16 +140,16 @@ require 'includes/template_top.php';
           <h2 class="h5"><?= CHECKOUT_OFFER_ADMIN_TIERS ?></h2>
           <a class="btn btn-outline-primary btn-sm mb-3" href="<?= $Admin->link('checkout_offer.php', ['tab' => 'offers']) ?>"><?= CHECKOUT_OFFER_ADMIN_NEW ?></a>
           <ul class="list-group co-admin-tier-list">
-            <?php $allTiers = $db->query('SELECT * FROM checkout_offer_tiers ORDER BY priority DESC, id'); while ($row = $allTiers->fetch_assoc()) { ?>
+            <?php $tierCurrencies = new currencies(); $allTiers = $db->query('SELECT * FROM checkout_offer_tiers ORDER BY priority DESC, id'); while ($row = $allTiers->fetch_assoc()) { ?>
               <li class="list-group-item co-admin-tier<?= (int)$row['id'] === $tierId ? ' co-admin-tier-selected' : '' ?>">
+                <div class="co-admin-tier-description"><a href="<?= $Admin->link('checkout_offer.php', ['tier_id' => $row['id']]) ?>" <?= (int)$row['id'] === $tierId ? 'aria-current="page"' : '' ?>><?= checkout_offer_escape($row['title']) ?></a>
+                <div class="small text-body-secondary"><?= checkout_offer_escape($tierCurrencies->format((float)$row['minimum'], false, DEFAULT_CURRENCY)) ?> – <?= null === $row['maximum'] ? '∞' : checkout_offer_escape($tierCurrencies->format((float)$row['maximum'], false, DEFAULT_CURRENCY)) ?> · <?= (int)$row['priority'] ?> <?= empty($row['enabled']) ? '(disabled)' : '' ?></div>
+                </div>
                 <div class="co-admin-tier-icons">
                   <a class="co-admin-tier-icon" href="<?= $Admin->link('checkout_offer.php', ['tier_id' => $row['id']]) ?>" aria-label="<?= checkout_offer_escape(CHECKOUT_OFFER_ADMIN_EDIT . ': ' . $row['title']) ?>" title="<?= CHECKOUT_OFFER_ADMIN_EDIT ?>"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m16 3 5 5-12 12-6 1 1-6Z M14 5l5 5"/></svg></a>
                   <?= checkout_offer_admin_form('delete_tier', ['tier_id' => $row['id']]) ?>
                     <button class="co-admin-tier-icon co-admin-tier-delete" aria-label="<?= checkout_offer_escape(CHECKOUT_OFFER_ADMIN_DELETE . ': ' . $row['title']) ?>" title="<?= CHECKOUT_OFFER_ADMIN_DELETE ?>"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M3 6h18 M9 6V3h6v3 M5 6l1 15h12l1-15 M10 10v7 M14 10v7"/></svg></button>
                   </form>
-                </div>
-                <div class="co-admin-tier-description"><a href="<?= $Admin->link('checkout_offer.php', ['tier_id' => $row['id']]) ?>" <?= (int)$row['id'] === $tierId ? 'aria-current="page"' : '' ?>><?= checkout_offer_escape($row['title']) ?></a>
-                <div class="small text-body-secondary"><?= checkout_offer_escape((string)$row['minimum']) ?> – <?= null === $row['maximum'] ? '∞' : checkout_offer_escape((string)$row['maximum']) ?> · <?= (int)$row['priority'] ?> <?= empty($row['enabled']) ? '(disabled)' : '' ?></div>
                 </div>
               </li>
             <?php } ?>
@@ -163,7 +163,7 @@ require 'includes/template_top.php';
             <div class="co-admin-tier-fields">
             <?php foreach (['title' => CHECKOUT_OFFER_ADMIN_TITLE, 'minimum' => CHECKOUT_OFFER_ADMIN_MINIMUM, 'maximum' => CHECKOUT_OFFER_ADMIN_MAXIMUM, 'priority' => CHECKOUT_OFFER_ADMIN_PRIORITY] as $key => $label) { ?>
               <div class="<?= 'title' === $key ? 'co-admin-tier-title' : '' ?>">
-              <label class="form-label small" for="<?= $key ?>"><?= $label ?></label>
+              <label class="form-label small" for="<?= $key ?>"><?= $label ?><?= in_array($key, ['minimum', 'maximum'], true) ? ' (' . checkout_offer_escape(DEFAULT_CURRENCY) . ')' : '' ?></label>
               <input class="form-control form-control-sm" id="<?= $key ?>" name="<?= $key ?>" value="<?= checkout_offer_escape((string)$editTier[$key]) ?>" <?= 'title' === $key ? 'maxlength="120" required' : 'inputmode="decimal"' ?>>
               </div>
             <?php } ?>

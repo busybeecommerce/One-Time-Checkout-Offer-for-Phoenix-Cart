@@ -16,6 +16,7 @@ define('SESSION_FORCE_COOKIE_USE', 'True');
 define('BOX_HEADING_REPORTS', 'Reports');
 define('BOX_HEADING_CATALOG', 'Catalog');
 define('CHECKOUT_OFFER_ENABLED', 'False');
+define('DEFAULT_CURRENCY', in_array('--currency-eur', $argv, true) ? 'EUR' : (in_array('--currency-jpy', $argv, true) ? 'JPY' : 'GBP'));
 $_SESSION = ['sessiontoken' => 'admin-render-token', 'languages_id' => 1];
 $_SERVER['REQUEST_METHOD'] = 'GET';
 $_GET = 'tier' === $scenario ? ['tier_id' => 1] : [];
@@ -48,6 +49,14 @@ $GLOBALS['db'] = $db = new class($scenario) {
         if (in_array('--without-uncategorised', $GLOBALS['argv'], true) && str_contains($sql, 'FROM products p')) {
             $rows = array_values(array_filter($rows, static fn(array $row): bool => null !== $row['categories_id']));
         }
+        if (str_contains($sql, 'FROM currencies')) {
+            $rows = [['code' => 'GBP', 'title' => 'Pounds', 'symbol_left' => '£', 'symbol_right' => '', 'decimal_point' => '.', 'thousands_point' => ',', 'decimal_places' => 2, 'value' => 1],
+                ['code' => 'EUR', 'title' => 'Euro', 'symbol_left' => '', 'symbol_right' => ' €', 'decimal_point' => ',', 'thousands_point' => '.', 'decimal_places' => 2, 'value' => 1.5],
+                ['code' => 'JPY', 'title' => 'Yen', 'symbol_left' => '¥', 'symbol_right' => '', 'decimal_point' => '.', 'thousands_point' => ',', 'decimal_places' => 0, 'value' => 200]];
+        }
+        if (str_contains($sql, 'FROM checkout_offer_tiers') && in_array('--finite-tier', $GLOBALS['argv'], true)) {
+            $rows[0]['maximum'] = '1234.56';
+        }
         return new class($rows) {
             private array $rows;
             public function __construct(array $rows) { $this->rows = $rows; }
@@ -61,6 +70,8 @@ foreach (['1.0.8.2/text.php', '1.0.8.1/html_element.php', '1.0.8.1/named_html_el
     '1.0.8.1/input.php', $formFile, '1.0.8.5/href.php'] as $file) {
     require $reference . '/includes/system/versioned/' . $file;
 }
+require $reference . '/includes/system/versioned/1.0.8.6/currencies.php';
+$_SESSION['currency'] = 'JPY';
 require $root . '/admin/includes/languages/english/checkout_offer.php';
 require $reference . '/admin/includes/classes/message_stack.php';
 $messageStack = new messageStack();
@@ -91,6 +102,11 @@ try {
     chdir($previousDirectory);
 }
 if ('tier' === $scenario) {
+    $expectedMinimum = ['GBP' => '£50.00', 'EUR' => '50,00 €', 'JPY' => '¥50'][DEFAULT_CURRENCY];
+    $expectedMaximum = in_array('--finite-tier', $argv, true) ? ['GBP' => '£1,234.56', 'EUR' => '1.234,56 €', 'JPY' => '¥1,235'][DEFAULT_CURRENCY] : '∞';
+    if (!str_contains($html, $expectedMinimum . ' – ' . $expectedMaximum) || !str_contains($html, '(' . DEFAULT_CURRENCY . ')')) {
+        throw new RuntimeException('Tier amounts must use base currency formatting without exchange conversion.');
+    }
     $hasOption = str_contains($html, '<option value="0">Uncategorised</option>');
     if ($hasOption === in_array('--without-uncategorised', $argv, true)) {
         throw new RuntimeException('Uncategorised must appear only when active uncategorised products exist.');
@@ -122,7 +138,7 @@ if ('install' !== $scenario) {
 if ('install' !== $scenario) {
     $expected = array_merge($expected, ['data-co-tab="manual"', 'id="co-panel-manual"', 'id="troubleshooting"', 'Create your first offer']);
 }
-foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.7.18']) as $text) {
+foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.7.19']) as $text) {
     if (!str_contains($html, $text)) {
         throw new RuntimeException("Admin $scenario output missing: $text");
     }

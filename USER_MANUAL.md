@@ -75,7 +75,7 @@ Tier and product forms have their own **Save** buttons. Save each edited tier or
 
 ## Set basket-value tiers
 
-Saved tiers have edit and delete icons on the left. Edit opens that tier; Delete removes the tier and its product rules.
+Saved tiers show basket limits formatted in the store base currency and have edit and delete icons on the right. Edit opens that tier; Delete removes the tier and its product rules.
 
 The qualifying value includes products, product tax, delivery and delivery tax. Tier amounts use the **store base currency**, even when a customer shops in another currency. This qualifying amount is not necessarily the final payable total after other order-total adjustments.
 

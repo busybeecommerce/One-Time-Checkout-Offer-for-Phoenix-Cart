@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.19
+
+- Format saved tier limits using the store base currency, including symbols, separators and decimal precision, without exchange conversion. Identify the base currency on amount fields and move tier edit/delete icons to the far right.
+
 ## 1.7.18
 
 - Show Uncategorised only when active uncategorised products exist. Add labelled edit/delete icons to the left of saved tiers, using the existing tier actions and CSRF protection.
