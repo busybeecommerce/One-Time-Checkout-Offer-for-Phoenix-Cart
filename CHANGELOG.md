@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.21
+
+- Update setup help immediately when switching inline/modal display and show the correct saved-mode guidance without JavaScript.
+- Render and normalise percentage fields with two decimal places. Clarify priority eligibility and accepted-tier locking; add regression checks for priorities 1 and 21.
+
 ## 1.7.20
 
 - Prefix basket-value and fixed-price fields with the store currency symbol and display two decimal places. Preserve blank unlimited maximums and keep percentage fields distinct when switching pricing modes.

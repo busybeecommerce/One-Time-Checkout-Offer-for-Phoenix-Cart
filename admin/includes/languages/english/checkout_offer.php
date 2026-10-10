@@ -128,3 +128,6 @@ const CHECKOUT_OFFER_ADMIN_CATEGORY_SCRIPT_HELP = 'Enable JavaScript to select a
 const CHECKOUT_OFFER_ADMIN_PRODUCT = 'Product';
 const CHECKOUT_OFFER_ADMIN_SELECT_PRODUCT = 'Choose a product';
 const CHECKOUT_OFFER_ADMIN_UNAVAILABLE_PRODUCT = 'Unavailable product';
+
+const CHECKOUT_OFFER_ADMIN_INLINE_HELP = 'Eligible offers appear at the top of the payment page, above the payment methods. Customers can add an offer or continue checkout. No popup opens.';
+const CHECKOUT_OFFER_ADMIN_PRIORITY_HELP = 'Among enabled tiers whose basket ranges match, the highest priority wins (21 beats 1). After an offer is accepted, that tier stays locked for the same basket.';

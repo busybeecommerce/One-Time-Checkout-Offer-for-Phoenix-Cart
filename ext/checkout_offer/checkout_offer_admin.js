@@ -19,6 +19,11 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
     initialiseManual(workspace);
+    const displayMode = workspace.querySelector('#display-mode');
+    const displayHelp = workspace.querySelector('#co-display-help');
+    displayMode.addEventListener('change', function () {
+        displayHelp.textContent = displayMode.value === 'modal' ? displayHelp.dataset.modalHelp : displayHelp.dataset.inlineHelp;
+    });
     function formatMoney(input) {
         if (input.value !== '' && Number.isFinite(Number(input.value)) && Number(input.value) >= 0) {
             input.value = Number(input.value).toFixed(2);
@@ -33,11 +38,12 @@ document.addEventListener('DOMContentLoaded', function () {
         mode.addEventListener('change', function () {
             const fixed = mode.value === 'fixed';
             field.querySelector('[data-co-price-symbol]').textContent = fixed ? field.dataset.currencySymbol : '%';
-            input.step = fixed ? '0.01' : '0.0001';
-            if (fixed) { formatMoney(input); }
+            input.step = '0.01';
+            input.max = fixed ? '' : '100';
+            formatMoney(input);
         });
         input.addEventListener('blur', function () {
-            if (mode.value === 'fixed') { formatMoney(input); }
+            formatMoney(input);
         });
     });
     workspace.querySelectorAll('.co-admin-product-picker').forEach(function (picker) {

@@ -268,6 +268,19 @@ rejected(static fn() => checkout_offer_validate_tier(['title' => 'x', 'minimum' 
 rejected(static fn() => checkout_offer_decimal('NaN'), 'Reject malformed number');
 
 $GLOBALS['order'] = new order();
+$priorityTiers = [['id' => 1, 'enabled' => 1, 'minimum' => 0, 'maximum' => null, 'priority' => '1'],
+    ['id' => 2, 'enabled' => 1, 'minimum' => 0, 'maximum' => null, 'priority' => '21']];
+expect(2 === checkout_offer_select_tier($priorityTiers, 132)['id'], 'Priority 21 beats 1 when both ranges match');
+$originalTiers = $GLOBALS['db']->tiers;
+$GLOBALS['db']->tiers = $priorityTiers;
+expect(2 === checkout_offer_current_tier($GLOBALS['order'], [])['id'], 'Fresh checkout selects priority 21');
+expect(1 === checkout_offer_current_tier($GLOBALS['order'], ['tier_id' => 1, 'items' => [2 => []]])['id'], 'Accepted offer retains the locked tier');
+$GLOBALS['db']->tiers = $originalTiers;
+$priorityTiers[1]['enabled'] = 0;
+expect(1 === checkout_offer_select_tier($priorityTiers, 132)['id'], 'Disabled priority 21 is ignored');
+$priorityTiers[1]['enabled'] = 1;
+$priorityTiers[1]['minimum'] = 200;
+expect(1 === checkout_offer_select_tier($priorityTiers, 132)['id'], 'Priority does not override basket eligibility');
 near(checkout_offer_baseline_total($GLOBALS['order'], []), 132, 'Eligibility includes goods and delivery VAT');
 ot_shipping::$free = true;
 near(checkout_offer_baseline_total($GLOBALS['order'], []), 120, 'Free shipping eligibility');
