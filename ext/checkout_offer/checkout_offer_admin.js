@@ -19,6 +19,24 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
     initialiseManual(workspace);
+    workspace.querySelectorAll('[data-co-colour]').forEach(function (control) {
+        const picker = control.querySelector('[data-co-colour-picker]');
+        const hex = control.querySelector('[data-co-colour-hex]');
+        const rgb = control.querySelector('[data-co-colour-rgb]');
+        function showColour() {
+            const valid = /^#[0-9a-f]{6}$/i.test(hex.value);
+            rgb.value = valid ? 'rgb(' + [1, 3, 5].map(function (index) {
+                return parseInt(hex.value.slice(index, index + 2), 16);
+            }).join(', ') + ')' : '';
+            picker.value = valid ? hex.value : '#ffffff';
+        }
+        picker.addEventListener('input', function () {
+            hex.value = picker.value;
+            showColour();
+        });
+        hex.addEventListener('input', showColour);
+        showColour();
+    });
     const displayMode = workspace.querySelector('#display-mode');
     const displayHelp = workspace.querySelector('#co-display-help');
     displayMode.addEventListener('change', function () {

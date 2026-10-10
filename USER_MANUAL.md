@@ -171,7 +171,7 @@ In styled Stacked layouts, Left retains the compact image-beside-details arrange
 
 ### Colours and typography
 
-Use six-digit colour values such as `#ffffff` or `#166534`. Heading background, Image background, Heading text colour and Description colour may be left blank to keep the design defaults. Other colour fields require a valid colour.
+Choose a colour with the picker or enter a six-digit HEX value such as `#ffffff` or `#166534`. The RGB field shows the matching red, green and blue values and can be copied. Clear an optional HEX field to return to automatic colours. Heading background, Image background, Heading text colour and Description colour may be left blank to keep the design defaults. Other colour fields require a valid colour.
 
 Heading and description font sizes use **0** for automatic sizing. Choose **Automatic** weight to retain the design's weight, or choose a listed weight. Normal and Italic styles are available. Customise the heading separately from the general Text size to keep the introductory title balanced with the cards.
 

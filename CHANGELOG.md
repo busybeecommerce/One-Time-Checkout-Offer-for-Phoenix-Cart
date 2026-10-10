@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.22
+
+- Add colour pickers, editable HEX values and copyable RGB values to all appearance colour fields, preserving blank automatic colours.
+- Match adjacent appearance settings card heights and verify responsive controls and submitted values.
+
 ## 1.7.21
 
 - Update setup help immediately when switching inline/modal display and show the correct saved-mode guidance without JavaScript.

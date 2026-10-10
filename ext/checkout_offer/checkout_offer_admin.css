@@ -83,12 +83,17 @@
 .checkout-offer-admin .co-template-choice { padding: .85rem; }
 .checkout-offer-admin .co-template-preview { height: 80px; margin-top: .65rem; }
 .checkout-offer-admin .co-appearance-groups { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; max-width: 68rem; }
-.checkout-offer-admin .co-admin-field-group { min-width: 0; align-self: start; margin: 0; padding: 1rem; border: 1px solid var(--co-admin-border); border-radius: .65rem; background: #fafbfc; }
+.checkout-offer-admin .co-admin-field-group { min-width: 0; align-self: stretch; margin: 0; padding: 1rem; border: 1px solid var(--co-admin-border); border-radius: .65rem; background: #fafbfc; }
 .checkout-offer-admin .co-admin-field-group:last-child { grid-column: 1 / -1; }
 .checkout-offer-admin .co-admin-field-group:last-child .co-appearance-fields { grid-template-columns: repeat(4, minmax(0, 1fr)); }
 .checkout-offer-admin .co-admin-field-group legend { float: none; width: auto; margin: 0 0 1rem; font-size: .9rem; font-weight: 700; color: #914400; }
 .checkout-offer-admin .co-appearance-field input[type="number"], .checkout-offer-admin .co-appearance-field input[type="text"] { width: 100%; max-width: 10rem; }
 .checkout-offer-admin .co-appearance-field input[type="color"] { width: 3.25rem; }
+.checkout-offer-admin .co-colour-control { display: flex; align-items: flex-start; gap: .5rem; min-width: 0; }
+.checkout-offer-admin .co-colour-control input[type="color"] { flex: 0 0 3.25rem; margin-top: 1rem; }
+.checkout-offer-admin .co-colour-codes { flex: 1; min-width: 0; }
+.checkout-offer-admin .co-colour-code-label { display: block; font-size: .65rem; color: #52606d; margin: .15rem 0; }
+.checkout-offer-admin .co-colour-codes input[type="text"] { max-width: 10rem; padding-left: .4rem; padding-right: .4rem; font-size: .75rem; }
 .checkout-offer-admin .co-appearance-field select { width: 100%; max-width: 18rem; }
 .checkout-offer-admin .co-admin-text-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 1.25rem; max-width: 52rem; padding: 1rem; border: 1px solid var(--co-admin-border); border-radius: .65rem; background: #fafbfc; }
 .checkout-offer-admin .co-admin-text-field { display: flex; flex-direction: column; min-width: 0; }

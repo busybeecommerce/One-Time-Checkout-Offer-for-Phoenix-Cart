@@ -40,8 +40,8 @@ if (!is_string($activeTab) || !in_array($activeTab, ['setup', 'templates', 'appe
 }
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.21')) ?>">
-<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.21')) ?>" defer></script>
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.22')) ?>">
+<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.22')) ?>" defer></script>
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
     <div class="co-admin-heading">
@@ -112,6 +112,16 @@ require 'includes/template_top.php';
                       <option value="<?= $choice ?>" <?= $appearance[$key] === $choice ? 'selected' : '' ?>><?= constant('CHECKOUT_OFFER_ADMIN_CHOICE_' . strtoupper($choice)) ?></option>
                     <?php } ?>
                   </select>
+                <?php } elseif (in_array($field['type'], ['color', 'optional_color'], true)) { $colour = (string)$appearance[$key]; ?>
+                  <div class="co-colour-control" data-co-colour>
+                    <input class="form-control form-control-color" type="color" value="<?= checkout_offer_escape($colour ?: '#ffffff') ?>" aria-label="<?= checkout_offer_escape(constant('CHECKOUT_OFFER_ADMIN_STYLE_' . strtoupper($key))) ?>: colour picker" data-co-colour-picker>
+                    <div class="co-colour-codes">
+                      <label class="co-colour-code-label" for="style-<?= $key ?>">HEX</label>
+                      <input class="form-control form-control-sm" id="style-<?= $key ?>" type="text" name="appearance[<?= $key ?>]" value="<?= checkout_offer_escape($colour) ?>" placeholder="#rrggbb" maxlength="7" pattern="#[0-9a-fA-F]{6}" <?= 'color' === $field['type'] ? 'required' : '' ?> data-co-colour-hex>
+                      <label class="co-colour-code-label" for="rgb-<?= $key ?>">RGB</label>
+                      <input class="form-control form-control-sm" id="rgb-<?= $key ?>" type="text" readonly data-co-colour-rgb>
+                    </div>
+                  </div>
                 <?php } else { ?>
                   <input class="form-control form-control-sm<?= 'color' === $field['type'] ? ' form-control-color' : '' ?>" id="style-<?= $key ?>" type="<?= 'optional_color' === $field['type'] ? 'text' : $field['type'] ?>" name="appearance[<?= $key ?>]" value="<?= checkout_offer_escape((string)$appearance[$key]) ?>" <?= 'optional_color' === $field['type'] ? 'placeholder="#rrggbb" maxlength="7"' : '' ?> <?= 'number' === $field['type'] ? 'min="' . $field['min'] . '" max="' . $field['max'] . '" step="1"' : '' ?>>
                 <?php } ?>
