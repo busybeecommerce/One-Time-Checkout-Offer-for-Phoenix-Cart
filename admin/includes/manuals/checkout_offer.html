@@ -1,4 +1,4 @@
-<!-- USER_MANUAL.md sha256: b703862711e60a2755fdb6e788d4f087e92f71556ba2ee0650fca811b4fb1ef6 -->
+<!-- USER_MANUAL.md sha256: 8ac98ab4cf55c4051f2c4e7923616fb71e92e3fd99764be6e805d0a8fbc1a78b -->
 <header class="co-manual-header"><div><span class="co-manual-kicker">Checkout Offers · Help centre</span><h2 id="user-manual">User manual</h2><p>Set up, style and maintain your checkout offers.</p></div>
 <div class="co-manual-search" hidden><label for="co-manual-query">Find help</label><input id="co-manual-query" type="search" placeholder="Search pricing, stock, alignment…" aria-controls="co-manual-topics"><p role="status" aria-live="polite"></p></div></header>
 <div class="co-manual-tools"><button type="button" class="co-manual-home" hidden>Quick start</button><a href="#co-manual-topics">Browse topics ↓</a></div>
@@ -10,12 +10,12 @@
 <li><strong>Test, then enable</strong> — <a href="#check-an-offer-before-enabling-it">Check checkout on staging</a>, then enable offers in Setup.</li>
 </ol>
 <p>Select a guide for full instructions. Tiers/products and global settings have separate Save buttons.</p>
-<details class="co-manual-about"><summary>About this add-on and guide</summary><p>For store owners and administrators using version <strong>1.7.14</strong>. Open <strong>Catalog → Checkout Offers → User manual</strong> to read this guide inside administration.</p>
+<details class="co-manual-about"><summary>About this add-on and guide</summary><p>For store owners and administrators. Open <strong>Catalog → Checkout Offers → User manual</strong> to read this guide inside administration.</p>
 <p>The add-on shows eligible customers discounted products at the payment step of checkout. You choose the basket-value ranges, products, offer prices and presentation. Customers can add one unit of each offered product to their current order or continue without accepting an offer.</p>
 <p>Choose a topic from the grouped guides. With JavaScript, the selected guide appears in the reading pane; search finds headings, field names and full guidance. Without JavaScript, expand a topic to read it in place. Reading help does not save or discard unsaved settings.</p></details></div></section>
 <div id="co-manual-topics" tabindex="-1" class="co-manual-topics" aria-label="Guide topics">
 <section class="co-manual-group"><h3>Get started</h3>
-<details class="co-manual-task" id="install-and-open-the-add-on"><summary id="co-guide-install-and-open-the-add-on">Install and open the add-on</summary><div class="co-manual-detail"><h3>Install and open the add-on</h3><p>The release is tested with CE Phoenix Cart 1.1.0.6 and 1.1.0.8, using PHP 8.1 and 8.3. It requires Phoenix's standard checkout payment form and hooks. Installation does not require Phoenix core edits or an order-total module.</p>
+<details class="co-manual-task" id="install-and-open-the-add-on"><summary id="co-guide-install-and-open-the-add-on">Install and open the add-on</summary><div class="co-manual-detail"><h3>Install and open the add-on</h3><p>The add-on requires Phoenix's standard checkout payment form and hooks. Installation does not require Phoenix core edits or an order-total module.</p>
 <ol>
 <li>Back up your store files and database, and install on a staging copy first.</li>
 <li>Extract the release ZIP. Copy its <code>includes/</code>, <code>ext/</code> and <code>images/</code> folders into your store root. Copy the contents of its <code>admin/</code> folder into your actual administration directory, including when you have renamed that directory.</li>
@@ -395,11 +395,8 @@
 </tr>
 </tbody>
 </table></div>
-<p>If the problem remains, record the add-on/Phoenix versions, selected display/template/layout, tier boundaries and priority, product IDs, browser width and the checkout step. Include a screenshot and relevant error-log entry when seeking support.</p></div></details>
-<details class="co-manual-task" id="update-disable-or-remove-the-add-on"><summary id="co-guide-update-disable-or-remove-the-add-on">Update, disable or remove the add-on</summary><div class="co-manual-detail"><h3>Update, disable or remove the add-on</h3><h4 id="update">Update</h4>
-<p>Back up the store, extract the new release and replace only the add-on files listed in <code>package-manifest.txt</code>. Upload the full package's runtime files together, including the checkout hook, stylesheets and JavaScript. Use your actual admin directory. Do not uninstall before updating; existing tiers and settings are retained.</p>
-<p>Open administration after updating, review settings and save where needed. Refresh cached assets and run the staging checks. Version 1.7.14 starts modal focus at the offer heading, preserving keyboard focus indicators on controls. The help workspace and Catalog menu introduced in 1.7.12 remain available. Upload the new Catalog box and its language file, and overwrite the retained inert Reports/legacy menu files to remove old entries. Upload <code>admin/includes/manuals/checkout_offer.html</code> into the matching folder inside your actual admin directory, together with the updated admin page, language file, stylesheet and JavaScript. No database migration or reinstall is required.</p>
-<h4 id="disable-temporarily">Disable temporarily</h4>
+<p>If the problem remains, record the selected display/template/layout, tier boundaries and priority, product IDs, browser width and the checkout step. Include a screenshot and relevant error-log entry when seeking support.</p></div></details>
+<details class="co-manual-task" id="disable-or-remove-the-add-on"><summary id="co-guide-disable-or-remove-the-add-on">Disable or remove the add-on</summary><div class="co-manual-detail"><h3>Disable or remove the add-on</h3><h4 id="disable-temporarily">Disable temporarily</h4>
 <p>Under <strong>Setup</strong>, clear <strong>Enabled</strong> and save. Tiers and product rules remain stored for later use. To pause only one tier, clear that tier's Enabled checkbox and save its form.</p>
 <h4 id="remove-permanently">Remove permanently</h4>
 <p>Uninstallation deletes all offer tiers, product rules and add-on settings. Back up anything you want to retain first.</p>

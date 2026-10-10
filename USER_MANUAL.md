@@ -1,6 +1,6 @@
 # User manual
 
-For store owners and administrators using version **1.7.14**. Open **Catalog → Checkout Offers → User manual** to read this guide inside administration.
+For store owners and administrators. Open **Catalog → Checkout Offers → User manual** to read this guide inside administration.
 
 The add-on shows eligible customers discounted products at the payment step of checkout. You choose the basket-value ranges, products, offer prices and presentation. Customers can add one unit of each offered product to their current order or continue without accepting an offer.
 
@@ -20,7 +20,7 @@ Choose a topic from the grouped guides. With JavaScript, the selected guide appe
 10. [Understand the customer checkout journey](#understand-the-customer-checkout-journey)
 11. [Check an offer before enabling it](#check-an-offer-before-enabling-it)
 12. [Troubleshooting](#troubleshooting)
-13. [Update, disable or remove the add-on](#update-disable-or-remove-the-add-on)
+13. [Disable or remove the add-on](#disable-or-remove-the-add-on)
 
 ## Quick start
 
@@ -32,7 +32,7 @@ Select a guide for full instructions. Tiers/products and global settings have se
 
 ## Install and open the add-on
 
-The release is tested with CE Phoenix Cart 1.1.0.6 and 1.1.0.8, using PHP 8.1 and 8.3. It requires Phoenix's standard checkout payment form and hooks. Installation does not require Phoenix core edits or an order-total module.
+The add-on requires Phoenix's standard checkout payment form and hooks. Installation does not require Phoenix core edits or an order-total module.
 
 1. Back up your store files and database, and install on a staging copy first.
 2. Extract the release ZIP. Copy its `includes/`, `ext/` and `images/` folders into your store root. Copy the contents of its `admin/` folder into your actual administration directory, including when you have renamed that directory.
@@ -256,15 +256,9 @@ For the full technical/staging checklist, see [TESTING.md](TESTING.md). Automate
 | Option prices do not change immediately | Check that the packaged JavaScript loads without errors. Without JavaScript, the accepted price is still calculated on the server. |
 | Appearance changes cannot be saved | Use values within the listed ranges, six-digit colours and permitted choices. Check the error displayed after saving. |
 
-If the problem remains, record the add-on/Phoenix versions, selected display/template/layout, tier boundaries and priority, product IDs, browser width and the checkout step. Include a screenshot and relevant error-log entry when seeking support.
+If the problem remains, record the selected display/template/layout, tier boundaries and priority, product IDs, browser width and the checkout step. Include a screenshot and relevant error-log entry when seeking support.
 
-## Update, disable or remove the add-on
-
-### Update
-
-Back up the store, extract the new release and replace only the add-on files listed in `package-manifest.txt`. Upload the full package's runtime files together, including the checkout hook, stylesheets and JavaScript. Use your actual admin directory. Do not uninstall before updating; existing tiers and settings are retained.
-
-Open administration after updating, review settings and save where needed. Refresh cached assets and run the staging checks. Version 1.7.14 starts modal focus at the offer heading, preserving keyboard focus indicators on controls. The help workspace and Catalog menu introduced in 1.7.12 remain available. Upload the new Catalog box and its language file, and overwrite the retained inert Reports/legacy menu files to remove old entries. Upload `admin/includes/manuals/checkout_offer.html` into the matching folder inside your actual admin directory, together with the updated admin page, language file, stylesheet and JavaScript. No database migration or reinstall is required.
+## Disable or remove the add-on
 
 ### Disable temporarily
 
