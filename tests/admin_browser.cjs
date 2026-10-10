@@ -89,6 +89,13 @@ const { chromium } = require('playwright');
     }
     for (const width of [1440, 1200, 768]) {
         await page.setViewportSize({ width, height: 1000 });
+        for (const key of ['heading_style', 'description_style']) {
+            const gap = await page.locator('#style-' + key).evaluate(node => {
+                const label = node.parentElement.querySelector('.form-label');
+                return node.getBoundingClientRect().top - label.getBoundingClientRect().bottom;
+            });
+            assert.ok(gap >= 0 && gap <= 8, 'Style dropdown sits directly below its label at ' + width);
+        }
         if (width >= 1200) {
             const heights = await page.locator('.co-admin-field-group').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().height));
             assert.ok(Math.abs(heights[0] - heights[1]) < 1, 'Colour and layout cards have equal heights');

@@ -55,6 +55,7 @@
 .checkout-offer-admin .co-appearance-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .85rem .65rem; }
 .checkout-offer-admin .co-appearance-field { display: flex; flex-direction: column; min-width: 0; }
 .checkout-offer-admin .co-appearance-field .form-label { flex: 1; }
+.checkout-offer-admin .co-appearance-field .form-label[for="style-heading_style"], .checkout-offer-admin .co-appearance-field .form-label[for="style-description_style"] { flex: 0 0 auto; }
 .checkout-offer-admin .co-appearance-field .form-control, .checkout-offer-admin .co-appearance-field .form-select { flex: 0 0 auto; }
 .checkout-offer-admin .co-admin-tier { margin-bottom: .5rem; padding: .85rem; border: 1px solid var(--co-admin-border); border-radius: .6rem; background: #fafbfc; }
 .checkout-offer-admin .co-admin-tier-selected { border-color: #dc8b42; background: #fff4e7; }
