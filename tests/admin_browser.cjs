@@ -133,6 +133,13 @@ const { chromium } = require('playwright');
     assert.equal(submission.admin_tab, 'appearance');
     await page.getByRole('tab', { name: 'Tiers & products', exact: true }).click();
     const productForm = page.locator('form:has(input[value="save_product"])').first();
+    assert.match(await page.getByRole('link', { name: 'Edit: Medium basket', exact: true }).getAttribute('href'), /tier_id=1/);
+    await page.getByRole('button', { name: 'Delete: Medium basket', exact: true }).click();
+    assert.equal(await page.evaluate(() => window.submission.action), 'delete_tier');
+    assert.equal(await page.evaluate(() => window.submission.tier_id), '1');
+    assert.equal(await page.evaluate(() => window.submission.formid), 'admin-render-token');
+    assert.equal(await page.evaluate(() => window.submission.admin_tab), 'offers');
+
     for (const width of [1440, 1024, 375]) {
         await page.setViewportSize({ width, height: 1000 });
         assert.equal(await page.locator('.co-admin-tier').last().evaluate(node => getComputedStyle(node).borderBottomWidth), '1px');

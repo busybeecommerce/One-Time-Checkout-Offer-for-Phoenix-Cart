@@ -75,6 +75,8 @@ Tier and product forms have their own **Save** buttons. Save each edited tier or
 
 ## Set basket-value tiers
 
+Saved tiers have edit and delete icons on the left. Edit opens that tier; Delete removes the tier and its product rules.
+
 The qualifying value includes products, product tax, delivery and delivery tax. Tier amounts use the **store base currency**, even when a customer shops in another currency. This qualifying amount is not necessarily the final payable total after other order-total adjustments.
 
 | Field | Meaning |
@@ -95,7 +97,7 @@ Select a tier to edit its settings and assigned products. To pause one tier, cle
 
 ## Add products and offer prices
 
-Save or select a tier before adding products. In **Add a product**, choose a category and active product, choose the pricing method and save. Category filtering lists products directly assigned to that category; linked products appear in each assigned category. Choose Uncategorised for products without a category. The Product dropdown stays empty until a category is selected. Saved rules automatically select a category for their product. JavaScript is required to change category/product selections. Each product can appear once within a tier. The same product may have separate rules in different tiers.
+Save or select a tier before adding products. In **Add a product**, choose a category and active product, choose the pricing method and save. Category filtering lists products directly assigned to that category; linked products appear in each assigned category. Uncategorised appears only when active products without a category exist. Choose it to select those products. The Product dropdown stays empty until a category is selected. Saved rules automatically select a category for their product. JavaScript is required to change category/product selections. Each product can appear once within a tier. The same product may have separate rules in different tiers.
 
 Existing product rules remain editable under the selected tier. Use a rule's **Save** button after changing its product, pricing method or value. Its **Delete** button removes only that rule.
 

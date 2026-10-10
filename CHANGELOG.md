@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.18
+
+- Show Uncategorised only when active uncategorised products exist. Add labelled edit/delete icons to the left of saved tiers, using the existing tier actions and CSRF protection.
+
 ## 1.7.17
 
 - Populate the product dropdown only after a category is selected. Preselect a category for saved products, clear products when category is cleared, and provide Uncategorised for products without category assignments.
