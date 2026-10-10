@@ -26,7 +26,7 @@ def build(source: str) -> str:
         ("Get started", ["Install and open the add-on", "Create your first offer", "Use the administration tabs"]),
         ("Offers & pricing", ["Set basket-value tiers", "Add products and offer prices", "Understand the customer checkout journey"]),
         ("Design & wording", ["Choose inline or modal display", "Choose a template", "Customise appearance and alignment", "Change the wording"]),
-        ("Check & maintain", ["Check an offer before enabling it", "Troubleshooting", "Update, disable or remove the add-on"]),
+        ("Check & maintain", ["Check an offer before enabling it", "Troubleshooting", "Disable or remove the add-on"]),
     ]
     titles = [title for _, tasks in groups for title in tasks]
     if set(sections) != set(titles + ["Contents", "Quick start"]):

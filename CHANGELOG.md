@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.15
+
+- Remove version references and update instructions from the user manual, retaining temporary disable and permanent add-on removal guidance. Rename the maintenance guide and regenerate packaged HTML.
+
 ## 1.7.14
 
 - Start modal focus at the offer heading, avoiding an automatic second border on the close button. Preserve its visible keyboard focus outline, native modal behaviour and focus restoration after dismissal.
