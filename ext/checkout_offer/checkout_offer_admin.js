@@ -22,16 +22,25 @@ document.addEventListener('DOMContentLoaded', function () {
     workspace.querySelectorAll('.co-admin-product-picker').forEach(function (picker) {
         const category = picker.querySelector('[data-co-category]');
         const product = picker.querySelector('[data-co-product]');
-        const options = Array.from(product.options);
+        const options = Array.from(picker.querySelector('[data-co-products]').content.querySelectorAll('option'));
+        const placeholder = product.options[0];
+        const current = options.find(function (option) { return option.value === product.value; });
+        if (current) {
+            category.value = String(JSON.parse(current.dataset.categories)[0]);
+        }
         category.disabled = false;
-        category.addEventListener('change', function () {
+        function populateProducts() {
             const selected = product.value;
             const matches = options.filter(function (option) {
-                return !option.value || !category.value || JSON.parse(option.dataset.categories || '[]').includes(Number(category.value));
+                return category.value !== '' && JSON.parse(option.dataset.categories).includes(Number(category.value));
             });
-            product.replaceChildren(...matches);
+            product.replaceChildren(placeholder, ...matches);
             product.value = matches.some(function (option) { return option.value === selected; }) ? selected : '';
-        });
+        }
+        category.addEventListener('change', populateProducts);
+        if (current || !product.value) {
+            populateProducts();
+        }
     });
     const tabs = Array.from(workspace.querySelectorAll('[data-co-tab]'));
     const panels = Array.from(workspace.querySelectorAll('[data-co-panel]'));

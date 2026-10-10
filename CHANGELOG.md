@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.17
+
+- Populate the product dropdown only after a category is selected. Preselect a category for saved products, clear products when category is cleared, and provide Uncategorised for products without category assignments.
+
 ## 1.7.16
 
 - Restore all saved tier borders, compact the basket-value fields and place Save/Delete actions alongside each other.
