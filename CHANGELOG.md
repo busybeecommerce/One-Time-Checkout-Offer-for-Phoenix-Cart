@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.20
+
+- Prefix basket-value and fixed-price fields with the store currency symbol and display two decimal places. Preserve blank unlimited maximums and keep percentage fields distinct when switching pricing modes.
+
 ## 1.7.19
 
 - Format saved tier limits using the store base currency, including symbols, separators and decimal precision, without exchange conversion. Identify the base currency on amount fields and move tier edit/delete icons to the far right.

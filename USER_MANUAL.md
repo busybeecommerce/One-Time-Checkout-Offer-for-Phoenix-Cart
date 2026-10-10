@@ -87,7 +87,7 @@ The qualifying value includes products, product tax, delivery and delivery tax. 
 | Priority (highest wins) | Determines which enabled tier wins when ranges overlap. |
 | Enabled | Allows this tier to be selected while global offers are enabled. |
 
-Use non-negative basket amounts. A maximum must be greater than the minimum. Enter amounts without currency symbols. Priority must be a whole number from -100000 to 100000; higher values take precedence.
+Use non-negative basket amounts. A maximum must be greater than the minimum. Amount fields show the currency symbol separately and display two decimal places. Enter the numeric amount; leave Maximum blank for unlimited. Priority must be a whole number from -100000 to 100000; higher values take precedence.
 
 For adjacent ranges, use the same boundary: `0–50`, `50–100`, and `100–unlimited`. Exactly 50 belongs to the second range; exactly 100 belongs to the third.
 
@@ -103,7 +103,7 @@ Existing product rules remain editable under the selected tier. Use a rule's **S
 
 ### Fixed unit price excluding tax
 
-Enter the final offer unit price **before tax**, in base currency. The fixed price includes the selected product options; their surcharges are not added again to the fixed offer price. Phoenix applies the appropriate tax and currency display.
+Enter the final offer unit price **before tax**, in base currency. Fixed-price fields show the currency symbol separately and display two decimal places; percentage fields show %. The fixed price includes the selected product options; their surcharges are not added again to the fixed offer price. Phoenix applies the appropriate tax and currency display.
 
 For example, if the normal pre-tax price is 10 and an option adds 2, a fixed offer value of 8 sets the pre-tax offer price to 8. It does not become 10 after adding the option surcharge.
 
