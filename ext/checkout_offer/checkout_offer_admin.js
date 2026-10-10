@@ -19,6 +19,20 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
     initialiseManual(workspace);
+    workspace.querySelectorAll('.co-admin-product-picker').forEach(function (picker) {
+        const category = picker.querySelector('[data-co-category]');
+        const product = picker.querySelector('[data-co-product]');
+        const options = Array.from(product.options);
+        category.disabled = false;
+        category.addEventListener('change', function () {
+            const selected = product.value;
+            const matches = options.filter(function (option) {
+                return !option.value || !category.value || JSON.parse(option.dataset.categories || '[]').includes(Number(category.value));
+            });
+            product.replaceChildren(...matches);
+            product.value = matches.some(function (option) { return option.value === selected; }) ? selected : '';
+        });
+    });
     const tabs = Array.from(workspace.querySelectorAll('[data-co-tab]'));
     const panels = Array.from(workspace.querySelectorAll('[data-co-panel]'));
     const settingsForm = workspace.querySelector('[name="action"][value="settings"]').form;

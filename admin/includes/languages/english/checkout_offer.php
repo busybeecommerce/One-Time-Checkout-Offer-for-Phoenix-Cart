@@ -120,3 +120,9 @@ const CHECKOUT_OFFER_ADMIN_GROUP_LAYOUT = 'Product layout & alignment';
 const CHECKOUT_OFFER_ADMIN_GROUP_SPACING = 'Sizing & spacing';
 const CHECKOUT_OFFER_ADMIN_GROUP_BUTTONS = 'Buttons & shadow';
 const CHECKOUT_OFFER_ADMIN_GROUP_TYPOGRAPHY = 'Heading & description styles';
+
+const CHECKOUT_OFFER_ADMIN_CATEGORY = 'Category';
+const CHECKOUT_OFFER_ADMIN_ALL_CATEGORIES = 'All categories';
+const CHECKOUT_OFFER_ADMIN_PRODUCT = 'Product';
+const CHECKOUT_OFFER_ADMIN_SELECT_PRODUCT = 'Choose a product';
+const CHECKOUT_OFFER_ADMIN_UNAVAILABLE_PRODUCT = 'Unavailable product';

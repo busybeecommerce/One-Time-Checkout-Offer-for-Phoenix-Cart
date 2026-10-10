@@ -16,7 +16,7 @@ define('SESSION_FORCE_COOKIE_USE', 'True');
 define('BOX_HEADING_REPORTS', 'Reports');
 define('BOX_HEADING_CATALOG', 'Catalog');
 define('CHECKOUT_OFFER_ENABLED', 'False');
-$_SESSION = ['sessiontoken' => 'admin-render-token'];
+$_SESSION = ['sessiontoken' => 'admin-render-token', 'languages_id' => 1];
 $_SERVER['REQUEST_METHOD'] = 'GET';
 $_GET = 'tier' === $scenario ? ['tier_id' => 1] : [];
 
@@ -39,6 +39,11 @@ $GLOBALS['db'] = $db = new class($scenario) {
             $rows = [['id' => 1, 'title' => 'Medium basket', 'minimum' => '50', 'maximum' => null, 'priority' => 10, 'enabled' => 1]];
         } elseif (str_contains($sql, 'FROM checkout_offer_products')) {
             $rows = [['id' => 1, 'products_id' => 2, 'tier_id' => 1, 'mode' => 'percent', 'value' => '25']];
+        }
+        if (str_contains($sql, 'FROM categories c')) {
+            $rows = [['categories_id' => 10, 'categories_name' => 'Fruit & veg'], ['categories_id' => 20, 'categories_name' => 'Other']];
+        } elseif (str_contains($sql, 'FROM products p')) {
+            $rows = [['products_id' => 2, 'products_name' => 'Lime <fresh>', 'categories_id' => 10], ['products_id' => 2, 'products_name' => 'Lime <fresh>', 'categories_id' => 20], ['products_id' => 3, 'products_name' => 'Tomato', 'categories_id' => 10], ['products_id' => 4, 'products_name' => 'Uncategorised', 'categories_id' => null]];
         }
         return new class($rows) {
             private array $rows;
@@ -108,7 +113,7 @@ if ('install' !== $scenario) {
 if ('install' !== $scenario) {
     $expected = array_merge($expected, ['data-co-tab="manual"', 'id="co-panel-manual"', 'id="troubleshooting"', 'Create your first offer']);
 }
-foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.7.13']) as $text) {
+foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.7.16']) as $text) {
     if (!str_contains($html, $text)) {
         throw new RuntimeException("Admin $scenario output missing: $text");
     }

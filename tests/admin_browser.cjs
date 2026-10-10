@@ -133,7 +133,42 @@ const { chromium } = require('playwright');
     assert.equal(submission.admin_tab, 'appearance');
     await page.getByRole('tab', { name: 'Tiers & products', exact: true }).click();
     const productForm = page.locator('form:has(input[value="save_product"])').first();
-    await productForm.locator('button').click();
+    for (const width of [1440, 1024, 375]) {
+        await page.setViewportSize({ width, height: 1000 });
+        assert.equal(await page.locator('.co-admin-tier').last().evaluate(node => getComputedStyle(node).borderBottomWidth), '1px');
+        const actions = await page.locator('.co-admin-actions').first().locator('button').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().top));
+        assert.ok(Math.abs(actions[0] - actions[1]) < 1, 'Save and Delete share a row at ' + width);
+        assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
+        if (width >= 1024) {
+            const gap = await page.evaluate(() => document.querySelector('#maximum').getBoundingClientRect().left - document.querySelector('#minimum').getBoundingClientRect().right);
+            assert.ok(gap >= 0 && gap <= 17, 'Basket bounds have a compact gap');
+        }
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    assert.equal(await productForm.locator('.co-admin-product-picker').evaluate(node => getComputedStyle(node).display), 'grid');
+    await page.screenshot({ path: 'build/admin-offers-desktop.png', fullPage: true });
+    await page.setViewportSize({ width: 375, height: 812 });
+    assert.ok(await productForm.locator('[data-co-product]').evaluate(node => node.getBoundingClientRect().width > 200), 'Mobile product selector fills its row');
+    await page.screenshot({ path: 'build/admin-offers-mobile.png', fullPage: true });
+    await page.setViewportSize({ width: 1440, height: 1000 });
+    assert.equal(await productForm.locator('[name="products_id"] option[value="2"]').count(), 1, 'Linked product appears only once');
+    assert.equal(await productForm.locator('[name="products_id"] option[value="2"]').textContent(), 'Lime <fresh> (#2)');
+    await productForm.locator('[data-co-category]').selectOption('20');
+    assert.equal(await productForm.locator('[name="products_id"]').inputValue(), '2', 'Linked product remains selected in either category');
+    assert.equal(await productForm.locator('[name="products_id"] option[value="3"]').count(), 0);
+    await productForm.locator('[data-co-category]').selectOption('10');
+    await productForm.locator('[name="products_id"]').selectOption('3');
+    await productForm.locator('[data-co-category]').selectOption('20');
+    assert.equal(await productForm.locator('[name="products_id"]').inputValue(), '', 'Category change clears an incompatible selection');
+    await productForm.locator('[data-co-category]').selectOption('');
+    assert.equal(await productForm.locator('[name="products_id"] option[value="4"]').count(), 1, 'All categories includes uncategorised products');
+    await productForm.locator('[name="products_id"]').selectOption('2');
+    await page.locator('button[form="co-save-tier"]').click();
+    assert.equal(await page.evaluate(() => window.submission.action), 'save_tier');
+    await page.locator('.co-admin-actions').first().getByRole('button', { name: 'Delete', exact: true }).click();
+    assert.equal(await page.evaluate(() => window.submission.action), 'delete_tier');
+
+    await page.locator('button[form="co-save-product-1"]').click();
     submission = await page.evaluate(() => window.submission);
     assert.equal(submission.products_id, '2');
     assert.equal(submission.tier_id, '1');
@@ -241,6 +276,9 @@ const { chromium } = require('playwright');
     const fallbackPage = await noScriptContext.newPage();
     await fallbackPage.goto('https://fallback.test/');
     assert.equal(await fallbackPage.locator('[data-co-panel]:visible').count(), 7);
+    assert.equal(await fallbackPage.locator('[data-co-category]').first().isDisabled(), true);
+    assert.equal(await fallbackPage.locator('[data-co-product]').first().locator('option[value="2"]').count(), 1);
+    assert.equal(await fallbackPage.locator('[data-co-product]').first().locator('option[value="4"]').count(), 1);
     assert.equal(await fallbackPage.locator('#co-panel-manual #troubleshooting').isVisible(), true);
     await fallbackPage.locator('#troubleshooting summary').click();
     assert.equal(await fallbackPage.locator('#troubleshooting table').isVisible(), true);

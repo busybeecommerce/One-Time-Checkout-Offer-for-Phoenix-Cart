@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.16
+
+- Restore all saved tier borders, compact the basket-value fields and place Save/Delete actions alongside each other.
+- Add category and active-product dropdowns, preserving linked products and uncategorised products through All categories. Product selection remains available without JavaScript; server validation is unchanged.
+
 ## 1.7.15
 
 - Remove version references and update instructions from the user manual, retaining temporary disable and permanent add-on removal guidance. Rename the maintenance guide and regenerate packaged HTML.

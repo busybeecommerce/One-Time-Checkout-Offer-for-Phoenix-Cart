@@ -49,7 +49,7 @@ This example offers an accessory at a 10% discount when the qualifying basket va
 1. Open **Tiers & products**, then choose **New tier**.
 2. Enter a **Title**, such as `Basket 50–100`. This is an administrative label; the storefront heading is configured separately.
 3. Enter **Minimum basket value** `50`, **Maximum basket value** `100` and **Priority** `0`. Leave the tier's **Enabled** checkbox selected and click its **Save** button.
-4. With that tier selected, use **Add a product**. Enter the numeric **Product ID** of an active catalogue product.
+4. With that tier selected, use **Add a product**. Choose a **Category**, then select an active **Product** from the dropdown. Use **All categories** to browse all active products.
 5. Set **Pricing** to **Percentage discount**, enter `10` under **Price or percentage**, and click that product form's **Save** button.
 6. Under **Setup**, choose **At the top of checkout** or **Modal popup**.
 7. Choose your template, appearance and wording in their tabs. Click the settings **Save** button.
@@ -95,7 +95,7 @@ Select a tier to edit its settings and assigned products. To pause one tier, cle
 
 ## Add products and offer prices
 
-Save or select a tier before adding products. In **Add a product**, enter an active product's numeric catalogue ID, choose the pricing method and save. Each product can appear once within a tier. The same product may have separate rules in different tiers.
+Save or select a tier before adding products. In **Add a product**, choose a category and active product, choose the pricing method and save. Category filtering lists products directly assigned to that category; linked products appear in each assigned category. All categories also includes products without a category. Without JavaScript, the product dropdown lists all active products. Each product can appear once within a tier. The same product may have separate rules in different tiers.
 
 Existing product rules remain editable under the selected tier. Use a rule's **Save** button after changing its product, pricing method or value. Its **Delete** button removes only that rule.
 
@@ -245,7 +245,7 @@ For the full technical/staging checklist, see [TESTING.md](TESTING.md). Automate
 | The installation screen still appears | Complete Install database tables and check that the add-on's tables/settings were created successfully. |
 | No offers appear | Sign in as a customer; enable offers and the tier; check the tax/delivery-inclusive base-currency range and the winning priority. The tier needs eligible active products. |
 | A configured product is missing | Check its active status, stock rules and whether it is already in the basket. Check the product rule belongs to the winning tier. |
-| The product rule will not save | Use an existing active numeric Product ID, a non-negative fixed price or a 0–100 percentage. The same product cannot be added twice to one tier. |
+| The product rule will not save | Select an existing active product, a non-negative fixed price or a 0–100 percentage. The same product cannot be added twice to one tier. |
 | A higher-value tier is not selected after adding an offer | The first acceptance intentionally locks the tier for that exact basket. |
 | Delivery/payment must be selected again | Adding a product invalidates the previous shipping quote and payment selection so checkout can be recalculated. |
 | An accepted product returns to normal price | Check for basket, option, quantity, customer or currency changes, or a disabled/deleted tier or product rule. |

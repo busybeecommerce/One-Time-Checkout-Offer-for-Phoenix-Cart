@@ -134,11 +134,32 @@ function checkout_offer_admin_action(string $action, array $input): void
     }
 }
 
-function checkout_offer_admin_form(string $action, array $hidden = []): string
+function checkout_offer_admin_form(string $action, array $hidden = [], array $attributes = []): string
 {
-    $html = (string)new Form('checkout_offer_' . $action, (string)$GLOBALS['Admin']->link('checkout_offer.php'), 'post');
+    $html = (string)new Form('checkout_offer_' . $action, (string)$GLOBALS['Admin']->link('checkout_offer.php'), 'post', $attributes);
     foreach (['action' => $action] + $hidden as $key => $value) {
         $html .= '<input type="hidden" name="' . checkout_offer_escape($key) . '" value="' . checkout_offer_escape((string)$value) . '">';
     }
     return $html;
+}
+
+function checkout_offer_admin_catalogue(int $languageId): array
+{
+    $categories = [];
+    $query = $GLOBALS['db']->query('SELECT c.categories_id, cd.categories_name FROM categories c JOIN categories_description cd ON cd.categories_id = c.categories_id WHERE cd.language_id = ' . $languageId . ' ORDER BY cd.categories_name, c.categories_id');
+    while ($row = $query->fetch_assoc()) {
+        $categories[] = $row;
+    }
+    $products = [];
+    $query = $GLOBALS['db']->query('SELECT p.products_id, pd.products_name, ptc.categories_id FROM products p JOIN products_description pd ON pd.products_id = p.products_id LEFT JOIN products_to_categories ptc ON ptc.products_id = p.products_id WHERE p.products_status = 1 AND pd.language_id = ' . $languageId . ' ORDER BY pd.products_name, p.products_id');
+    while ($row = $query->fetch_assoc()) {
+        $id = (int)$row['products_id'];
+        if (!isset($products[$id])) {
+            $products[$id] = ['name' => $row['products_name'], 'categories' => []];
+        }
+        if (null !== $row['categories_id']) {
+            $products[$id]['categories'][] = (int)$row['categories_id'];
+        }
+    }
+    return ['categories' => $categories, 'products' => $products];
 }
