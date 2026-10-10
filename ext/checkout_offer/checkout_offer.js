@@ -18,6 +18,12 @@ document.addEventListener('DOMContentLoaded', function () {
             dialog.dataset.template = section.dataset.template;
             dialog.style.cssText = section.style.cssText;
             dialog.setAttribute('aria-labelledby', 'checkout-offer-title');
+            // Start reading at the heading rather than highlighting the close control.
+            const heading = section.querySelector('#checkout-offer-title');
+            if (heading) {
+                heading.setAttribute('tabindex', '-1');
+                heading.setAttribute('autofocus', '');
+            }
             const close = document.createElement('button');
             close.type = 'button';
             close.className = 'checkout-offer-modal-close';

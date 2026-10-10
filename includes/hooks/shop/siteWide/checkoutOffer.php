@@ -49,12 +49,12 @@ class hook_shop_siteWide_checkoutOffer {
         if ('checkout_payment.php' !== Request::get_page() || !checkout_offer_enabled()) {
             return '';
         }
-        return '<script src="ext/checkout_offer/checkout_offer.js?v=1.7.0" defer></script>';
+        return '<script src="ext/checkout_offer/checkout_offer.js?v=1.7.14" defer></script>';
     }
 
     public function listen_injectSiteStart(): string
     {
         return 'checkout_payment.php' === Request::get_page() && checkout_offer_enabled()
-            ? '<link rel="stylesheet" href="ext/checkout_offer/checkout_offer.css?v=1.7.7">' : '';
+            ? '<link rel="stylesheet" href="ext/checkout_offer/checkout_offer.css?v=1.7.14">' : '';
     }
 }

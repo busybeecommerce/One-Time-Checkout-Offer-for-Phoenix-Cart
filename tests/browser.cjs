@@ -25,6 +25,7 @@ const { chromium } = require('playwright');
     const dialog = page.locator('#checkout-offer-modal');
     await dialog.evaluate(node => Promise.all(node.getAnimations().map(animation => animation.finished)));
     assert.equal(await dialog.evaluate(node => node.open), true);
+    assert.equal(await page.evaluate(() => document.activeElement.id), 'checkout-offer-title', 'Opening focus starts at the offer heading');
     assert.equal(await dialog.evaluate(node => Math.round(node.getBoundingClientRect().width)), 800);
     assert.equal(await page.locator('#checkout-offer').evaluate(node => getComputedStyle(node).backgroundColor), 'rgb(238, 246, 255)');
     assert.equal(await page.locator('.checkout-offer-image').first().evaluate(node => getComputedStyle(node).height), '180px');
@@ -43,6 +44,12 @@ const { chromium } = require('playwright');
     assert.equal(closeBounds.height, 28);
     assert.equal(closeBounds.border, '1px');
     assert.ok(Math.abs(closeBounds.x) < .5 && Math.abs(closeBounds.y) < .5);
+    assert.equal(await page.locator('.checkout-offer-modal-close').evaluate(node => getComputedStyle(node).outlineStyle), 'none', 'No outer close outline on opening');
+    await page.screenshot({ path: 'build/modal-opening-focus.png', fullPage: true });
+    await page.keyboard.press('Shift+Tab');
+    assert.equal(await page.locator('.checkout-offer-modal-close').evaluate(node => node === document.activeElement), true);
+    assert.equal(await page.locator('.checkout-offer-modal-close').evaluate(node => getComputedStyle(node).outlineStyle), 'solid', 'Keyboard close focus remains visible');
+    await page.keyboard.press('Tab');
     assert.equal(await page.locator('#checkout-offer').evaluate(node => getComputedStyle(node).borderTopWidth), '1px');
     for (const alignment of ['left', 'center', 'right']) {
         await page.locator('#checkout-offer').evaluate((node, value) => {
@@ -104,6 +111,7 @@ const { chromium } = require('playwright');
     assert.equal(await dialog.evaluate(node => node.open), false);
     await page.evaluate(() => window.dispatchEvent(new PageTransitionEvent('pageshow', { persisted: true })));
     assert.equal(await dialog.evaluate(node => node.open), true);
+    assert.equal(await page.evaluate(() => document.activeElement.id), 'checkout-offer-title', 'Restored checkout uses heading focus');
     await page.reload();
     assert.equal(await dialog.evaluate(node => node.open), true);
     await page.goto('http://checkout-offer.test/modal?repeat-entry');

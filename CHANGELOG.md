@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.14
+
+- Start modal focus at the offer heading, avoiding an automatic second border on the close button. Preserve its visible keyboard focus outline, native modal behaviour and focus restoration after dismissal.
+
 ## 1.7.13
 
 - Match the desktop user-guide reading pane to the topic column height instead of capping it at 68vh. Retain scrolling for long guides and natural content height on mobile.
