@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.23
+
+- Refine appearance colour fields with compact bordered blocks, full-height swatches and aligned HEX/RGB rows.
+- Retain automatic colours, responsive layouts and balanced settings cards.
+
 ## 1.7.22
 
 - Add colour pickers, editable HEX values and copyable RGB values to all appearance colour fields, preserving blank automatic colours.

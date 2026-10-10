@@ -107,6 +107,18 @@ const { chromium } = require('playwright');
         for (const control of await page.locator('#co-panel-appearance input[type="number"], #co-panel-appearance input[type="text"]').all()) {
             assert.ok(await control.evaluate(node => node.getBoundingClientRect().width <= 161), 'Short values have compact fields');
         }
+        for (const colour of await page.locator('[data-co-colour]').all()) {
+            const bounds = await colour.evaluate(node => {
+                const picker = node.querySelector('[data-co-colour-picker]').getBoundingClientRect();
+                const hex = node.querySelector('[data-co-colour-hex]').getBoundingClientRect();
+                const rgb = node.querySelector('[data-co-colour-rgb]').getBoundingClientRect();
+                return { picker, hex, rgb, right: node.getBoundingClientRect().right };
+            });
+            assert.ok(Math.abs(bounds.hex.left - bounds.rgb.left) < 1, 'Colour codes share a left edge');
+            assert.ok(Math.abs(bounds.hex.right - bounds.rgb.right) < 1, 'Colour codes share a right edge');
+            assert.ok(Math.abs(bounds.picker.top - bounds.hex.top) < 1 && Math.abs(bounds.picker.bottom - bounds.rgb.bottom) < 1, 'Swatch spans both code rows');
+            assert.ok(bounds.rgb.right < bounds.right, 'Colour codes fit inside their block');
+        }
     }
     await page.setViewportSize({ width: 1440, height: 1000 });
     await page.screenshot({ path: 'build/admin-appearance-desktop.png', fullPage: true });

@@ -89,11 +89,12 @@
 .checkout-offer-admin .co-admin-field-group legend { float: none; width: auto; margin: 0 0 1rem; font-size: .9rem; font-weight: 700; color: #914400; }
 .checkout-offer-admin .co-appearance-field input[type="number"], .checkout-offer-admin .co-appearance-field input[type="text"] { width: 100%; max-width: 10rem; }
 .checkout-offer-admin .co-appearance-field input[type="color"] { width: 3.25rem; }
-.checkout-offer-admin .co-colour-control { display: flex; align-items: flex-start; gap: .5rem; min-width: 0; }
-.checkout-offer-admin .co-colour-control input[type="color"] { flex: 0 0 3.25rem; margin-top: 1rem; }
-.checkout-offer-admin .co-colour-codes { flex: 1; min-width: 0; }
-.checkout-offer-admin .co-colour-code-label { display: block; font-size: .65rem; color: #52606d; margin: .15rem 0; }
-.checkout-offer-admin .co-colour-codes input[type="text"] { max-width: 10rem; padding-left: .4rem; padding-right: .4rem; font-size: .75rem; }
+.checkout-offer-admin .co-colour-control { display: flex; align-items: stretch; gap: .5rem; min-width: 0; padding: .5rem; border: 1px solid #dfe5eb; border-radius: .6rem; background: #fff; }
+.checkout-offer-admin .co-colour-control input[type="color"] { flex: 0 0 2.5rem; width: 2.5rem; height: auto; min-height: 4.75rem; margin: 0; padding: .25rem; cursor: pointer; }
+.checkout-offer-admin .co-colour-codes { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: .4rem; flex: 1; min-width: 0; }
+.checkout-offer-admin .co-colour-code-label { font-size: .65rem; font-weight: 600; color: #52606d; margin: 0; }
+.checkout-offer-admin .co-colour-codes input[type="text"] { max-width: 10rem; padding-left: .35rem; padding-right: .35rem; font-size: .75rem; }
+.checkout-offer-admin .co-colour-codes input[readonly] { background: #f5f7f9; color: #52606d; }
 .checkout-offer-admin .co-appearance-field select { width: 100%; max-width: 18rem; }
 .checkout-offer-admin .co-admin-text-fields { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem 1.25rem; max-width: 52rem; padding: 1rem; border: 1px solid var(--co-admin-border); border-radius: .65rem; background: #fafbfc; }
 .checkout-offer-admin .co-admin-text-field { display: flex; flex-direction: column; min-width: 0; }
