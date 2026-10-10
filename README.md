@@ -1,6 +1,6 @@
 # One-Time Checkout Offer for Phoenix Cart
 
-Version **1.7.24** · Tested CE Phoenix Cart **1.1.0.6 / 1.1.0.8** · PHP **8.1–8.3**
+Version **1.7.25** · Tested CE Phoenix Cart **1.1.0.6 / 1.1.0.8** · PHP **8.1–8.3**
 
 Present discounted products at the payment step of checkout. This independent Phoenix implementation follows [PrestaChamps' published feature description](https://shop.prestachamps.com/en/prestashop-modules/118-one-time-checkout-offer.html). No PrestaShop module code or assets are included.
 
@@ -12,7 +12,8 @@ Present discounted products at the payment step of checkout. This independent Ph
 - Eligibility includes product VAT, delivery and delivery VAT, in store base currency.
 - Inline display or an automatic modal with close, Escape, backdrop dismissal and a continue-checkout button.
 - Colours for the panel, text, cards, borders and buttons; solid/outline buttons and shadows.
-- Configurable corners, border width, spacing, image height, font size, columns and modal width.
+- Configurable corners, border width, spacing, image height, font size, desktop/tablet/mobile columns and modal width.
+- Contain/crop image fit, independent price and button alignment, button size/full width/corner radius, hover colours and separate offer/card/button shadows with design-preserving automatic defaults.
 - Header-free modal with a corner close button, plus independent left/centre/right alignment for inline/modal content and product rows.
 - Ten selectable designs: Red special offer, BusyBee honey, Midnight, Fresh green, Ocean blue, Soft plum, Slate minimal, Warm coral, Clean teal and Champagne templates with banners, compact product rows, savings badges and price-labelled Add buttons.
 - Clean solid-colour banners and readable typography; modals keep the continue-checkout button without separate footer strips.
@@ -72,7 +73,7 @@ foreach ($template in @('red','honey','midnight','green','ocean','plum','slate',
 node tests/templates_browser.cjs
 node tests/alignment_browser.cjs
 git diff --check
-powershell -File scripts/build_package.ps1 -Version 1.7.24
+powershell -File scripts/build_package.ps1 -Version 1.7.25
 ```
 
 The harness uses real Phoenix order/tax/currency classes with deterministic database/cart fixtures, without defining legacy image constants. CI repeats checks on PHP 8.1 and 8.3 against pinned Phoenix 1.1.0.6 and 1.1.0.8 references. Browser checks require Playwright 1.62.1, Bootstrap 5.3.8 and Chromium (`npm install --no-save --package-lock=false playwright@1.62.1 bootstrap@5.3.8`, then `npx playwright install chromium`). No live store or payment capture was tested. See [TESTING.md](TESTING.md) for staging checks.

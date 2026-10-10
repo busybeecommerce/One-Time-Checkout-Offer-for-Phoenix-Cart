@@ -47,9 +47,21 @@ function checkout_offer_appearance_fields(): array
         'image_height' => ['type' => 'number', 'default' => 140, 'min' => 60, 'max' => 300],
         'font_size' => ['type' => 'number', 'default' => 16, 'min' => 12, 'max' => 24],
         'columns' => ['type' => 'number', 'default' => 3, 'min' => 1, 'max' => 4],
+        'tablet_columns' => ['type' => 'number', 'default' => 0, 'min' => 0, 'max' => 4],
+        'mobile_columns' => ['type' => 'number', 'default' => 1, 'min' => 1, 'max' => 2],
+        'image_fit' => ['type' => 'select', 'default' => 'contain', 'choices' => ['contain', 'cover']],
+        'price_alignment' => ['type' => 'select', 'default' => 'auto', 'choices' => ['auto', 'left', 'center', 'right']],
+        'button_alignment' => ['type' => 'select', 'default' => 'auto', 'choices' => ['auto', 'left', 'center', 'right']],
         'modal_width' => ['type' => 'number', 'default' => 900, 'min' => 360, 'max' => 1200],
         'button_style' => ['type' => 'select', 'default' => 'outline', 'choices' => ['outline', 'solid']],
         'shadow' => ['type' => 'select', 'default' => 'none', 'choices' => ['none', 'soft', 'strong']],
+        'button_size' => ['type' => 'select', 'default' => 'auto', 'choices' => ['auto', 'small', 'medium', 'large']],
+        'button_width' => ['type' => 'select', 'default' => 'auto', 'choices' => ['auto', 'full']],
+        'button_radius' => ['type' => 'number', 'default' => -1, 'min' => -1, 'max' => 40],
+        'button_hover_background' => ['type' => 'optional_color', 'default' => ''],
+        'button_hover_text' => ['type' => 'optional_color', 'default' => ''],
+        'card_shadow' => ['type' => 'select', 'default' => 'auto', 'choices' => ['auto', 'none', 'soft', 'strong']],
+        'button_shadow' => ['type' => 'select', 'default' => 'auto', 'choices' => ['auto', 'none', 'soft', 'strong']],
         'content_alignment' => ['type' => 'select', 'default' => 'left', 'choices' => ['left', 'center', 'right']],
         'products_alignment' => ['type' => 'select', 'default' => 'left', 'choices' => ['left', 'center', 'right']],
         'product_layout' => ['type' => 'select', 'default' => 'row', 'choices' => ['row', 'stacked']],
@@ -115,12 +127,13 @@ function checkout_offer_style(array $appearance): string
     $appearance = array_replace($appearance, $palette);
     $style = '';
     foreach (checkout_offer_appearance_fields() as $key => $field) {
-        if ('text' === $field['type'] || '' === $appearance[$key] || (in_array($key, ['heading_size', 'description_size'], true) && 0 === $appearance[$key])) {
+        if ('text' === $field['type'] || '' === $appearance[$key] || (in_array($key, ['heading_size', 'description_size', 'tablet_columns'], true) && 0 === $appearance[$key])
+            || ('button_radius' === $key && -1 === $appearance[$key]) || (in_array($key, ['price_alignment', 'button_alignment'], true) && 'auto' === $appearance[$key])) {
             continue;
         }
-        if ('select' !== $field['type'] || in_array($key, ['content_alignment', 'products_alignment', 'heading_style', 'description_style'], true)
+        if ('select' !== $field['type'] || in_array($key, ['content_alignment', 'products_alignment', 'heading_style', 'description_style', 'image_fit', 'price_alignment', 'button_alignment'], true)
             || (in_array($key, ['heading_weight', 'description_weight'], true) && 'auto' !== $appearance[$key])) {
-            $unit = 'number' === $field['type'] && 'columns' !== $key ? 'px' : '';
+            $unit = 'number' === $field['type'] && !in_array($key, ['columns', 'tablet_columns', 'mobile_columns'], true) ? 'px' : '';
             $style .= '--co-' . str_replace('_', '-', $key) . ':' . $appearance[$key] . $unit . ';';
         }
     }
