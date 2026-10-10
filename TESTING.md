@@ -2,7 +2,9 @@
 
 `node tests/alignment_browser.cjs` checks 330 combinations of Classic/all ten templates, inline/modal, Left/Centre/Right and five viewport widths (375–1736px). It measures image positioning, heading/product text, compact button placement, incomplete row alignment and equal price/button positions with and without product options. Classic inline buttons sit beneath prices consistently rather than wrapping independently within each card.
 
-Tabbed admin checks verify one visible panel, white header text, cross-tab settings submission and retained unsaved input, active-tab submission, keyboard navigation, responsive bounds and no-JavaScript access to all six panels. Row-card browser checks measure equal price and Add-button positions when one product has options and another does not.
+Tabbed admin checks verify one visible panel, white header text, cross-tab settings submission and retained unsaved input, active-tab submission, keyboard navigation, responsive bounds and no-JavaScript access to all seven panels. The User manual tab hides the settings form, has no action buttons, links to existing section IDs and keeps tables within mobile bounds. Row-card browser checks measure equal price and Add-button positions when one product has options and another does not.
+
+The runtime/manual contract checks the SHA-256 source marker in `admin/includes/manuals/checkout_offer.html` against `USER_MANUAL.md`, normalising line endings. To update the guide, edit the Markdown source and run `python scripts/build_manual.py` with the Python `Markdown` package installed. Commit the source and generated HTML together. The store needs only the packaged HTML; it does not require Python or a Markdown renderer.
 
 Run README.md automated commands. PHP tests lint package files, check manifest/contracts, exercise real Phoenix order construction and test pricing, tier boundaries, VAT, delivery tax, options and isolated acceptance. Node tests verify placement and option-price updates.
 

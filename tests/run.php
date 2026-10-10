@@ -53,6 +53,10 @@ foreach ($contracts as $file => $needles) {
 
 $manifest = file($root . '/package-manifest.txt', FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
 expect(count($manifest) === count(array_unique($manifest)), 'Duplicate manifest paths');
+$manualSource = str_replace("\r\n", "\n", file_get_contents($root . '/USER_MANUAL.md'));
+$manualHtml = file_get_contents($root . '/admin/includes/manuals/checkout_offer.html');
+expect(str_contains($manualHtml, 'USER_MANUAL.md sha256: ' . hash('sha256', $manualSource)), 'Admin manual matches its Markdown source');
+expect(!str_contains($manualHtml, 'href="INSTALL.md"') && !str_contains($manualHtml, 'href="TESTING.md"'), 'Admin manual uses internal help links');
 foreach ($manifest as $file) {
     expect(is_file($root . '/' . $file), "Missing package file: $file");
 }
