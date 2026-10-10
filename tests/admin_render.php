@@ -14,6 +14,7 @@ if (!in_array($scenario, ['install', 'setup', 'tier'], true)) {
 define('DIR_FS_CATALOG', $root . '/');
 define('SESSION_FORCE_COOKIE_USE', 'True');
 define('BOX_HEADING_REPORTS', 'Reports');
+define('BOX_HEADING_CATALOG', 'Catalog');
 define('CHECKOUT_OFFER_ENABLED', 'False');
 $_SESSION = ['sessiontoken' => 'admin-render-token'];
 $_SERVER['REQUEST_METHOD'] = 'GET';
@@ -107,7 +108,7 @@ if ('install' !== $scenario) {
 if ('install' !== $scenario) {
     $expected = array_merge($expected, ['data-co-tab="manual"', 'id="co-panel-manual"', 'id="troubleshooting"', 'Create your first offer']);
 }
-foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.7.11']) as $text) {
+foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.7.12']) as $text) {
     if (!str_contains($html, $text)) {
         throw new RuntimeException("Admin $scenario output missing: $text");
     }
@@ -117,14 +118,35 @@ if (substr_count($html, '<form') !== substr_count($html, '</form>')) {
 }
 
 $cl_box_groups = [['heading' => 'Tools', 'apps' => []]];
-require $reference . '/admin/includes/boxes/reports.php';
+require $root . '/admin/includes/languages/english/modules/boxes/catalog_checkout_offer.php';
 require $root . '/admin/includes/languages/english/modules/boxes/reports_checkout_offer.php';
-// Phoenix sorts box filenames: the legacy compatibility file is read first.
-require $root . '/admin/includes/boxes/checkout_offer.php';
-require $root . '/admin/includes/boxes/reports_checkout_offer.php';
-if (2 !== count($cl_box_groups) || 'checkout_offer.php' !== ($cl_box_groups[1]['apps'][0]['code'] ?? '')
-    || 'Checkout Offers' !== $cl_box_groups[1]['apps'][0]['title']) {
-    throw new RuntimeException('Checkout Offers must join Reports without another top-level menu.');
+// Use Phoenix's ascending filename loading order with all legacy files installed.
+$boxes = [
+    'catalog.php' => $reference . '/admin/includes/boxes/catalog.php',
+    'reports.php' => $reference . '/admin/includes/boxes/reports.php',
+];
+foreach (glob($root . '/admin/includes/boxes/*.php') as $file) {
+    $boxes[basename($file)] = $file;
+}
+uksort($boxes, 'strnatcasecmp');
+foreach ($boxes as $file) {
+    require $file;
+}
+// An accidental repeated inclusion must not add a duplicate application.
+require $root . '/admin/includes/boxes/catalog_checkout_offer.php';
+$offerGroups = [];
+foreach ($cl_box_groups as $group) {
+    foreach ($group['apps'] as $app) {
+        if ('checkout_offer.php' === $app['code']) {
+            $offerGroups[] = $group['heading'];
+            if ('Checkout Offers' !== $app['title'] || !str_contains((string)$app['link'], 'checkout_offer.php')) {
+                throw new RuntimeException('Catalog offer registration has an incorrect title/link.');
+            }
+        }
+    }
+}
+if (3 !== count($cl_box_groups) || ['Catalog'] !== $offerGroups) {
+    throw new RuntimeException('Checkout Offers must register once in Catalog and never in Reports/legacy menus.');
 }
 file_put_contents($root . '/build/admin-' . $scenario . '.html', $html);
-echo "Admin $scenario rendering passed with real Phoenix Form/Href; Reports menu passed.\n";
+echo "Admin $scenario rendering passed with real Phoenix Form/Href; Catalog and inert legacy menus passed.\n";

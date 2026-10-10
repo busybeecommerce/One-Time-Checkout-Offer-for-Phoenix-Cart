@@ -141,44 +141,50 @@
     .checkout-offer-admin .co-admin-panel { padding: 1rem; }
 }
 
-/* The manual is independent of the settings form and uses native disclosures. */
+/* One set of native topic disclosures; JavaScript adds a shared reading pane. */
 .checkout-offer-admin .co-admin-manual { max-width: none; }
-.checkout-offer-admin .co-manual-nav { margin: 1.5rem 0; }
-.checkout-offer-admin .co-manual-nav h3 { margin-top: 0; }
-.checkout-offer-admin .co-manual-nav ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; max-width: none; padding: 0; list-style: none; counter-reset: manual-task; }
-.checkout-offer-admin .co-manual-nav li { margin: 0; counter-increment: manual-task; }
-.checkout-offer-admin .co-manual-nav a { display: flex; align-items: center; gap: .65rem; height: 100%; padding: .75rem; border: 1px solid var(--co-admin-border); border-radius: .5rem; background: #fff; color: #713900; font-size: .85rem; text-decoration: none; }
-.checkout-offer-admin .co-manual-nav a::before { content: counter(manual-task); display: grid; place-items: center; flex: 0 0 1.6rem; height: 1.6rem; border-radius: 50%; background: #fff0dc; font-weight: 700; }
-.checkout-offer-admin .co-manual-nav a:hover { background: #fff8ef; border-color: #b95500; }
-.checkout-offer-admin .co-manual-quick { padding: 1.5rem; margin: 1.25rem 0; border: 1px solid #e6bf8d; border-left: 5px solid #b95500; border-radius: .6rem; background: #fff8ef; scroll-margin-top: 1rem; }
-.checkout-offer-admin .co-manual-kicker { color: #914400; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
-.checkout-offer-admin .co-manual-quick h3 { margin-top: .5rem; border: 0; font-size: 1.2rem; }
-.checkout-offer-admin .co-manual-task { margin: .65rem 0; border: 1px solid var(--co-admin-border); border-radius: .5rem; background: #fff; scroll-margin-top: 1rem; }
-.checkout-offer-admin .co-manual-task summary { padding: 1rem; cursor: pointer; color: #713900; }
-.checkout-offer-admin .co-manual-task summary h3 { display: inline; margin: 0; padding: 0; border: 0; font-size: .95rem; }
-.checkout-offer-admin .co-manual-task summary span { float: right; color: #52606d; font-size: .8rem; }
-.checkout-offer-admin .co-manual-task[open] summary { border-bottom: 1px solid var(--co-admin-border); background: #fff8ef; }
-.checkout-offer-admin .co-manual-detail { padding: 1.25rem; }
+.checkout-offer-admin .co-manual-header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; margin-bottom: .75rem; }
+.checkout-offer-admin .co-manual-header h2 { margin: .2rem 0; font-size: 1.4rem; font-weight: 700; }
+.checkout-offer-admin .co-manual-header p { margin: 0; font-size: .85rem; color: #52606d; }
+.checkout-offer-admin .co-manual-kicker { color: #914400; font-size: .7rem; font-weight: 700; text-transform: uppercase; letter-spacing: .06em; }
+.checkout-offer-admin .co-manual-search { flex: 0 1 22rem; }
+.checkout-offer-admin .co-manual-search label { display: block; font-size: .75rem; font-weight: 700; margin-bottom: .25rem; }
+.checkout-offer-admin .co-manual-search input { width: 100%; padding: .55rem .75rem; border: 1px solid #8795a3; border-radius: .5rem; background: #fff; font-size: .85rem; }
+.checkout-offer-admin .co-manual-search p { margin-top: .25rem; font-size: .7rem; }
+.checkout-offer-admin .co-manual-tools { display: flex; gap: .75rem; align-items: center; margin-bottom: 1rem; }
+.checkout-offer-admin .co-manual-tools a { color: #713900; font-size: .8rem; }
+.checkout-offer-admin .co-manual-home { padding: .35rem .75rem; border: 1px solid #dbbb95; border-radius: 2rem; background: #fff8ef; color: #713900; font-size: .8rem; font-weight: 600; }
+.checkout-offer-admin .co-manual-reader { min-width: 0; padding: 1.5rem; border: 1px solid #e6d4bd; border-radius: .75rem; background: #fff; scroll-margin-top: 1rem; margin-bottom: 1rem; }
+.checkout-offer-admin .co-manual-reader h3:first-of-type { margin-top: .4rem; }
+.checkout-offer-admin .co-manual-welcome { padding: .25rem; }
+.checkout-offer-admin .co-manual-welcome > h3 { border: 0; font-size: 1.4rem; }
+.checkout-offer-admin .co-manual-welcome > ol { display: grid; gap: .6rem; padding: 0; list-style: none; counter-reset: quick-step; max-width: none; }
+.checkout-offer-admin .co-manual-welcome > ol > li { counter-increment: quick-step; margin: 0; padding: .85rem 1rem .85rem 3.5rem; position: relative; border: 1px solid #ecd9bd; border-radius: .6rem; background: #fff8ef; font-size: .9rem; }
+.checkout-offer-admin .co-manual-welcome > ol > li::before { content: counter(quick-step); position: absolute; left: .9rem; top: .85rem; display: grid; place-items: center; width: 1.8rem; height: 1.8rem; background: #914400; color: #fff; border-radius: 50%; font-weight: 700; }
+.checkout-offer-admin .co-manual-reader a, .checkout-offer-admin .co-manual-detail a { color: #713900; }
+.checkout-offer-admin .co-manual-about { margin-top: 1.5rem; padding-top: .75rem; border-top: 1px solid var(--co-admin-border); }
+.checkout-offer-admin .co-manual-about summary { cursor: pointer; font-size: .8rem; color: #52606d; }
+.checkout-offer-admin .co-manual-about p { font-size: .85rem; margin-top: .75rem; }
+.checkout-offer-admin .co-manual-topics { min-width: 0; scroll-margin-top: 1rem; }
+.checkout-offer-admin .co-manual-group { margin-bottom: .9rem; }
+.checkout-offer-admin .co-manual-group > h3 { margin: 0 0 .4rem; padding: 0; border: 0; font-size: .7rem; color: #52606d; text-transform: uppercase; letter-spacing: .05em; }
+.checkout-offer-admin .co-manual-task { border: 1px solid var(--co-admin-border); background: #fff; border-radius: .5rem; margin-bottom: .3rem; scroll-margin-top: 1rem; }
+.checkout-offer-admin .co-manual-task summary { cursor: pointer; padding: .5rem .65rem; color: #334155; font-size: .82rem; font-weight: 600; }
+.checkout-offer-admin .co-manual-task summary:hover { background: #fff8ef; border-radius: .5rem; }
+.checkout-offer-admin .co-manual-task[open] > summary { background: #914400; color: #fff; border-radius: .45rem; }
+.checkout-offer-admin .co-manual-detail { padding: 1rem; font-size: .9rem; }
 .checkout-offer-admin .co-manual-detail > :last-child { margin-bottom: 0; }
-.checkout-offer-admin .co-manual-search { padding: 1rem; background: #f4f6f8; border-radius: .5rem; }
-.checkout-offer-admin .co-manual-search label { display: block; font-weight: 700; font-size: .9rem; }
-.checkout-offer-admin .co-manual-search input { width: 100%; max-width: 32rem; padding: .6rem .75rem; border: 1px solid #8795a3; border-radius: .3rem; background: #fff; }
-.checkout-offer-admin .co-manual-search p { margin: .4rem 0 0; font-size: .85rem; color: #52606d; }
+.checkout-offer-admin .co-manual-enhanced .co-manual-grid { display: grid; grid-template-columns: 18rem minmax(0, 1fr); gap: 1.25rem; align-items: start; }
+.checkout-offer-admin .co-manual-enhanced .co-manual-topics { grid-column: 1; grid-row: 1; padding: .75rem; background: #f5f6f8; border-radius: .75rem; }
+.checkout-offer-admin .co-manual-enhanced .co-manual-reader { grid-column: 2; grid-row: 1; min-height: 34rem; max-height: 68vh; overflow-y: auto; }
+.checkout-offer-admin .co-manual-enhanced .co-manual-reader > .co-manual-detail { padding: 0; }
 .checkout-offer-admin .co-admin-manual [hidden] { display: none; }
-.checkout-offer-admin .co-admin-manual a:focus-visible, .checkout-offer-admin .co-admin-manual summary:focus-visible, .checkout-offer-admin .co-admin-manual input:focus-visible, .checkout-offer-admin .co-manual-table:focus-visible { outline: 3px solid #914400; outline-offset: 3px; }
+.checkout-offer-admin .co-admin-manual a:focus-visible, .checkout-offer-admin .co-admin-manual summary:focus-visible, .checkout-offer-admin .co-admin-manual input:focus-visible, .checkout-offer-admin .co-admin-manual button:focus-visible, .checkout-offer-admin .co-manual-reader:focus-visible, .checkout-offer-admin .co-manual-table:focus-visible { outline: 3px solid #914400; outline-offset: 3px; }
 @media (max-width: 767px) {
-    .checkout-offer-admin .co-manual-nav ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
-    .checkout-offer-admin .co-manual-task summary span { display: none; }
+    .checkout-offer-admin .co-manual-header { display: block; }
+    .checkout-offer-admin .co-manual-search { margin-top: .75rem; }
+    .checkout-offer-admin .co-manual-reader { padding: 1rem; }
+    .checkout-offer-admin .co-manual-enhanced .co-manual-grid { display: flex; flex-direction: column; gap: 0; }
+    .checkout-offer-admin .co-manual-enhanced .co-manual-reader { width: 100%; min-height: 0; max-height: none; overflow: visible; }
+    .checkout-offer-admin .co-manual-enhanced .co-manual-topics { width: 100%; }
 }
-@media (max-width: 575px) {
-    .checkout-offer-admin .co-manual-nav ol { grid-template-columns: 1fr; }
-    .checkout-offer-admin .co-manual-quick, .checkout-offer-admin .co-manual-detail { padding: 1rem; }
-}
-@media (min-width: 768px) {
-    .checkout-offer-admin .co-manual-quick ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem 2rem; max-width: none; }
-}
-.checkout-offer-admin .co-manual-about { max-width: 76ch; margin-bottom: .65rem; }
-.checkout-offer-admin .co-manual-about summary { cursor: pointer; font-size: .85rem; font-weight: 600; color: #713900; }
-.checkout-offer-admin .co-manual-about p { margin: .65rem 0; }
-.checkout-offer-admin .co-manual-browse { display: inline-block; margin-bottom: 1rem; color: #713900; font-weight: 600; font-size: .85rem; }
-.checkout-offer-admin .co-manual-nav { scroll-margin-top: 1rem; }

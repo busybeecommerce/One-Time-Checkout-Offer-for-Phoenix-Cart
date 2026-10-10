@@ -1,10 +1,10 @@
-# One-Time Checkout Offer: User Manual
+# User manual
 
-For store owners and administrators using version **1.7.11**. Open **Reports → Checkout Offers → User manual** to read this guide inside administration.
+For store owners and administrators using version **1.7.12**. Open **Catalog → Checkout Offers → User manual** to read this guide inside administration.
 
 The add-on shows eligible customers discounted products at the payment step of checkout. You choose the basket-value ranges, products, offer prices and presentation. Customers can add one unit of each offered product to their current order or continue without accepting an offer.
 
-Use **Find a task** to jump to a topic, then expand its guide. The quick start stays open. Search filters guide sections locally and opens matching details; clear the search to return to the full guide. Links and expandable guides also work without JavaScript. Reading help does not save or discard your unsaved settings.
+Choose a topic from the grouped guides. With JavaScript, the selected guide appears in the reading pane; search finds headings, field names and full guidance. Without JavaScript, expand a topic to read it in place. Reading help does not save or discard unsaved settings.
 
 ## Contents
 
@@ -22,13 +22,21 @@ Use **Find a task** to jump to a topic, then expand its guide. The quick start s
 12. [Troubleshooting](#troubleshooting)
 13. [Update, disable or remove the add-on](#update-disable-or-remove-the-add-on)
 
+## Quick start
+
+1. **Build your offer** — [Create a tier and add a product](#create-your-first-offer).
+2. **Make it yours** — [Choose a template](#choose-a-template) and [adjust appearance](#customise-appearance-and-alignment).
+3. **Test, then enable** — [Check checkout on staging](#check-an-offer-before-enabling-it), then enable offers in Setup.
+
+Select a guide for full instructions. Tiers/products and global settings have separate Save buttons.
+
 ## Install and open the add-on
 
 The release is tested with CE Phoenix Cart 1.1.0.6 and 1.1.0.8, using PHP 8.1 and 8.3. It requires Phoenix's standard checkout payment form and hooks. Installation does not require Phoenix core edits or an order-total module.
 
 1. Back up your store files and database, and install on a staging copy first.
 2. Extract the release ZIP. Copy its `includes/`, `ext/` and `images/` folders into your store root. Copy the contents of its `admin/` folder into your actual administration directory, including when you have renamed that directory.
-3. Open **Reports → Checkout Offers**. If necessary, grant the administrator access through your store's normal administrator permissions. You can also open `checkout_offer.php` inside your administration directory.
+3. Open **Catalog → Checkout Offers**. If necessary, grant the administrator access through your store's normal administrator permissions. You can also open `checkout_offer.php` inside your administration directory.
 4. Click **Install database tables** if the installation screen appears.
 5. Create your tiers and products before enabling offers.
 
@@ -59,7 +67,7 @@ Global offers and the individual tier must both be enabled. The offered product 
 | Custom offer text | Headings, descriptions and button/label wording. |
 | Tiers & products | Basket-value ranges and the products/prices assigned to each tier. |
 | Maintenance | Permanent removal of the add-on's configuration. |
-| User manual | Task navigation, quick start, expandable reference guides and local section search. |
+| User manual | Grouped topics, compact quick start, a selected-guide reading pane and local search. |
 
 Setup, Offer template, Appearance and Custom offer text share one settings form. You can change tabs without losing those unsaved settings, then click **Save** to store them together. Leaving or reloading the page without saving discards unsaved changes.
 
@@ -233,7 +241,7 @@ For the full technical/staging checklist, see [TESTING.md](TESTING.md). Automate
 
 | Symptom | What to check |
 | --- | --- |
-| Checkout Offers is missing from Reports | Upload the admin box/language files into the actual admin directory and check administrator permissions. |
+| Checkout Offers is missing from Catalog | Upload the admin box/language files into the actual admin directory and check administrator permissions. |
 | The installation screen still appears | Complete Install database tables and check that the add-on's tables/settings were created successfully. |
 | No offers appear | Sign in as a customer; enable offers and the tier; check the tax/delivery-inclusive base-currency range and the winning priority. The tier needs eligible active products. |
 | A configured product is missing | Check its active status, stock rules and whether it is already in the basket. Check the product rule belongs to the winning tier. |
@@ -256,7 +264,7 @@ If the problem remains, record the add-on/Phoenix versions, selected display/tem
 
 Back up the store, extract the new release and replace only the add-on files listed in `package-manifest.txt`. Upload the full package's runtime files together, including the checkout hook, stylesheets and JavaScript. Use your actual admin directory. Do not uninstall before updating; existing tiers and settings are retained.
 
-Open administration after updating, review settings and save where needed. Refresh cached assets and run the staging checks. Version 1.7.11 makes the User manual a navigable task guide with a quick start and expandable details. Upload `admin/includes/manuals/checkout_offer.html` into the matching folder inside your actual admin directory, together with the updated admin page, language file, stylesheet and JavaScript. No database migration or reinstall is required.
+Open administration after updating, review settings and save where needed. Refresh cached assets and run the staging checks. Version 1.7.12 adds the compact help workspace and moves Checkout Offers into Catalog. Upload the new Catalog box and its language file, and overwrite the retained inert Reports/legacy menu files to remove old entries. Upload `admin/includes/manuals/checkout_offer.html` into the matching folder inside your actual admin directory, together with the updated admin page, language file, stylesheet and JavaScript. No database migration or reinstall is required.
 
 ### Disable temporarily
 

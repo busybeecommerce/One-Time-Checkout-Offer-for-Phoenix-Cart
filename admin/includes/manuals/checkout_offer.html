@@ -1,12 +1,30 @@
-<!-- USER_MANUAL.md sha256: 722ac81ba60dfd695eb4f8c075000e6b148e9ccb9ad9a57adbc4b581efb6149f -->
-<h2 id="one-time-checkout-offer-user-manual">One-Time Checkout Offer: User Manual</h2>
-<p>For store owners and administrators using version <strong>1.7.11</strong>. Open <strong>Reports → Checkout Offers → User manual</strong> to read this guide inside administration.</p>
-<details class="co-manual-about"><summary>About this guide</summary><p>The add-on shows eligible customers discounted products at the payment step of checkout. You choose the basket-value ranges, products, offer prices and presentation. Customers can add one unit of each offered product to their current order or continue without accepting an offer.</p>
-<p>Use <strong>Find a task</strong> to jump to a topic, then expand its guide. The quick start stays open. Search filters guide sections locally and opens matching details; clear the search to return to the full guide. Links and expandable guides also work without JavaScript. Reading help does not save or discard your unsaved settings.</p></details>
-<a class="co-manual-browse" href="#co-manual-navigation">Browse all tasks ↓</a>
-<div class="co-manual-search" hidden><label for="co-manual-query">Search this guide</label><input id="co-manual-query" type="search" placeholder="Try pricing, stock or alignment" aria-controls="co-manual-tasks"><p role="status" aria-live="polite"></p></div>
-<div id="co-manual-tasks">
-<section class="co-manual-quick" id="create-your-first-offer" tabindex="-1"><span class="co-manual-kicker">Quick start · your first offer</span><h3>Create your first offer</h3><p>This example offers an accessory at a 10% discount when the qualifying basket value is at least 50 but less than 100 in your store's base currency.</p>
+<!-- USER_MANUAL.md sha256: 6246cac4408305acd013166e48cd98478b7ad3e588c6402d6ab626ddf1a8cefc -->
+<header class="co-manual-header"><div><span class="co-manual-kicker">Checkout Offers · Help centre</span><h2 id="user-manual">User manual</h2><p>Set up, style and maintain your checkout offers.</p></div>
+<div class="co-manual-search" hidden><label for="co-manual-query">Find help</label><input id="co-manual-query" type="search" placeholder="Search pricing, stock, alignment…" aria-controls="co-manual-topics"><p role="status" aria-live="polite"></p></div></header>
+<div class="co-manual-tools"><button type="button" class="co-manual-home" hidden>Quick start</button><a href="#co-manual-topics">Browse topics ↓</a></div>
+<div class="co-manual-grid"><section class="co-manual-reader" id="co-manual-reader" tabindex="-1" role="region" aria-label="Getting started"><div class="co-manual-welcome">
+<span class="co-manual-kicker">Your first offer in three steps</span><h3 id="quick-start">Quick start</h3>
+<ol>
+<li><strong>Build your offer</strong> — <a href="#create-your-first-offer">Create a tier and add a product</a>.</li>
+<li><strong>Make it yours</strong> — <a href="#choose-a-template">Choose a template</a> and <a href="#customise-appearance-and-alignment">adjust appearance</a>.</li>
+<li><strong>Test, then enable</strong> — <a href="#check-an-offer-before-enabling-it">Check checkout on staging</a>, then enable offers in Setup.</li>
+</ol>
+<p>Select a guide for full instructions. Tiers/products and global settings have separate Save buttons.</p>
+<details class="co-manual-about"><summary>About this add-on and guide</summary><p>For store owners and administrators using version <strong>1.7.12</strong>. Open <strong>Catalog → Checkout Offers → User manual</strong> to read this guide inside administration.</p>
+<p>The add-on shows eligible customers discounted products at the payment step of checkout. You choose the basket-value ranges, products, offer prices and presentation. Customers can add one unit of each offered product to their current order or continue without accepting an offer.</p>
+<p>Choose a topic from the grouped guides. With JavaScript, the selected guide appears in the reading pane; search finds headings, field names and full guidance. Without JavaScript, expand a topic to read it in place. Reading help does not save or discard unsaved settings.</p></details></div></section>
+<div id="co-manual-topics" tabindex="-1" class="co-manual-topics" aria-label="Guide topics">
+<section class="co-manual-group"><h3>Get started</h3>
+<details class="co-manual-task" id="install-and-open-the-add-on"><summary id="co-guide-install-and-open-the-add-on">Install and open the add-on</summary><div class="co-manual-detail"><h3>Install and open the add-on</h3><p>The release is tested with CE Phoenix Cart 1.1.0.6 and 1.1.0.8, using PHP 8.1 and 8.3. It requires Phoenix's standard checkout payment form and hooks. Installation does not require Phoenix core edits or an order-total module.</p>
+<ol>
+<li>Back up your store files and database, and install on a staging copy first.</li>
+<li>Extract the release ZIP. Copy its <code>includes/</code>, <code>ext/</code> and <code>images/</code> folders into your store root. Copy the contents of its <code>admin/</code> folder into your actual administration directory, including when you have renamed that directory.</li>
+<li>Open <strong>Catalog → Checkout Offers</strong>. If necessary, grant the administrator access through your store's normal administrator permissions. You can also open <code>checkout_offer.php</code> inside your administration directory.</li>
+<li>Click <strong>Install database tables</strong> if the installation screen appears.</li>
+<li>Create your tiers and products before enabling offers.</li>
+</ol>
+<p>Documentation files can stay on your computer; they do not need to be uploaded to the public store. See <a href="#install-and-open-the-add-on">INSTALL.md</a> for installation and upgrade details.</p></div></details>
+<details class="co-manual-task" id="create-your-first-offer"><summary id="co-guide-create-your-first-offer">Create your first offer</summary><div class="co-manual-detail"><h3>Create your first offer</h3><p>This example offers an accessory at a 10% discount when the qualifying basket value is at least 50 but less than 100 in your store's base currency.</p>
 <ol>
 <li>Open <strong>Tiers &amp; products</strong>, then choose <strong>New tier</strong>.</li>
 <li>Enter a <strong>Title</strong>, such as <code>Basket 50–100</code>. This is an administrative label; the storefront heading is configured separately.</li>
@@ -17,32 +35,8 @@
 <li>Choose your template, appearance and wording in their tabs. Click the settings <strong>Save</strong> button.</li>
 <li>Test the offer on staging using a signed-in customer with an eligible basket. Once satisfied, select <strong>Enabled</strong> under Setup and save to activate offers. You can enable it on staging while testing.</li>
 </ol>
-<p>Global offers and the individual tier must both be enabled. The offered product must be eligible and must not already be in the customer's basket.</p></section>
-<nav class="co-manual-nav" id="co-manual-navigation" tabindex="-1" aria-label="Manual tasks"><h3>Find a task</h3><ol>
-<li><a href="#install-and-open-the-add-on">Install and open the add-on</a></li>
-<li><a href="#create-your-first-offer">Create your first offer</a></li>
-<li><a href="#use-the-administration-tabs">Use the administration tabs</a></li>
-<li><a href="#set-basket-value-tiers">Set basket-value tiers</a></li>
-<li><a href="#add-products-and-offer-prices">Add products and offer prices</a></li>
-<li><a href="#choose-inline-or-modal-display">Choose inline or modal display</a></li>
-<li><a href="#choose-a-template">Choose a template</a></li>
-<li><a href="#customise-appearance-and-alignment">Customise appearance and alignment</a></li>
-<li><a href="#change-the-wording">Change the wording</a></li>
-<li><a href="#understand-the-customer-checkout-journey">Understand the customer checkout journey</a></li>
-<li><a href="#check-an-offer-before-enabling-it">Check an offer before enabling it</a></li>
-<li><a href="#troubleshooting">Troubleshooting</a></li>
-<li><a href="#update-disable-or-remove-the-add-on">Update, disable or remove the add-on</a></li>
-</ol></nav>
-<details class="co-manual-task" id="install-and-open-the-add-on"><summary><h3>Install and open the add-on</h3><span>View guide</span></summary><div class="co-manual-detail"><p>The release is tested with CE Phoenix Cart 1.1.0.6 and 1.1.0.8, using PHP 8.1 and 8.3. It requires Phoenix's standard checkout payment form and hooks. Installation does not require Phoenix core edits or an order-total module.</p>
-<ol>
-<li>Back up your store files and database, and install on a staging copy first.</li>
-<li>Extract the release ZIP. Copy its <code>includes/</code>, <code>ext/</code> and <code>images/</code> folders into your store root. Copy the contents of its <code>admin/</code> folder into your actual administration directory, including when you have renamed that directory.</li>
-<li>Open <strong>Reports → Checkout Offers</strong>. If necessary, grant the administrator access through your store's normal administrator permissions. You can also open <code>checkout_offer.php</code> inside your administration directory.</li>
-<li>Click <strong>Install database tables</strong> if the installation screen appears.</li>
-<li>Create your tiers and products before enabling offers.</li>
-</ol>
-<p>Documentation files can stay on your computer; they do not need to be uploaded to the public store. See <a href="#install-and-open-the-add-on">INSTALL.md</a> for installation and upgrade details.</p></div></details>
-<details class="co-manual-task" id="use-the-administration-tabs"><summary><h3>Use the administration tabs</h3><span>View guide</span></summary><div class="co-manual-detail"><div class="co-manual-table" tabindex="0" role="region" aria-label="Reference table"><table>
+<p>Global offers and the individual tier must both be enabled. The offered product must be eligible and must not already be in the customer's basket.</p></div></details>
+<details class="co-manual-task" id="use-the-administration-tabs"><summary id="co-guide-use-the-administration-tabs">Use the administration tabs</summary><div class="co-manual-detail"><h3>Use the administration tabs</h3><div class="co-manual-table" tabindex="0" role="region" aria-label="Reference table"><table>
 <thead>
 <tr>
 <th>Tab</th>
@@ -76,13 +70,15 @@
 </tr>
 <tr>
 <td>User manual</td>
-<td>Task navigation, quick start, expandable reference guides and local section search.</td>
+<td>Grouped topics, compact quick start, a selected-guide reading pane and local search.</td>
 </tr>
 </tbody>
 </table></div>
 <p>Setup, Offer template, Appearance and Custom offer text share one settings form. You can change tabs without losing those unsaved settings, then click <strong>Save</strong> to store them together. Leaving or reloading the page without saving discards unsaved changes.</p>
 <p>Tier and product forms have their own <strong>Save</strong> buttons. Save each edited tier or product rule separately. Saving the appearance settings does not save a tier or product form.</p></div></details>
-<details class="co-manual-task" id="set-basket-value-tiers"><summary><h3>Set basket-value tiers</h3><span>View guide</span></summary><div class="co-manual-detail"><p>The qualifying value includes products, product tax, delivery and delivery tax. Tier amounts use the <strong>store base currency</strong>, even when a customer shops in another currency. This qualifying amount is not necessarily the final payable total after other order-total adjustments.</p>
+</section>
+<section class="co-manual-group"><h3>Offers &amp; pricing</h3>
+<details class="co-manual-task" id="set-basket-value-tiers"><summary id="co-guide-set-basket-value-tiers">Set basket-value tiers</summary><div class="co-manual-detail"><h3>Set basket-value tiers</h3><p>The qualifying value includes products, product tax, delivery and delivery tax. Tier amounts use the <strong>store base currency</strong>, even when a customer shops in another currency. This qualifying amount is not necessarily the final payable total after other order-total adjustments.</p>
 <div class="co-manual-table" tabindex="0" role="region" aria-label="Reference table"><table>
 <thead>
 <tr>
@@ -117,7 +113,7 @@
 <p>For adjacent ranges, use the same boundary: <code>0–50</code>, <code>50–100</code>, and <code>100–unlimited</code>. Exactly 50 belongs to the second range; exactly 100 belongs to the third.</p>
 <p>When ranges overlap, the highest numeric priority wins. If priorities are equal, the lowest tier ID wins. Products come from the winning tier; the add-on does not combine all matching tiers. A winning tier with no eligible products does not show offers from a lower-priority tier.</p>
 <p>Select a tier to edit its settings and assigned products. To pause one tier, clear its <strong>Enabled</strong> checkbox and save. <strong>Delete</strong> removes that tier and its product rules; use disable when you want to keep the configuration.</p></div></details>
-<details class="co-manual-task" id="add-products-and-offer-prices"><summary><h3>Add products and offer prices</h3><span>View guide</span></summary><div class="co-manual-detail"><p>Save or select a tier before adding products. In <strong>Add a product</strong>, enter an active product's numeric catalogue ID, choose the pricing method and save. Each product can appear once within a tier. The same product may have separate rules in different tiers.</p>
+<details class="co-manual-task" id="add-products-and-offer-prices"><summary id="co-guide-add-products-and-offer-prices">Add products and offer prices</summary><div class="co-manual-detail"><h3>Add products and offer prices</h3><p>Save or select a tier before adding products. In <strong>Add a product</strong>, enter an active product's numeric catalogue ID, choose the pricing method and save. Each product can appear once within a tier. The same product may have separate rules in different tiers.</p>
 <p>Existing product rules remain editable under the selected tier. Use a rule's <strong>Save</strong> button after changing its product, pricing method or value. Its <strong>Delete</strong> button removes only that rule.</p>
 <h4 id="fixed-unit-price-excluding-tax">Fixed unit price excluding tax</h4>
 <p>Enter the final offer unit price <strong>before tax</strong>, in base currency. The fixed price includes the selected product options; their surcharges are not added again to the fixed offer price. Phoenix applies the appropriate tax and currency display.</p>
@@ -127,7 +123,20 @@
 <p>For example, a pre-tax product price of 10 plus a 2 option adjustment gives a normal option-inclusive price of 12. A 10% discount gives a pre-tax offer price of 10.80.</p>
 <p>Offers never increase the normal price. If a fixed offer value exceeds the normal option-inclusive price, the normal price is retained. A 0% discount gives no reduction; 100% reduces the offer price to zero.</p>
 <p>Only one unit of each offered product can be accepted. Products already in the basket are hidden. Inactive products are hidden, and stock availability is checked when the store's stock checking is enabled. Keep offer products and their stock up to date.</p></div></details>
-<details class="co-manual-task" id="choose-inline-or-modal-display"><summary><h3>Choose inline or modal display</h3><span>View guide</span></summary><div class="co-manual-detail"><p>Under <strong>Setup → Offer display</strong>, choose an option and save.</p>
+<details class="co-manual-task" id="understand-the-customer-checkout-journey"><summary id="co-guide-understand-the-customer-checkout-journey">Understand the customer checkout journey</summary><div class="co-manual-detail"><h3>Understand the customer checkout journey</h3><ol>
+<li>A signed-in customer reaches the payment page with an eligible basket.</li>
+<li>The add-on selects one enabled tier and shows its eligible products with option selectors where needed.</li>
+<li>With JavaScript available, choosing an option updates the normal price, offer price and saving shown on the card.</li>
+<li>The customer clicks an Add button. The server checks eligibility, the selected options and stock rules, then adds one unit.</li>
+<li>The customer returns to the delivery step. Delivery is recalculated for the changed basket, and the payment selection must be reviewed again.</li>
+<li>The first acceptance locks the offer tier to that basket. Remaining products from the same tier may still be accepted; accepting an offer does not switch the customer to another tier.</li>
+<li>Phoenix recalculates the discounted lines and taxes during confirmation and order processing.</li>
+</ol>
+<p>Changing other basket contents, quantities, product options, the customer or the currency invalidates the saved acceptance. Accepted products remain in the basket at their normal prices and the customer must review checkout again. A completed order empties the basket and ends the acceptance.</p>
+<p>The offer is limited to the current checkout. It does not create a catalogue-wide special or a coupon. Disabling/deleting the tier or its product rule removes the associated discount entitlement for a checkout in progress. Historical orders keep the prices saved when they were placed.</p></div></details>
+</section>
+<section class="co-manual-group"><h3>Design &amp; wording</h3>
+<details class="co-manual-task" id="choose-inline-or-modal-display"><summary id="co-guide-choose-inline-or-modal-display">Choose inline or modal display</summary><div class="co-manual-detail"><h3>Choose inline or modal display</h3><p>Under <strong>Setup → Offer display</strong>, choose an option and save.</p>
 <div class="co-manual-table" tabindex="0" role="region" aria-label="Reference table"><table>
 <thead>
 <tr>
@@ -148,7 +157,7 @@
 </table></div>
 <p>Customers can dismiss the modal using its corner close button, Escape, the backdrop or the continue-checkout button. Dismissing it closes it for the current page entry; it can open again on the next eligible visit. There is no separate offer launcher and no remembered browser-storage suppression.</p>
 <p>Without JavaScript or native dialog support, modal offers fall back to inline content and customers can still add products. Without JavaScript, the inline panel stays at its original checkout hook position and displayed prices do not recalculate immediately when options change; the server still validates options and calculates the accepted price.</p></div></details>
-<details class="co-manual-task" id="choose-a-template"><summary><h3>Choose a template</h3><span>View guide</span></summary><div class="co-manual-detail"><p>Open <strong>Offer template</strong>, select a design and save. The choices are:</p>
+<details class="co-manual-task" id="choose-a-template"><summary id="co-guide-choose-a-template">Choose a template</summary><div class="co-manual-detail"><h3>Choose a template</h3><p>Open <strong>Offer template</strong>, select a design and save. The choices are:</p>
 <ul>
 <li>No template / Custom</li>
 <li>Red special offer</li>
@@ -164,7 +173,7 @@
 </ul>
 <p>Predefined templates supply their own palette, solid buttons and thumbnail sizing. Manual values for those template-controlled properties are retained but may not be visible while the design is selected. To return to your manual appearance, select <strong>No template / Custom</strong> and save.</p>
 <p>Layout, alignment, spacing, corners, text size and modal width remain configurable with a predefined template. Heading/image background overrides and heading/description typography also work with templates. The Classic modal has no separate header strip; styled designs have a promotional banner.</p></div></details>
-<details class="co-manual-task" id="customise-appearance-and-alignment"><summary><h3>Customise appearance and alignment</h3><span>View guide</span></summary><div class="co-manual-detail"><p>Open <strong>Appearance</strong>, change the required settings and save. Check the actual checkout at desktop and phone widths after making changes.</p>
+<details class="co-manual-task" id="customise-appearance-and-alignment"><summary id="co-guide-customise-appearance-and-alignment">Customise appearance and alignment</summary><div class="co-manual-detail"><h3>Customise appearance and alignment</h3><p>Open <strong>Appearance</strong>, change the required settings and save. Check the actual checkout at desktop and phone widths after making changes.</p>
 <h4 id="layout-and-alignment">Layout and alignment</h4>
 <div class="co-manual-table" tabindex="0" role="region" aria-label="Reference table"><table>
 <thead>
@@ -258,7 +267,7 @@
 </tbody>
 </table></div>
 <p>Choose <strong>Outline</strong> or <strong>Solid</strong> buttons when using your custom design. Shadow choices are None, Soft and Strong.</p></div></details>
-<details class="co-manual-task" id="change-the-wording"><summary><h3>Change the wording</h3><span>View guide</span></summary><div class="co-manual-detail"><p>Use <strong>Custom offer text</strong>, then save. Leave a field blank to use its predefined wording. Text is plain text: HTML tags are displayed as text rather than used for formatting. Description line breaks are preserved.</p>
+<details class="co-manual-task" id="change-the-wording"><summary id="co-guide-change-the-wording">Change the wording</summary><div class="co-manual-detail"><h3>Change the wording</h3><p>Use <strong>Custom offer text</strong>, then save. Leave a field blank to use its predefined wording. Text is plain text: HTML tags are displayed as text rather than used for formatting. Description line breaks are preserved.</p>
 <div class="co-manual-table" tabindex="0" role="region" aria-label="Reference table"><table>
 <thead>
 <tr>
@@ -306,18 +315,9 @@
 </tbody>
 </table></div>
 <p>Changing labels does not change the action of the buttons. Keep Add and Continue wording clear so customers understand whether they are adding a product or dismissing the offer.</p></div></details>
-<details class="co-manual-task" id="understand-the-customer-checkout-journey"><summary><h3>Understand the customer checkout journey</h3><span>View guide</span></summary><div class="co-manual-detail"><ol>
-<li>A signed-in customer reaches the payment page with an eligible basket.</li>
-<li>The add-on selects one enabled tier and shows its eligible products with option selectors where needed.</li>
-<li>With JavaScript available, choosing an option updates the normal price, offer price and saving shown on the card.</li>
-<li>The customer clicks an Add button. The server checks eligibility, the selected options and stock rules, then adds one unit.</li>
-<li>The customer returns to the delivery step. Delivery is recalculated for the changed basket, and the payment selection must be reviewed again.</li>
-<li>The first acceptance locks the offer tier to that basket. Remaining products from the same tier may still be accepted; accepting an offer does not switch the customer to another tier.</li>
-<li>Phoenix recalculates the discounted lines and taxes during confirmation and order processing.</li>
-</ol>
-<p>Changing other basket contents, quantities, product options, the customer or the currency invalidates the saved acceptance. Accepted products remain in the basket at their normal prices and the customer must review checkout again. A completed order empties the basket and ends the acceptance.</p>
-<p>The offer is limited to the current checkout. It does not create a catalogue-wide special or a coupon. Disabling/deleting the tier or its product rule removes the associated discount entitlement for a checkout in progress. Historical orders keep the prices saved when they were placed.</p></div></details>
-<details class="co-manual-task" id="check-an-offer-before-enabling-it"><summary><h3>Check an offer before enabling it</h3><span>View guide</span></summary><div class="co-manual-detail"><p>Use a staging store and test a signed-in customer account.</p>
+</section>
+<section class="co-manual-group"><h3>Check &amp; maintain</h3>
+<details class="co-manual-task" id="check-an-offer-before-enabling-it"><summary id="co-guide-check-an-offer-before-enabling-it">Check an offer before enabling it</summary><div class="co-manual-detail"><h3>Check an offer before enabling it</h3><p>Use a staging store and test a signed-in customer account.</p>
 <ol>
 <li>Check values just below, exactly at and just above each tier boundary. Include delivery and tax when preparing the basket.</li>
 <li>Check overlapping tiers and priorities, and confirm the intended winning tier has eligible products.</li>
@@ -329,7 +329,7 @@
 <li>Complete a test order using each supported payment route, and check the saved line prices, tax and order total.</li>
 </ol>
 <p>For the full technical/staging checklist, see <a href="#check-an-offer-before-enabling-it">TESTING.md</a>. Automated release checks do not replace installation and payment testing on your own store and theme.</p></div></details>
-<details class="co-manual-task" id="troubleshooting"><summary><h3>Troubleshooting</h3><span>View guide</span></summary><div class="co-manual-detail"><div class="co-manual-table" tabindex="0" role="region" aria-label="Reference table"><table>
+<details class="co-manual-task" id="troubleshooting"><summary id="co-guide-troubleshooting">Troubleshooting</summary><div class="co-manual-detail"><h3>Troubleshooting</h3><div class="co-manual-table" tabindex="0" role="region" aria-label="Reference table"><table>
 <thead>
 <tr>
 <th>Symptom</th>
@@ -338,7 +338,7 @@
 </thead>
 <tbody>
 <tr>
-<td>Checkout Offers is missing from Reports</td>
+<td>Checkout Offers is missing from Catalog</td>
 <td>Upload the admin box/language files into the actual admin directory and check administrator permissions.</td>
 </tr>
 <tr>
@@ -396,9 +396,9 @@
 </tbody>
 </table></div>
 <p>If the problem remains, record the add-on/Phoenix versions, selected display/template/layout, tier boundaries and priority, product IDs, browser width and the checkout step. Include a screenshot and relevant error-log entry when seeking support.</p></div></details>
-<details class="co-manual-task" id="update-disable-or-remove-the-add-on"><summary><h3>Update, disable or remove the add-on</h3><span>View guide</span></summary><div class="co-manual-detail"><h4 id="update">Update</h4>
+<details class="co-manual-task" id="update-disable-or-remove-the-add-on"><summary id="co-guide-update-disable-or-remove-the-add-on">Update, disable or remove the add-on</summary><div class="co-manual-detail"><h3>Update, disable or remove the add-on</h3><h4 id="update">Update</h4>
 <p>Back up the store, extract the new release and replace only the add-on files listed in <code>package-manifest.txt</code>. Upload the full package's runtime files together, including the checkout hook, stylesheets and JavaScript. Use your actual admin directory. Do not uninstall before updating; existing tiers and settings are retained.</p>
-<p>Open administration after updating, review settings and save where needed. Refresh cached assets and run the staging checks. Version 1.7.11 makes the User manual a navigable task guide with a quick start and expandable details. Upload <code>admin/includes/manuals/checkout_offer.html</code> into the matching folder inside your actual admin directory, together with the updated admin page, language file, stylesheet and JavaScript. No database migration or reinstall is required.</p>
+<p>Open administration after updating, review settings and save where needed. Refresh cached assets and run the staging checks. Version 1.7.12 adds the compact help workspace and moves Checkout Offers into Catalog. Upload the new Catalog box and its language file, and overwrite the retained inert Reports/legacy menu files to remove old entries. Upload <code>admin/includes/manuals/checkout_offer.html</code> into the matching folder inside your actual admin directory, together with the updated admin page, language file, stylesheet and JavaScript. No database migration or reinstall is required.</p>
 <h4 id="disable-temporarily">Disable temporarily</h4>
 <p>Under <strong>Setup</strong>, clear <strong>Enabled</strong> and save. Tiers and product rules remain stored for later use. To pause only one tier, clear that tier's Enabled checkbox and save its form.</p>
 <h4 id="remove-permanently">Remove permanently</h4>
@@ -411,4 +411,5 @@
 <li>Remove only the add-on runtime files listed in <code>package-manifest.txt</code>, using your actual admin directory. Do not delete shared Phoenix folders.</li>
 </ol>
 <p>Historical orders retain their saved prices. Reinstalling creates a fresh configuration; it does not restore deleted tiers.</p></div></details>
-</div>
+</section>
+</div></div>

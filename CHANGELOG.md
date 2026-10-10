@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.12
+
+- Move Checkout Offers into Catalog after Phoenix loads the Catalog box. Package inert Reports/legacy files for overwrite upgrades; avoid duplicate registrations.
+- Replace duplicated manual navigation with one grouped topic navigator and a selected-guide reading pane; add a concise three-step quick start and compact heading/search.
+- Preserve complete guidance and native/no-JavaScript access, keyboard/mobile support, unsaved settings and hidden settings Save form. No storefront/accounting changes or migration.
+
 ## 1.7.11
 
 - Turn the admin manual into a task guide with compact navigation cards, an always-open quick start and native expandable reference sections.

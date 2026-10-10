@@ -65,41 +65,80 @@ function initialiseManual(workspace) {
     const manual = workspace.querySelector('.co-admin-manual');
     if (!manual) return;
     const search = manual.querySelector('.co-manual-search');
-    if (!search) return;
+    const reader = manual.querySelector('.co-manual-reader');
+    const home = manual.querySelector('.co-manual-home');
+    if (!search || !reader || !home) return;
     const query = search.querySelector('input');
     const status = search.querySelector('[role="status"]');
-    const tasks = Array.from(manual.querySelectorAll('.co-manual-quick, .co-manual-task'));
-    const originalOpen = new Map();
+    const welcome = reader.firstElementChild;
+    const tasks = Array.from(manual.querySelectorAll('.co-manual-task'));
+    const text = new Map(tasks.map(task => [task, task.textContent.toLocaleLowerCase()]));
+    let selected = null;
+
+    function showGuide(task) {
+        if (selected) {
+            selected.append(reader.firstElementChild);
+            selected.open = false;
+        }
+        selected = task;
+        reader.replaceChildren(task ? task.querySelector('.co-manual-detail') : welcome);
+        reader.removeAttribute('aria-labelledby');
+        reader.setAttribute('aria-label', 'Getting started');
+        if (task) {
+            task.open = true;
+            reader.removeAttribute('aria-label');
+            reader.setAttribute('aria-labelledby', task.querySelector('summary').id);
+        }
+    }
     function filterTasks() {
         const term = query.value.trim().toLocaleLowerCase();
         let count = 0;
         tasks.forEach(function (task) {
-            if (!originalOpen.has(task)) originalOpen.set(task, task.open);
-            const matches = !term || task.textContent.toLocaleLowerCase().includes(term);
-            task.hidden = !matches;
-            if (task.tagName === 'DETAILS') task.open = term ? matches : originalOpen.get(task);
-            if (matches) count += 1;
+            task.hidden = !!term && !text.get(task).includes(term);
+            if (!task.hidden) count += 1;
         });
-        if (!term) originalOpen.clear();
-        status.textContent = term ? count + ' matching sections. Clear search to show all tasks.' : 'Search headings, field names and guidance.';
+        manual.querySelectorAll('.co-manual-group').forEach(function (group) {
+            group.hidden = !Array.from(group.querySelectorAll('.co-manual-task')).some(task => !task.hidden);
+        });
+        if (selected && selected.hidden) showGuide(null);
+        status.textContent = term ? count + ' matching topics. Clear search to show all.' : tasks.length + ' guides · Search all instructions';
     }
+    tasks.forEach(function (task) {
+        const summary = task.querySelector('summary');
+        summary.setAttribute('aria-controls', reader.id);
+        summary.addEventListener('click', function (event) {
+            event.preventDefault();
+            showGuide(task);
+            reader.focus({ preventScroll: true });
+            if (window.matchMedia('(max-width: 767px)').matches) {
+                reader.scrollIntoView();
+            }
+        });
+    });
     manual.addEventListener('click', function (event) {
         const link = event.target.closest('a[href^="#"]');
         if (!link) return;
         const target = document.getElementById(link.hash.slice(1));
         if (!target || !manual.contains(target)) return;
         event.preventDefault();
-        window.history.replaceState(null, '', link.hash);
         query.value = '';
         filterTasks();
-        const task = target.closest('details');
-        if (task) {
-            task.open = true;
-            task.querySelector('summary').focus({ preventScroll: true });
-        } else target.focus({ preventScroll: true });
-        target.scrollIntoView();
+        const task = target.closest('.co-manual-task');
+        if (task) showGuide(task);
+        const focus = task ? reader : target;
+        focus.focus({ preventScroll: true });
+        focus.scrollIntoView();
+    });
+    home.addEventListener('click', function () {
+        query.value = '';
+        filterTasks();
+        showGuide(null);
+        reader.focus({ preventScroll: true });
+        reader.scrollIntoView();
     });
     query.addEventListener('input', filterTasks);
+    manual.classList.add('co-manual-enhanced');
     search.hidden = false;
+    home.hidden = false;
     filterTasks();
 }
