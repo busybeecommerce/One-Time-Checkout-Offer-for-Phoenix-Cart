@@ -1,5 +1,7 @@
 # Installation
 
+For the current administration tabs, pricing examples and troubleshooting, see [USER_MANUAL.md](USER_MANUAL.md). The manual is included in the release ZIP; it does not need to be uploaded to the storefront.
+
 1. Back up store files and database. Use staging first.
 2. Extract the release ZIP. Copy `includes/`, `ext/` and `images/` into the store root and `admin/` contents into your actual admin directory (including a renamed admin). All are new files; no Phoenix files should be replaced.
 3. Open **Reports → Checkout Offers** in administration, or open `checkout_offer.php` inside your admin directory. Grant access through the store's normal administrator permissions.
@@ -12,7 +14,7 @@
 
 To update, replace only add-on files; do not uninstall first. To uninstall, disable offers, expand Uninstall, check its confirmation and submit. Historical orders are preserved. Remove uploaded files under `admin/`, `includes/`, `ext/` and `images/` listed in `package-manifest.txt`. Documentation need not be uploaded.
 
-For v1.1.0, upload the new `ext/checkout_offer/checkout_offer.css` along with updated add-on PHP, language and JavaScript files. Save Setup to create the new settings. Existing installations keep inline display until modal is selected. Modal opens once per basket in the current browser tab; blocked storage may cause it to open on each visit. Without JavaScript or native dialog support, offers remain inline.
+When updating an early installation, upload `ext/checkout_offer/checkout_offer.css` along with the complete current add-on PHP, language and JavaScript files. Save Setup to create the new settings. Existing installations keep inline display until modal is selected. In current versions, eligible modals open on each payment-page visit or reload; dismissing a modal closes it for that page entry. Without JavaScript or native dialog support, offers remain inline.
 
 For v1.1.1, upload the updated add-on files and save Setup. Appearance includes independent modal text/button and product row alignment (Left, Centre or Right). The modal's separate header strip is removed and the close × remains in its top-right corner. Accent colour styling is removed immediately; saving Setup removes the old accent setting. Existing rules and other appearance values are preserved.
 
@@ -43,3 +45,5 @@ For v1.6.0, upload the updated add-on files, including both stylesheets, JavaScr
 For v1.7.0, also upload the new `ext/checkout_offer/checkout_offer_admin.js`. Administration now uses tabs for Setup, Offer template, Appearance, Custom offer text, Tiers & products and Maintenance. Settings stay editable across tabs; Save stores them together. Tier links open Tiers & products, and saving returns to the active tab. Without JavaScript all sections remain available. Upload the updated storefront stylesheet and checkout hook for aligned row prices/buttons. No migration or reinstall is required.
 
 For v1.7.4, upload the complete updated package. Under **Appearance → Colours**, set **Heading background** and **Image background** using #rrggbb, or leave either blank to retain the design default. Under **Heading & description styles**, set **Heading font size** (0 = automatic) and **Heading text colour** (blank = automatic). These settings work in inline and modal displays, including predefined templates. No migration or reinstall is required.
+
+For v1.7.8 and later, upload the storefront stylesheet and checkout-payment hook together as part of the complete runtime package. Row cards use shared layout tracks for aligned prices, savings and buttons, and Left/Centre/Right settings apply to inline and modal offers. Version 1.7.9 adds the packaged user manual and refreshed documentation; no database migration or reinstallation is required.

@@ -15,6 +15,7 @@ includes/hooks/shop/siteWide/checkoutOffer.php
 includes/languages/english/checkout_offer.php
 README.md
 INSTALL.md
+USER_MANUAL.md
 TESTING.md
 CHANGELOG.md
 LICENSE
