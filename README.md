@@ -34,7 +34,7 @@ Present discounted products at the payment step of checkout. This independent Ph
 
 See [INSTALL.md](INSTALL.md). No Phoenix core edits or order-total module installation are required.
 
-For step-by-step administration, pricing examples, appearance controls and troubleshooting, open **Catalog → Checkout Offers → User manual**, for task cards, a quick start, expandable details and local section search, or read [USER_MANUAL.md](USER_MANUAL.md) from the release ZIP.
+For step-by-step administration, pricing examples, appearance controls and troubleshooting, open **Catalog → Checkout Offers → User manual** for grouped topics, a three-step quick start, a selected-guide reading pane and local search, or read [USER_MANUAL.md](USER_MANUAL.md) from the release ZIP.
 
 ## Offer lifecycle
 
