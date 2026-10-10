@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.24
+
+- Keep heading and description style dropdowns directly beneath their labels beside taller colour controls.
+
 ## 1.7.23
 
 - Refine appearance colour fields with compact bordered blocks, full-height swatches and aligned HEX/RGB rows.
