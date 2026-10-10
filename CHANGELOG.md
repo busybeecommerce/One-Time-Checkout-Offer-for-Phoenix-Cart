@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.7.26
+
+- Remove obsolete top-level and Reports menu compatibility files and the unused Reports language file from the source and package.
+- Retain Catalog-only registration and document deletion of legacy files on existing stores.
+
 ## 1.7.25
 
 - Add tablet/mobile column counts, contain/crop image fit and independent price/button alignment.

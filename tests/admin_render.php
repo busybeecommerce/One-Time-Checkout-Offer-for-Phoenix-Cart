@@ -141,7 +141,7 @@ if ('install' !== $scenario) {
 if ('install' !== $scenario) {
     $expected = array_merge($expected, ['data-co-tab="manual"', 'id="co-panel-manual"', 'id="troubleshooting"', 'Create your first offer']);
 }
-foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.7.25']) as $text) {
+foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.7.26']) as $text) {
     if (!str_contains($html, $text)) {
         throw new RuntimeException("Admin $scenario output missing: $text");
     }
@@ -152,8 +152,12 @@ if (substr_count($html, '<form') !== substr_count($html, '</form>')) {
 
 $cl_box_groups = [['heading' => 'Tools', 'apps' => []]];
 require $root . '/admin/includes/languages/english/modules/boxes/catalog_checkout_offer.php';
-require $root . '/admin/includes/languages/english/modules/boxes/reports_checkout_offer.php';
-// Use Phoenix's ascending filename loading order with all legacy files installed.
+// Use Phoenix's ascending filename loading order with only the Catalog registration.
+foreach (['admin/includes/boxes/checkout_offer.php', 'admin/includes/boxes/reports_checkout_offer.php', 'admin/includes/languages/english/modules/boxes/reports_checkout_offer.php'] as $legacyFile) {
+    if (is_file($root . '/' . $legacyFile) || in_array($legacyFile, file($root . '/package-manifest.txt', FILE_IGNORE_NEW_LINES), true)) {
+        throw new RuntimeException('Legacy menu file must not be shipped: ' . $legacyFile);
+    }
+}
 $boxes = [
     'catalog.php' => $reference . '/admin/includes/boxes/catalog.php',
     'reports.php' => $reference . '/admin/includes/boxes/reports.php',
@@ -182,4 +186,4 @@ if (3 !== count($cl_box_groups) || ['Catalog'] !== $offerGroups) {
     throw new RuntimeException('Checkout Offers must register once in Catalog and never in Reports/legacy menus.');
 }
 file_put_contents($root . '/build/admin-' . $scenario . '.html', $html);
-echo "Admin $scenario rendering passed with real Phoenix Form/Href; Catalog and inert legacy menus passed.\n";
+echo "Admin $scenario rendering passed with real Phoenix Form/Href; Catalog-only registration and legacy file removal passed.\n";
