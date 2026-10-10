@@ -1,6 +1,6 @@
 param(
-    [ValidateSet('1.7.25')]
-    [string]$Version = '1.7.25'
+    [ValidateSet('1.7.26')]
+    [string]$Version = '1.7.26'
 )
 
 $ErrorActionPreference = 'Stop'
