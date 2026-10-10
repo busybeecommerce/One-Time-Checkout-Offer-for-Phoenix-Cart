@@ -63,6 +63,12 @@ jobs:
       - run: php tests/admin_render.php reference tier
       - run: node tests/admin_browser.cjs
       - run: |
+          php tests/run.php reference --render --extended
+          php tests/run.php reference --render --modal --extended
+          php tests/run.php reference --render --template=red --extended
+          php tests/run.php reference --render --modal --template=red --extended
+      - run: node tests/appearance_browser.cjs
+      - run: |
           for template in red honey midnight green ocean plum slate coral teal champagne; do
             php tests/run.php reference --render --template=$template
             php tests/run.php reference --render --modal --template=$template
@@ -80,13 +86,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and verify release from tested main
         shell: pwsh
-        run: ./scripts/build_package.ps1 -Version 1.7.24
+        run: ./scripts/build_package.ps1 -Version 1.7.25
       - name: Publish ZIP and SHA-256
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v1.7.24 \
-            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.7.24.zip \
-            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.7.24.zip.sha256.txt \
-            --target "$GITHUB_SHA" --title "v1.7.24 — Typography style field alignment" \
-            --notes "Place heading and description style dropdowns directly below their labels without stretching the label gap. PHP/browser CI passed; package verified. No live deployment."
+          gh release create v1.7.25 \
+            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.7.25.zip \
+            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.7.25.zip.sha256.txt \
+            --target "$GITHUB_SHA" --title "v1.7.25 — Extended appearance controls" \
+            --notes "Add responsive columns, image fit, independent price/button alignment, button sizing/width/radius/hover colours and card/button shadows. PHP/browser CI passed; package verified. No live deployment."

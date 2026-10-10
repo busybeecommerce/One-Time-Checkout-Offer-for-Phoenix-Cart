@@ -40,8 +40,8 @@ if (!is_string($activeTab) || !in_array($activeTab, ['setup', 'templates', 'appe
 }
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.24')) ?>">
-<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.24')) ?>" defer></script>
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.25')) ?>">
+<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.25')) ?>" defer></script>
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
     <div class="co-admin-heading">
@@ -97,9 +97,9 @@ require 'includes/template_top.php';
           <div class="co-appearance-groups">
             <?php foreach ([
                 CHECKOUT_OFFER_ADMIN_GROUP_COLOURS => ['background', 'text', 'card_background', 'border', 'button_background', 'button_text', 'heading_background', 'image_background'],
-                CHECKOUT_OFFER_ADMIN_GROUP_LAYOUT => ['product_layout', 'columns', 'modal_width', 'content_alignment', 'products_alignment'],
+                CHECKOUT_OFFER_ADMIN_GROUP_LAYOUT => ['product_layout', 'columns', 'tablet_columns', 'mobile_columns', 'modal_width', 'image_fit', 'content_alignment', 'products_alignment', 'price_alignment', 'button_alignment'],
                 CHECKOUT_OFFER_ADMIN_GROUP_SPACING => ['radius', 'padding', 'gap', 'border_width', 'image_height', 'font_size'],
-                CHECKOUT_OFFER_ADMIN_GROUP_BUTTONS => ['button_style', 'shadow'],
+                CHECKOUT_OFFER_ADMIN_GROUP_BUTTONS => ['button_style', 'shadow', 'button_size', 'button_width', 'card_shadow', 'button_shadow', 'button_hover_background', 'button_hover_text', 'button_radius'],
                 CHECKOUT_OFFER_ADMIN_GROUP_TYPOGRAPHY => ['heading_size', 'description_size', 'heading_weight', 'description_weight', 'heading_colour', 'description_colour', 'heading_style', 'description_style'],
             ] as $group => $keys) { ?>
             <fieldset class="co-admin-field-group"><legend><?= $group ?></legend><div class="co-appearance-fields">

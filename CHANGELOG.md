@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.25
+
+- Add tablet/mobile column counts, contain/crop image fit and independent price/button alignment.
+- Add button size, full width, corner radius, hover colours and separate card/button shadows.
+- Preserve existing appearance through automatic defaults and document all controls.
+
 ## 1.7.24
 
 - Keep heading and description style dropdowns directly beneath their labels beside taller colour controls.

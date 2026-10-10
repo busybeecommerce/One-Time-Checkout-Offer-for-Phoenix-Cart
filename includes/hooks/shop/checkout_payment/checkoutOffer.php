@@ -32,11 +32,15 @@ class hook_shop_checkout_payment_checkoutOffer {
             return '';
         }
         $appearance = checkout_offer_appearance();
+        $attributes = '';
+        foreach (['price_alignment', 'button_alignment', 'button_size', 'button_width', 'card_shadow', 'button_shadow'] as $key) {
+            $attributes .= ' data-' . str_replace('_', '-', $key) . '="' . checkout_offer_escape($appearance[$key]) . '"';
+        }
         return '<section id="checkout-offer" class="mb-4" data-display-mode="' . checkout_offer_display_mode()
             . '" data-template="' . $appearance['template'] . '" data-product-layout="' . $appearance['product_layout'] . '" data-content-alignment="' . $appearance['content_alignment']
             . '" data-shadow="' . $appearance['shadow'] . '" data-button-style="' . $appearance['button_style']
             . '" data-close-label="' . checkout_offer_escape(CHECKOUT_OFFER_CLOSE)
-            . '" data-dismiss-label="' . checkout_offer_text('dismiss_text', CHECKOUT_OFFER_DISMISS) . '" style="' . checkout_offer_escape(checkout_offer_style($appearance)) . '">'
+            . '" data-dismiss-label="' . checkout_offer_text('dismiss_text', CHECKOUT_OFFER_DISMISS) . '"' . $attributes . ' style="' . checkout_offer_escape(checkout_offer_style($appearance)) . '">'
             . '<div class="checkout-offer-banner"><span class="checkout-offer-badge">' . checkout_offer_text('badge_text', CHECKOUT_OFFER_BADGE) . '</span>'
             . '<h2 class="h5" id="checkout-offer-title">' . checkout_offer_text('heading_text', 'classic' === $appearance['template'] ? CHECKOUT_OFFER_HEADING : CHECKOUT_OFFER_TEMPLATE_HEADING)
             . '</h2><p class="checkout-offer-description">' . checkout_offer_text('description_text', 'classic' === $appearance['template'] ? CHECKOUT_OFFER_DESCRIPTION : CHECKOUT_OFFER_TEMPLATE_DESCRIPTION)

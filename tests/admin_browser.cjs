@@ -72,7 +72,13 @@ const { chromium } = require('playwright');
     await page.locator('[name="appearance[template]"][value="red"]').check();
     await page.getByRole('tab', { name: 'Appearance', exact: true }).click();
     await page.locator('[name="appearance[product_layout]"]').selectOption('row');
-    assert.equal(await page.locator('[data-co-colour]').count(), 10);
+    const extended = { tablet_columns: '3', mobile_columns: '2', image_fit: 'cover', price_alignment: 'right', button_alignment: 'center', button_size: 'large', button_width: 'full', button_radius: '20', card_shadow: 'strong', button_shadow: 'soft', button_hover_background: '#234567', button_hover_text: '#abcdef' };
+    for (const [key, value] of Object.entries(extended)) {
+        const control = page.locator('[name="appearance[' + key + ']"]');
+        if (await control.evaluate(node => node.tagName === 'SELECT')) await control.selectOption(value);
+        else await control.fill(value);
+    }
+    assert.equal(await page.locator('[data-co-colour]').count(), 12);
     for (const colour of await page.locator('[data-co-colour]').all()) {
         const hex = colour.locator('[data-co-colour-hex]');
         const original = await hex.inputValue();
@@ -141,6 +147,7 @@ const { chromium } = require('playwright');
     assert.equal(submission['appearance[content_alignment]'], 'center');
     assert.equal(submission['appearance[template]'], 'red');
     assert.equal(submission['appearance[product_layout]'], 'row');
+    for (const [key, value] of Object.entries(extended)) assert.equal(submission['appearance[' + key + ']'], value);
     assert.equal(Object.hasOwn(submission, 'accent'), false);
     await page.getByRole('tab', { name: 'Offer template', exact: true }).click();
     await page.locator('#co-panel-templates').getByText('No template / Custom', { exact: true }).click();

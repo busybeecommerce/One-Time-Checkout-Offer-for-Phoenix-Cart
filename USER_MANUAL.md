@@ -171,6 +171,23 @@ In styled Stacked layouts, Left retains the compact image-beside-details arrange
 
 ### Colours and typography
 
+Additional layout controls:
+
+- **Tablet columns (0 = auto)** applies at viewport widths from 576 to 767 px. Automatic keeps the existing limit of two columns or the desktop count, whichever is smaller. Choose 1–4 to override it.
+- **Mobile columns** applies up to 575 px. Choose one or two columns. Column counts apply to Row layout; Stacked remains a single column.
+- **Image fit** uses Contain to show the whole image, or Crop to fill the image area.
+- **Price alignment** and **Button alignment** can follow Image and text alignment (Automatic), or use Left, Centre or Right independently. Full-width buttons fill the card content area regardless of alignment.
+
+Additional button controls:
+
+- **Button size** offers Automatic, Small, Medium and Large. Automatic preserves the existing template sizing.
+- **Button width** offers Automatic or Full width.
+- **Button corner radius** uses -1 for the existing design, 0 for square corners, or up to 40 px for rounded corners.
+- **Button hover background/text** accept colour overrides; leave them blank for the existing hover appearance.
+- **Offer shadow** applies to the offer panel. **Card shadow** and **Button shadow** can independently use Automatic, None, Soft or Strong. Automatic preserves the existing design.
+
+These controls work with predefined templates as well as the custom design. Save the settings, then check both inline and modal offers at desktop, tablet and mobile widths.
+
 Choose a colour with the picker or enter a six-digit HEX value such as `#ffffff` or `#166534`. The RGB field shows the matching red, green and blue values and can be copied. Clear an optional HEX field to return to automatic colours. Heading background, Image background, Heading text colour and Description colour may be left blank to keep the design defaults. Other colour fields require a valid colour.
 
 Heading and description font sizes use **0** for automatic sizing. Choose **Automatic** weight to retain the design's weight, or choose a listed weight. Normal and Italic styles are available. Customise the heading separately from the general Text size to keep the introductory title balanced with the cards.

@@ -89,6 +89,9 @@ if (in_array('--modal', $argv, true)) {
     define('CHECKOUT_OFFER_DISPLAY_MODE', 'modal');
 }
 $fixtureAppearance = in_array('--styled', $argv, true) ? ['background' => '#eef6ff', 'radius' => 18, 'padding' => 24, 'image_height' => 180, 'columns' => 2, 'button_style' => 'solid', 'modal_width' => 800, 'content_alignment' => 'center', 'products_alignment' => 'center'] : [];
+if (in_array('--extended', $argv, true)) {
+    $fixtureAppearance = array_replace($fixtureAppearance, ['tablet_columns' => 3, 'mobile_columns' => 2, 'image_fit' => 'cover', 'price_alignment' => 'right', 'button_alignment' => 'center', 'button_size' => 'large', 'button_width' => 'full', 'button_radius' => 20, 'button_hover_background' => '#234567', 'button_hover_text' => '#abcdef', 'card_shadow' => 'strong', 'button_shadow' => 'soft']);
+}
 if (in_array('--custom-text', $argv, true)) {
     $fixtureAppearance += ['heading_text' => 'Your <b>exclusive</b> offer', 'description_text' => "Chosen for you\nAdd something special", 'add_text' => 'Choose this offer', 'dismiss_text' => 'Continue without an offer', 'heading_size' => 26, 'description_size' => 17, 'heading_weight' => '600', 'description_style' => 'italic', 'heading_colour' => '#254a68', 'heading_background' => '#e1edf8', 'image_background' => '#fff4dc'];
 }
@@ -306,6 +309,9 @@ if (in_array('--render', $argv, true)) {
     if ('classic' !== checkout_offer_appearance()['template']) {
         $suffix .= '-' . checkout_offer_appearance()['template'];
     }
+    if (in_array('--extended', $argv, true)) {
+        $suffix .= '-extended';
+    }
     if (in_array('--custom-text', $argv, true)) {
         $suffix .= '-custom';
     }
@@ -433,6 +439,15 @@ foreach (['radius' => 41, 'image_height' => 301, 'columns' => 5, 'background' =>
 expect(6 === checkout_offer_sanitise_appearance(['radius' => 41])['radius'], 'Invalid stored appearance safely defaults');
 expect(0 === checkout_offer_sanitise_appearance(['radius' => 0], true)['radius'], 'Minimum radius accepted');
 expect(300 === checkout_offer_sanitise_appearance(['image_height' => 300], true)['image_height'], 'Maximum image size accepted');
+$extendedStyle = checkout_offer_style(checkout_offer_sanitise_appearance(['tablet_columns' => 3, 'mobile_columns' => 2, 'button_radius' => 0, 'image_fit' => 'cover', 'price_alignment' => 'right'], true));
+foreach (['--co-tablet-columns:3;', '--co-mobile-columns:2;', '--co-button-radius:0px;', '--co-image-fit:cover;', '--co-price-alignment:right;'] as $value) {
+    expect(str_contains($extendedStyle, $value), 'Extended style renders ' . $value);
+}
+$automaticStyle = checkout_offer_style(checkout_offer_sanitise_appearance([]));
+expect(!str_contains($automaticStyle, '--co-tablet-columns:') && !str_contains($automaticStyle, '--co-button-radius:') && !str_contains($automaticStyle, '--co-price-alignment:'), 'Automatic controls preserve existing styling');
+foreach (['tablet_columns' => 5, 'mobile_columns' => 3, 'button_radius' => -2, 'image_fit' => 'invalid', 'price_alignment' => 'justify', 'button_alignment' => 'justify', 'button_size' => 'huge', 'button_width' => 'invalid', 'card_shadow' => 'invalid', 'button_shadow' => 'invalid', 'button_hover_background' => 'red', 'button_hover_text' => 'red'] as $key => $value) {
+    rejected(static fn() => checkout_offer_sanitise_appearance([$key => $value], true), 'Invalid extended control rejected: ' . $key);
+}
 foreach (array_keys(checkout_offer_templates()) as $template) {
     expect($template === checkout_offer_sanitise_appearance(['template' => $template], true)['template'], 'Known template accepted');
 }
