@@ -1,4 +1,4 @@
-<!-- USER_MANUAL.md sha256: 8ac98ab4cf55c4051f2c4e7923616fb71e92e3fd99764be6e805d0a8fbc1a78b -->
+<!-- USER_MANUAL.md sha256: 53c3e951d51887b260376417c0844685ca6d3b9d0b51842964b0a0c6e965a389 -->
 <header class="co-manual-header"><div><span class="co-manual-kicker">Checkout Offers · Help centre</span><h2 id="user-manual">User manual</h2><p>Set up, style and maintain your checkout offers.</p></div>
 <div class="co-manual-search" hidden><label for="co-manual-query">Find help</label><input id="co-manual-query" type="search" placeholder="Search pricing, stock, alignment…" aria-controls="co-manual-topics"><p role="status" aria-live="polite"></p></div></header>
 <div class="co-manual-tools"><button type="button" class="co-manual-home" hidden>Quick start</button><a href="#co-manual-topics">Browse topics ↓</a></div>
@@ -29,7 +29,7 @@
 <li>Open <strong>Tiers &amp; products</strong>, then choose <strong>New tier</strong>.</li>
 <li>Enter a <strong>Title</strong>, such as <code>Basket 50–100</code>. This is an administrative label; the storefront heading is configured separately.</li>
 <li>Enter <strong>Minimum basket value</strong> <code>50</code>, <strong>Maximum basket value</strong> <code>100</code> and <strong>Priority</strong> <code>0</code>. Leave the tier's <strong>Enabled</strong> checkbox selected and click its <strong>Save</strong> button.</li>
-<li>With that tier selected, use <strong>Add a product</strong>. Enter the numeric <strong>Product ID</strong> of an active catalogue product.</li>
+<li>With that tier selected, use <strong>Add a product</strong>. Choose a <strong>Category</strong>, then select an active <strong>Product</strong> from the dropdown. Use <strong>All categories</strong> to browse all active products.</li>
 <li>Set <strong>Pricing</strong> to <strong>Percentage discount</strong>, enter <code>10</code> under <strong>Price or percentage</strong>, and click that product form's <strong>Save</strong> button.</li>
 <li>Under <strong>Setup</strong>, choose <strong>At the top of checkout</strong> or <strong>Modal popup</strong>.</li>
 <li>Choose your template, appearance and wording in their tabs. Click the settings <strong>Save</strong> button.</li>
@@ -113,7 +113,7 @@
 <p>For adjacent ranges, use the same boundary: <code>0–50</code>, <code>50–100</code>, and <code>100–unlimited</code>. Exactly 50 belongs to the second range; exactly 100 belongs to the third.</p>
 <p>When ranges overlap, the highest numeric priority wins. If priorities are equal, the lowest tier ID wins. Products come from the winning tier; the add-on does not combine all matching tiers. A winning tier with no eligible products does not show offers from a lower-priority tier.</p>
 <p>Select a tier to edit its settings and assigned products. To pause one tier, clear its <strong>Enabled</strong> checkbox and save. <strong>Delete</strong> removes that tier and its product rules; use disable when you want to keep the configuration.</p></div></details>
-<details class="co-manual-task" id="add-products-and-offer-prices"><summary id="co-guide-add-products-and-offer-prices">Add products and offer prices</summary><div class="co-manual-detail"><h3>Add products and offer prices</h3><p>Save or select a tier before adding products. In <strong>Add a product</strong>, enter an active product's numeric catalogue ID, choose the pricing method and save. Each product can appear once within a tier. The same product may have separate rules in different tiers.</p>
+<details class="co-manual-task" id="add-products-and-offer-prices"><summary id="co-guide-add-products-and-offer-prices">Add products and offer prices</summary><div class="co-manual-detail"><h3>Add products and offer prices</h3><p>Save or select a tier before adding products. In <strong>Add a product</strong>, choose a category and active product, choose the pricing method and save. Category filtering lists products directly assigned to that category; linked products appear in each assigned category. All categories also includes products without a category. Without JavaScript, the product dropdown lists all active products. Each product can appear once within a tier. The same product may have separate rules in different tiers.</p>
 <p>Existing product rules remain editable under the selected tier. Use a rule's <strong>Save</strong> button after changing its product, pricing method or value. Its <strong>Delete</strong> button removes only that rule.</p>
 <h4 id="fixed-unit-price-excluding-tax">Fixed unit price excluding tax</h4>
 <p>Enter the final offer unit price <strong>before tax</strong>, in base currency. The fixed price includes the selected product options; their surcharges are not added again to the fixed offer price. Phoenix applies the appropriate tax and currency display.</p>
@@ -355,7 +355,7 @@
 </tr>
 <tr>
 <td>The product rule will not save</td>
-<td>Use an existing active numeric Product ID, a non-negative fixed price or a 0–100 percentage. The same product cannot be added twice to one tier.</td>
+<td>Select an existing active product, a non-negative fixed price or a 0–100 percentage. The same product cannot be added twice to one tier.</td>
 </tr>
 <tr>
 <td>A higher-value tier is not selected after adding an offer</td>

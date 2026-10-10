@@ -40,8 +40,8 @@ if (!is_string($activeTab) || !in_array($activeTab, ['setup', 'templates', 'appe
 }
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.13')) ?>">
-<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.13')) ?>" defer></script>
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.16')) ?>">
+<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.16')) ?>" defer></script>
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
     <div class="co-admin-heading">
@@ -139,7 +139,7 @@ require 'includes/template_top.php';
         <section class="card"><div class="card-body">
           <h2 class="h5"><?= CHECKOUT_OFFER_ADMIN_TIERS ?></h2>
           <a class="btn btn-outline-primary btn-sm mb-3" href="<?= $Admin->link('checkout_offer.php', ['tab' => 'offers']) ?>"><?= CHECKOUT_OFFER_ADMIN_NEW ?></a>
-          <ul class="list-group list-group-flush">
+          <ul class="list-group co-admin-tier-list">
             <?php $allTiers = $db->query('SELECT * FROM checkout_offer_tiers ORDER BY priority DESC, id'); while ($row = $allTiers->fetch_assoc()) { ?>
               <li class="list-group-item co-admin-tier<?= (int)$row['id'] === $tierId ? ' co-admin-tier-selected' : '' ?>"><a href="<?= $Admin->link('checkout_offer.php', ['tier_id' => $row['id']]) ?>" <?= (int)$row['id'] === $tierId ? 'aria-current="page"' : '' ?>><?= checkout_offer_escape($row['title']) ?></a>
                 <div class="small text-body-secondary"><?= checkout_offer_escape((string)$row['minimum']) ?> – <?= null === $row['maximum'] ? '∞' : checkout_offer_escape((string)$row['maximum']) ?> · <?= (int)$row['priority'] ?> <?= empty($row['enabled']) ? '(disabled)' : '' ?></div>
@@ -151,43 +151,65 @@ require 'includes/template_top.php';
       <div class="col-lg-8">
         <section class="card mb-4"><div class="card-body">
           <h2 class="h5"><?= $tier ? CHECKOUT_OFFER_ADMIN_EDIT : CHECKOUT_OFFER_ADMIN_NEW ?></h2>
-          <?= checkout_offer_admin_form('save_tier', ['tier_id' => $editTier['id']]) ?>
-            <div class="row g-3">
+          <?= checkout_offer_admin_form('save_tier', ['tier_id' => $editTier['id']], ['id' => 'co-save-tier']) ?>
+            <div class="co-admin-tier-fields">
             <?php foreach (['title' => CHECKOUT_OFFER_ADMIN_TITLE, 'minimum' => CHECKOUT_OFFER_ADMIN_MINIMUM, 'maximum' => CHECKOUT_OFFER_ADMIN_MAXIMUM, 'priority' => CHECKOUT_OFFER_ADMIN_PRIORITY] as $key => $label) { ?>
-              <div class="<?= 'title' === $key ? 'col-12' : 'col-md-6' ?>">
+              <div class="<?= 'title' === $key ? 'co-admin-tier-title' : '' ?>">
               <label class="form-label small" for="<?= $key ?>"><?= $label ?></label>
               <input class="form-control form-control-sm" id="<?= $key ?>" name="<?= $key ?>" value="<?= checkout_offer_escape((string)$editTier[$key]) ?>" <?= 'title' === $key ? 'maxlength="120" required' : 'inputmode="decimal"' ?>>
               </div>
             <?php } ?>
             </div>
             <label class="form-check my-3"><input class="form-check-input" type="checkbox" name="enabled" <?= $editTier['enabled'] ? 'checked' : '' ?>> <?= CHECKOUT_OFFER_ADMIN_ENABLED ?></label>
-            <button class="btn btn-primary btn-sm"><?= CHECKOUT_OFFER_ADMIN_SAVE ?></button>
           </form>
-          <?php if ($tier) { ?>
-            <?= checkout_offer_admin_form('delete_tier', ['tier_id' => $tierId]) ?>
-              <button class="btn btn-outline-danger btn-sm mt-2"><?= CHECKOUT_OFFER_ADMIN_DELETE ?></button>
-            </form>
-          <?php } ?>
+          <div class="co-admin-actions">
+            <button class="btn btn-primary btn-sm" form="co-save-tier"><?= CHECKOUT_OFFER_ADMIN_SAVE ?></button>
+            <?php if ($tier) { ?>
+              <?= checkout_offer_admin_form('delete_tier', ['tier_id' => $tierId]) ?>
+                <button class="btn btn-outline-danger btn-sm"><?= CHECKOUT_OFFER_ADMIN_DELETE ?></button>
+              </form>
+            <?php } ?>
+          </div>
         </div></section>
         <?php if ($tier) { ?>
           <section class="card mb-4"><div class="card-body">
             <h2 class="h5"><?= CHECKOUT_OFFER_ADMIN_PRODUCTS ?></h2>
-            <?php $rules = checkout_offer_items($tierId); $rules[] = ['id' => 0, 'products_id' => '', 'mode' => 'percent', 'value' => '10']; foreach ($rules as $rule) { ?>
+            <?php $catalogue = checkout_offer_admin_catalogue((int)$_SESSION['languages_id']); $rules = checkout_offer_items($tierId); $rules[] = ['id' => 0, 'products_id' => '', 'mode' => 'percent', 'value' => '10']; foreach ($rules as $rule) { ?>
               <div class="co-admin-product-rule">
                 <h3><?= $rule['id'] ? CHECKOUT_OFFER_ADMIN_PRODUCT_RULE : CHECKOUT_OFFER_ADMIN_ADD_PRODUCT ?></h3>
-                <?= checkout_offer_admin_form('save_product', ['tier_id' => $tierId, 'item_id' => $rule['id']]) ?>
+                <?= checkout_offer_admin_form('save_product', ['tier_id' => $tierId, 'item_id' => $rule['id']], ['id' => 'co-save-product-' . (int)$rule['id']]) ?>
                   <div class="row g-2">
-                    <div class="col-md-3"><label class="form-label small"><?= CHECKOUT_OFFER_ADMIN_PRODUCT_ID ?><input class="form-control form-control-sm" type="number" min="1" required name="products_id" value="<?= checkout_offer_escape((string)$rule['products_id']) ?>"></label></div>
-                    <div class="col-md-5"><label class="form-label small"><?= CHECKOUT_OFFER_ADMIN_MODE ?><select class="form-select form-select-sm" name="mode"><option value="fixed" <?= 'fixed' === $rule['mode'] ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_FIXED ?></option><option value="percent" <?= 'percent' === $rule['mode'] ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_PERCENT ?></option></select></label></div>
-                    <div class="col-md-4"><label class="form-label small"><?= CHECKOUT_OFFER_ADMIN_VALUE ?><input class="form-control form-control-sm" type="number" min="0" step="0.0001" required name="value" value="<?= checkout_offer_escape((string)$rule['value']) ?>"></label></div>
+                    <div class="col-12 co-admin-product-picker">
+                      <label class="form-label" for="co-category-<?= (int)$rule['id'] ?>"><?= CHECKOUT_OFFER_ADMIN_CATEGORY ?></label>
+                      <select class="form-select form-select-sm" id="co-category-<?= (int)$rule['id'] ?>" data-co-category disabled>
+                        <option value=""><?= CHECKOUT_OFFER_ADMIN_ALL_CATEGORIES ?></option>
+                        <?php foreach ($catalogue['categories'] as $category) { ?>
+                          <option value="<?= (int)$category['categories_id'] ?>"><?= checkout_offer_escape($category['categories_name']) ?> (#<?= (int)$category['categories_id'] ?>)</option>
+                        <?php } ?>
+                      </select>
+                      <label class="form-label" for="co-product-<?= (int)$rule['id'] ?>"><?= CHECKOUT_OFFER_ADMIN_PRODUCT ?></label>
+                      <select class="form-select form-select-sm" id="co-product-<?= (int)$rule['id'] ?>" name="products_id" required data-co-product>
+                        <option value=""><?= CHECKOUT_OFFER_ADMIN_SELECT_PRODUCT ?></option>
+                        <?php if ($rule['products_id'] && !isset($catalogue['products'][(int)$rule['products_id']])) { ?>
+                          <option value="<?= (int)$rule['products_id'] ?>" selected disabled><?= CHECKOUT_OFFER_ADMIN_UNAVAILABLE_PRODUCT ?> (#<?= (int)$rule['products_id'] ?>)</option>
+                        <?php } ?>
+                        <?php foreach ($catalogue['products'] as $productId => $product) { ?>
+                          <option value="<?= $productId ?>" data-categories="<?= checkout_offer_escape(json_encode($product['categories'], JSON_THROW_ON_ERROR)) ?>" <?= (int)$rule['products_id'] === $productId ? 'selected' : '' ?>><?= checkout_offer_escape($product['name']) ?> (#<?= $productId ?>)</option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                    <div class="col-md-6"><label class="form-label small"><?= CHECKOUT_OFFER_ADMIN_MODE ?><select class="form-select form-select-sm" name="mode"><option value="fixed" <?= 'fixed' === $rule['mode'] ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_FIXED ?></option><option value="percent" <?= 'percent' === $rule['mode'] ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_PERCENT ?></option></select></label></div>
+                    <div class="col-md-6"><label class="form-label small"><?= CHECKOUT_OFFER_ADMIN_VALUE ?><input class="form-control form-control-sm" type="number" min="0" step="0.0001" required name="value" value="<?= checkout_offer_escape((string)$rule['value']) ?>"></label></div>
                   </div>
-                  <button class="btn btn-primary btn-sm"><?= CHECKOUT_OFFER_ADMIN_SAVE ?></button>
                 </form>
-                <?php if ($rule['id']) { ?>
-                  <?= checkout_offer_admin_form('delete_product', ['tier_id' => $tierId, 'item_id' => $rule['id']]) ?>
-                    <button class="btn btn-outline-danger btn-sm mt-2"><?= CHECKOUT_OFFER_ADMIN_DELETE ?></button>
-                  </form>
-                <?php } ?>
+                <div class="co-admin-actions mt-2">
+                  <button class="btn btn-primary btn-sm" form="co-save-product-<?= (int)$rule['id'] ?>"><?= CHECKOUT_OFFER_ADMIN_SAVE ?></button>
+                  <?php if ($rule['id']) { ?>
+                    <?= checkout_offer_admin_form('delete_product', ['tier_id' => $tierId, 'item_id' => $rule['id']]) ?>
+                      <button class="btn btn-outline-danger btn-sm"><?= CHECKOUT_OFFER_ADMIN_DELETE ?></button>
+                    </form>
+                  <?php } ?>
+                </div>
               </div>
             <?php } ?>
           </div></section>
