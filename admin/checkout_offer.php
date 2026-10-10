@@ -40,8 +40,8 @@ if (!is_string($activeTab) || !in_array($activeTab, ['setup', 'templates', 'appe
 }
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.19')) ?>">
-<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.19')) ?>" defer></script>
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.20')) ?>">
+<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.20')) ?>" defer></script>
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
     <div class="co-admin-heading">
@@ -140,7 +140,7 @@ require 'includes/template_top.php';
           <h2 class="h5"><?= CHECKOUT_OFFER_ADMIN_TIERS ?></h2>
           <a class="btn btn-outline-primary btn-sm mb-3" href="<?= $Admin->link('checkout_offer.php', ['tab' => 'offers']) ?>"><?= CHECKOUT_OFFER_ADMIN_NEW ?></a>
           <ul class="list-group co-admin-tier-list">
-            <?php $tierCurrencies = new currencies(); $allTiers = $db->query('SELECT * FROM checkout_offer_tiers ORDER BY priority DESC, id'); while ($row = $allTiers->fetch_assoc()) { ?>
+            <?php $tierCurrencies = new currencies(); $baseCurrency = $tierCurrencies->currencies[DEFAULT_CURRENCY]; $currencySymbol = trim($baseCurrency['symbol_left'] ?: $baseCurrency['symbol_right']) ?: DEFAULT_CURRENCY; $allTiers = $db->query('SELECT * FROM checkout_offer_tiers ORDER BY priority DESC, id'); while ($row = $allTiers->fetch_assoc()) { ?>
               <li class="list-group-item co-admin-tier<?= (int)$row['id'] === $tierId ? ' co-admin-tier-selected' : '' ?>">
                 <div class="co-admin-tier-description"><a href="<?= $Admin->link('checkout_offer.php', ['tier_id' => $row['id']]) ?>" <?= (int)$row['id'] === $tierId ? 'aria-current="page"' : '' ?>><?= checkout_offer_escape($row['title']) ?></a>
                 <div class="small text-body-secondary"><?= checkout_offer_escape($tierCurrencies->format((float)$row['minimum'], false, DEFAULT_CURRENCY)) ?> – <?= null === $row['maximum'] ? '∞' : checkout_offer_escape($tierCurrencies->format((float)$row['maximum'], false, DEFAULT_CURRENCY)) ?> · <?= (int)$row['priority'] ?> <?= empty($row['enabled']) ? '(disabled)' : '' ?></div>
@@ -164,7 +164,14 @@ require 'includes/template_top.php';
             <?php foreach (['title' => CHECKOUT_OFFER_ADMIN_TITLE, 'minimum' => CHECKOUT_OFFER_ADMIN_MINIMUM, 'maximum' => CHECKOUT_OFFER_ADMIN_MAXIMUM, 'priority' => CHECKOUT_OFFER_ADMIN_PRIORITY] as $key => $label) { ?>
               <div class="<?= 'title' === $key ? 'co-admin-tier-title' : '' ?>">
               <label class="form-label small" for="<?= $key ?>"><?= $label ?><?= in_array($key, ['minimum', 'maximum'], true) ? ' (' . checkout_offer_escape(DEFAULT_CURRENCY) . ')' : '' ?></label>
-              <input class="form-control form-control-sm" id="<?= $key ?>" name="<?= $key ?>" value="<?= checkout_offer_escape((string)$editTier[$key]) ?>" <?= 'title' === $key ? 'maxlength="120" required' : 'inputmode="decimal"' ?>>
+              <?php if (in_array($key, ['minimum', 'maximum'], true)) { ?>
+                <div class="input-group input-group-sm co-admin-money">
+                  <span class="input-group-text" aria-hidden="true"><?= checkout_offer_escape($currencySymbol) ?></span>
+                  <input class="form-control form-control-sm" type="number" min="0" step="0.01" data-co-money id="<?= $key ?>" name="<?= $key ?>" value="<?= null === $editTier[$key] || '' === $editTier[$key] ? '' : number_format((float)$editTier[$key], 2, '.', '') ?>" <?= 'minimum' === $key ? 'required' : '' ?>>
+                </div>
+              <?php } else { ?>
+                <input class="form-control form-control-sm" id="<?= $key ?>" name="<?= $key ?>" value="<?= checkout_offer_escape((string)$editTier[$key]) ?>" <?= 'title' === $key ? 'maxlength="120" required' : 'inputmode="numeric"' ?>>
+              <?php } ?>
               </div>
             <?php } ?>
             </div>
@@ -214,7 +221,7 @@ require 'includes/template_top.php';
                       <noscript><p class="small"><?= CHECKOUT_OFFER_ADMIN_CATEGORY_SCRIPT_HELP ?></p></noscript>
                     </div>
                     <div class="col-md-6"><label class="form-label small"><?= CHECKOUT_OFFER_ADMIN_MODE ?><select class="form-select form-select-sm" name="mode"><option value="fixed" <?= 'fixed' === $rule['mode'] ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_FIXED ?></option><option value="percent" <?= 'percent' === $rule['mode'] ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_PERCENT ?></option></select></label></div>
-                    <div class="col-md-6"><label class="form-label small"><?= CHECKOUT_OFFER_ADMIN_VALUE ?><input class="form-control form-control-sm" type="number" min="0" step="0.0001" required name="value" value="<?= checkout_offer_escape((string)$rule['value']) ?>"></label></div>
+                    <div class="col-md-6"><label class="form-label small"><?= CHECKOUT_OFFER_ADMIN_VALUE ?><span class="input-group input-group-sm co-admin-money" data-co-price-field data-currency-symbol="<?= checkout_offer_escape($currencySymbol) ?>"><span class="input-group-text" data-co-price-symbol aria-hidden="true"><?= 'fixed' === $rule['mode'] ? checkout_offer_escape($currencySymbol) : '%' ?></span><input class="form-control form-control-sm" type="number" min="0" step="<?= 'fixed' === $rule['mode'] ? '0.01' : '0.0001' ?>" required name="value" value="<?= 'fixed' === $rule['mode'] ? number_format((float)$rule['value'], 2, '.', '') : checkout_offer_escape((string)$rule['value']) ?>"></span></label></div>
                   </div>
                 </form>
                 <div class="co-admin-actions mt-2">

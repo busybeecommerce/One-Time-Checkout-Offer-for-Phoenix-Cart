@@ -1,4 +1,4 @@
-<!-- USER_MANUAL.md sha256: 931fafddf1be87a8011c83a007e9de1b8f6c77d01615cb73100343015f2e1ac2 -->
+<!-- USER_MANUAL.md sha256: f35cc632b7bfd1c4ee36bd751aacb8356fe2a46425df49be00f08c8a0ba27287 -->
 <header class="co-manual-header"><div><span class="co-manual-kicker">Checkout Offers · Help centre</span><h2 id="user-manual">User manual</h2><p>Set up, style and maintain your checkout offers.</p></div>
 <div class="co-manual-search" hidden><label for="co-manual-query">Find help</label><input id="co-manual-query" type="search" placeholder="Search pricing, stock, alignment…" aria-controls="co-manual-topics"><p role="status" aria-live="polite"></p></div></header>
 <div class="co-manual-tools"><button type="button" class="co-manual-home" hidden>Quick start</button><a href="#co-manual-topics">Browse topics ↓</a></div>
@@ -110,14 +110,14 @@
 </tr>
 </tbody>
 </table></div>
-<p>Use non-negative basket amounts. A maximum must be greater than the minimum. Enter amounts without currency symbols. Priority must be a whole number from -100000 to 100000; higher values take precedence.</p>
+<p>Use non-negative basket amounts. A maximum must be greater than the minimum. Amount fields show the currency symbol separately and display two decimal places. Enter the numeric amount; leave Maximum blank for unlimited. Priority must be a whole number from -100000 to 100000; higher values take precedence.</p>
 <p>For adjacent ranges, use the same boundary: <code>0–50</code>, <code>50–100</code>, and <code>100–unlimited</code>. Exactly 50 belongs to the second range; exactly 100 belongs to the third.</p>
 <p>When ranges overlap, the highest numeric priority wins. If priorities are equal, the lowest tier ID wins. Products come from the winning tier; the add-on does not combine all matching tiers. A winning tier with no eligible products does not show offers from a lower-priority tier.</p>
 <p>Select a tier to edit its settings and assigned products. To pause one tier, clear its <strong>Enabled</strong> checkbox and save. <strong>Delete</strong> removes that tier and its product rules; use disable when you want to keep the configuration.</p></div></details>
 <details class="co-manual-task" id="add-products-and-offer-prices"><summary id="co-guide-add-products-and-offer-prices">Add products and offer prices</summary><div class="co-manual-detail"><h3>Add products and offer prices</h3><p>Save or select a tier before adding products. In <strong>Add a product</strong>, choose a category and active product, choose the pricing method and save. Category filtering lists products directly assigned to that category; linked products appear in each assigned category. Uncategorised appears only when active products without a category exist. Choose it to select those products. The Product dropdown stays empty until a category is selected. Saved rules automatically select a category for their product. JavaScript is required to change category/product selections. Each product can appear once within a tier. The same product may have separate rules in different tiers.</p>
 <p>Existing product rules remain editable under the selected tier. Use a rule's <strong>Save</strong> button after changing its product, pricing method or value. Its <strong>Delete</strong> button removes only that rule.</p>
 <h4 id="fixed-unit-price-excluding-tax">Fixed unit price excluding tax</h4>
-<p>Enter the final offer unit price <strong>before tax</strong>, in base currency. The fixed price includes the selected product options; their surcharges are not added again to the fixed offer price. Phoenix applies the appropriate tax and currency display.</p>
+<p>Enter the final offer unit price <strong>before tax</strong>, in base currency. Fixed-price fields show the currency symbol separately and display two decimal places; percentage fields show %. The fixed price includes the selected product options; their surcharges are not added again to the fixed offer price. Phoenix applies the appropriate tax and currency display.</p>
 <p>For example, if the normal pre-tax price is 10 and an option adds 2, a fixed offer value of 8 sets the pre-tax offer price to 8. It does not become 10 after adding the option surcharge.</p>
 <h4 id="percentage-discount">Percentage discount</h4>
 <p>Enter a percentage from <strong>0 to 100</strong>. The percentage applies to the current normal/special price including the selected option adjustments.</p>

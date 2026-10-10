@@ -19,6 +19,27 @@ document.addEventListener('DOMContentLoaded', function () {
         return;
     }
     initialiseManual(workspace);
+    function formatMoney(input) {
+        if (input.value !== '' && Number.isFinite(Number(input.value)) && Number(input.value) >= 0) {
+            input.value = Number(input.value).toFixed(2);
+        }
+    }
+    workspace.querySelectorAll('[data-co-money]').forEach(function (input) {
+        input.addEventListener('blur', function () { formatMoney(input); });
+    });
+    workspace.querySelectorAll('[data-co-price-field]').forEach(function (field) {
+        const mode = field.closest('form').querySelector('[name="mode"]');
+        const input = field.querySelector('[name="value"]');
+        mode.addEventListener('change', function () {
+            const fixed = mode.value === 'fixed';
+            field.querySelector('[data-co-price-symbol]').textContent = fixed ? field.dataset.currencySymbol : '%';
+            input.step = fixed ? '0.01' : '0.0001';
+            if (fixed) { formatMoney(input); }
+        });
+        input.addEventListener('blur', function () {
+            if (mode.value === 'fixed') { formatMoney(input); }
+        });
+    });
     workspace.querySelectorAll('.co-admin-product-picker').forEach(function (picker) {
         const category = picker.querySelector('[data-co-category]');
         const product = picker.querySelector('[data-co-product]');

@@ -133,6 +133,23 @@ const { chromium } = require('playwright');
     assert.equal(submission.admin_tab, 'appearance');
     await page.getByRole('tab', { name: 'Tiers & products', exact: true }).click();
     const productForm = page.locator('form:has(input[value="save_product"])').first();
+    assert.equal(await page.locator('#minimum').inputValue(), '50.00');
+    assert.equal(await page.locator('#maximum').inputValue(), '', 'Unlimited maximum stays blank');
+    assert.equal(await page.locator('#minimum').locator('..').locator('.input-group-text').textContent(), '£');
+    await page.locator('#minimum').fill('25.0000');
+    await page.locator('#minimum').blur();
+    assert.equal(await page.locator('#minimum').inputValue(), '25.00');
+    await productForm.locator('[name="mode"]').selectOption('fixed');
+    assert.equal(await productForm.locator('[data-co-price-symbol]').textContent(), '£');
+    assert.equal(await productForm.locator('[name="value"]').inputValue(), '25.00');
+    await productForm.locator('[name="value"]').fill('12.345');
+    await productForm.locator('[name="value"]').blur();
+    assert.equal(await productForm.locator('[name="value"]').inputValue(), '12.35');
+    assert.equal(await productForm.locator('[name="value"]').getAttribute('step'), '0.01');
+    await productForm.locator('[name="mode"]').selectOption('percent');
+    assert.equal(await productForm.locator('[data-co-price-symbol]').textContent(), '%');
+    await productForm.locator('[name="value"]').fill('25');
+
     assert.match(await page.getByRole('link', { name: 'Edit: Medium basket', exact: true }).getAttribute('href'), /tier_id=1/);
     await page.getByRole('button', { name: 'Delete: Medium basket', exact: true }).click();
     assert.equal(await page.evaluate(() => window.submission.action), 'delete_tier');
@@ -154,7 +171,7 @@ const { chromium } = require('playwright');
         assert.ok(Math.abs(actions[0] - actions[1]) < 1, 'Save and Delete share a row at ' + width);
         assert.ok(await page.evaluate(() => document.documentElement.scrollWidth <= innerWidth));
         if (width >= 1024) {
-            const gap = await page.evaluate(() => document.querySelector('#maximum').getBoundingClientRect().left - document.querySelector('#minimum').getBoundingClientRect().right);
+            const gap = await page.evaluate(() => document.querySelector('#maximum').closest('.input-group').getBoundingClientRect().left - document.querySelector('#minimum').closest('.input-group').getBoundingClientRect().right);
             assert.ok(gap >= 0 && gap <= 17, 'Basket bounds have a compact gap');
         }
     }

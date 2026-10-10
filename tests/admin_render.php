@@ -107,6 +107,9 @@ if ('tier' === $scenario) {
     if (!str_contains($html, $expectedMinimum . ' – ' . $expectedMaximum) || !str_contains($html, '(' . DEFAULT_CURRENCY . ')')) {
         throw new RuntimeException('Tier amounts must use base currency formatting without exchange conversion.');
     }
+    if (!str_contains($html, 'name="minimum" value="50.00"')) {
+        throw new RuntimeException('Basket amount inputs must render two decimal places.');
+    }
     $hasOption = str_contains($html, '<option value="0">Uncategorised</option>');
     if ($hasOption === in_array('--without-uncategorised', $argv, true)) {
         throw new RuntimeException('Uncategorised must appear only when active uncategorised products exist.');
@@ -138,7 +141,7 @@ if ('install' !== $scenario) {
 if ('install' !== $scenario) {
     $expected = array_merge($expected, ['data-co-tab="manual"', 'id="co-panel-manual"', 'id="troubleshooting"', 'Create your first offer']);
 }
-foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.7.19']) as $text) {
+foreach (array_merge($expected, ['name="formid"', 'admin-render-token', 'id="render-complete"', 'class="co-admin-header"', 'href="https://busybeecommerce.co.uk"', 'alt="BusyBee Commerce"', 'https://example.test/store/images/checkout_offer/busybee-logo.png', 'checkout_offer_admin.css?v=1.7.20']) as $text) {
     if (!str_contains($html, $text)) {
         throw new RuntimeException("Admin $scenario output missing: $text");
     }
