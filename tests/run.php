@@ -57,6 +57,14 @@ $manualSource = str_replace("\r\n", "\n", file_get_contents($root . '/USER_MANUA
 $manualHtml = file_get_contents($root . '/admin/includes/manuals/checkout_offer.html');
 expect(str_contains($manualHtml, 'USER_MANUAL.md sha256: ' . hash('sha256', $manualSource)), 'Admin manual matches its Markdown source');
 expect(!str_contains($manualHtml, 'href="INSTALL.md"') && !str_contains($manualHtml, 'href="TESTING.md"'), 'Admin manual uses internal help links');
+preg_match_all('/id="([^"]+)"/', $manualHtml, $manualIds);
+expect(count($manualIds[1]) === count(array_unique($manualIds[1])), 'Manual anchor IDs are unique');
+preg_match_all('/href="#([^"]+)"/', $manualHtml, $manualLinks);
+foreach ($manualLinks[1] as $anchor) {
+    expect(in_array($anchor, $manualIds[1], true), 'Manual task link has a target: ' . $anchor);
+}
+expect(12 === substr_count($manualHtml, '<details class="co-manual-task"'), 'All reference guides have native disclosures');
+expect(str_contains($manualHtml, 'class="co-manual-quick"') && str_contains($manualHtml, 'role="status"'), 'Manual includes quick start and accessible search status');
 foreach ($manifest as $file) {
     expect(is_file($root . '/' . $file), "Missing package file: $file");
 }

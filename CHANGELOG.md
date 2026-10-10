@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.11
+
+- Turn the admin manual into a task guide with compact navigation cards, an always-open quick start and native expandable reference sections.
+- Add local section search with accessible result counts and links that reveal and focus their targets; essential guidance remains available without JavaScript.
+- Preserve all guidance, unsaved settings and checkout behaviour; add manual navigation, search and disclosure browser regressions. No migration required.
+
 ## 1.7.10
 
 - Make the complete user manual available inside Checkout Offers administration as a read-only User manual tab with contents navigation and responsive tables. Include the rendered manual in the runtime package and verify it matches the Markdown guide. Preserve unsaved settings across tab switches and provide the manual without JavaScript.
