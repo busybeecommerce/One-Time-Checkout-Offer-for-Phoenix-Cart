@@ -103,7 +103,7 @@ Existing product rules remain editable under the selected tier. Use a rule's **S
 
 ### Fixed unit price excluding tax
 
-Enter the final offer unit price **before tax**, in base currency. Fixed-price fields show the currency symbol separately and display two decimal places; percentage fields show %. The fixed price includes the selected product options; their surcharges are not added again to the fixed offer price. Phoenix applies the appropriate tax and currency display.
+Enter the final offer unit price **before tax**, in base currency. Fixed-price fields show the currency symbol separately and display two decimal places; percentage fields show % and also use two decimal places. The fixed price includes the selected product options; their surcharges are not added again to the fixed offer price. Phoenix applies the appropriate tax and currency display.
 
 For example, if the normal pre-tax price is 10 and an option adds 2, a fixed offer value of 8 sets the pre-tax offer price to 8. It does not become 10 after adding the option surcharge.
 

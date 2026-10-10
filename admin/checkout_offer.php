@@ -40,8 +40,8 @@ if (!is_string($activeTab) || !in_array($activeTab, ['setup', 'templates', 'appe
 }
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.20')) ?>">
-<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.20')) ?>" defer></script>
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.21')) ?>">
+<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.21')) ?>" defer></script>
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
     <div class="co-admin-heading">
@@ -73,7 +73,7 @@ require 'includes/template_top.php';
             <option value="inline" <?= 'inline' === checkout_offer_display_mode() ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_INLINE ?></option>
             <option value="modal" <?= 'modal' === checkout_offer_display_mode() ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_MODAL ?></option>
           </select>
-          <p class="small text-body-secondary"><?= CHECKOUT_OFFER_ADMIN_MODAL_HELP ?></p>
+          <p class="small text-body-secondary" id="co-display-help" aria-live="polite" data-inline-help="<?= checkout_offer_escape(CHECKOUT_OFFER_ADMIN_INLINE_HELP) ?>" data-modal-help="<?= checkout_offer_escape(CHECKOUT_OFFER_ADMIN_MODAL_HELP) ?>"><?= 'modal' === checkout_offer_display_mode() ? CHECKOUT_OFFER_ADMIN_MODAL_HELP : CHECKOUT_OFFER_ADMIN_INLINE_HELP ?></p>
         </section>
         <section id="co-panel-templates" class="co-admin-panel" data-co-panel="templates"><h2><?= CHECKOUT_OFFER_ADMIN_STYLE_TEMPLATE ?></h2>
           <fieldset class="co-template-picker">
@@ -175,6 +175,7 @@ require 'includes/template_top.php';
               </div>
             <?php } ?>
             </div>
+            <p class="small text-body-secondary mt-2"><?= CHECKOUT_OFFER_ADMIN_PRIORITY_HELP ?></p>
             <label class="form-check my-3"><input class="form-check-input" type="checkbox" name="enabled" <?= $editTier['enabled'] ? 'checked' : '' ?>> <?= CHECKOUT_OFFER_ADMIN_ENABLED ?></label>
           </form>
           <div class="co-admin-actions">
@@ -221,7 +222,7 @@ require 'includes/template_top.php';
                       <noscript><p class="small"><?= CHECKOUT_OFFER_ADMIN_CATEGORY_SCRIPT_HELP ?></p></noscript>
                     </div>
                     <div class="col-md-6"><label class="form-label small"><?= CHECKOUT_OFFER_ADMIN_MODE ?><select class="form-select form-select-sm" name="mode"><option value="fixed" <?= 'fixed' === $rule['mode'] ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_FIXED ?></option><option value="percent" <?= 'percent' === $rule['mode'] ? 'selected' : '' ?>><?= CHECKOUT_OFFER_ADMIN_PERCENT ?></option></select></label></div>
-                    <div class="col-md-6"><label class="form-label small"><?= CHECKOUT_OFFER_ADMIN_VALUE ?><span class="input-group input-group-sm co-admin-money" data-co-price-field data-currency-symbol="<?= checkout_offer_escape($currencySymbol) ?>"><span class="input-group-text" data-co-price-symbol aria-hidden="true"><?= 'fixed' === $rule['mode'] ? checkout_offer_escape($currencySymbol) : '%' ?></span><input class="form-control form-control-sm" type="number" min="0" step="<?= 'fixed' === $rule['mode'] ? '0.01' : '0.0001' ?>" required name="value" value="<?= 'fixed' === $rule['mode'] ? number_format((float)$rule['value'], 2, '.', '') : checkout_offer_escape((string)$rule['value']) ?>"></span></label></div>
+                    <div class="col-md-6"><label class="form-label small"><?= CHECKOUT_OFFER_ADMIN_VALUE ?><span class="input-group input-group-sm co-admin-money" data-co-price-field data-currency-symbol="<?= checkout_offer_escape($currencySymbol) ?>"><span class="input-group-text" data-co-price-symbol aria-hidden="true"><?= 'fixed' === $rule['mode'] ? checkout_offer_escape($currencySymbol) : '%' ?></span><input class="form-control form-control-sm" type="number" min="0" step="0.01" required name="value" value="<?= number_format((float)$rule['value'], 2, '.', '') ?>"></span></label></div>
                   </div>
                 </form>
                 <div class="co-admin-actions mt-2">
