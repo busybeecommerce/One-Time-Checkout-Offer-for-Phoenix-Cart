@@ -140,3 +140,45 @@
     .checkout-offer-admin .co-admin-text-fields { grid-template-columns: minmax(0, 1fr); }
     .checkout-offer-admin .co-admin-panel { padding: 1rem; }
 }
+
+/* The manual is independent of the settings form and uses native disclosures. */
+.checkout-offer-admin .co-admin-manual { max-width: none; }
+.checkout-offer-admin .co-manual-nav { margin: 1.5rem 0; }
+.checkout-offer-admin .co-manual-nav h3 { margin-top: 0; }
+.checkout-offer-admin .co-manual-nav ol { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: .5rem; max-width: none; padding: 0; list-style: none; counter-reset: manual-task; }
+.checkout-offer-admin .co-manual-nav li { margin: 0; counter-increment: manual-task; }
+.checkout-offer-admin .co-manual-nav a { display: flex; align-items: center; gap: .65rem; height: 100%; padding: .75rem; border: 1px solid var(--co-admin-border); border-radius: .5rem; background: #fff; color: #713900; font-size: .85rem; text-decoration: none; }
+.checkout-offer-admin .co-manual-nav a::before { content: counter(manual-task); display: grid; place-items: center; flex: 0 0 1.6rem; height: 1.6rem; border-radius: 50%; background: #fff0dc; font-weight: 700; }
+.checkout-offer-admin .co-manual-nav a:hover { background: #fff8ef; border-color: #b95500; }
+.checkout-offer-admin .co-manual-quick { padding: 1.5rem; margin: 1.25rem 0; border: 1px solid #e6bf8d; border-left: 5px solid #b95500; border-radius: .6rem; background: #fff8ef; scroll-margin-top: 1rem; }
+.checkout-offer-admin .co-manual-kicker { color: #914400; font-size: .8rem; font-weight: 700; text-transform: uppercase; letter-spacing: .04em; }
+.checkout-offer-admin .co-manual-quick h3 { margin-top: .5rem; border: 0; font-size: 1.2rem; }
+.checkout-offer-admin .co-manual-task { margin: .65rem 0; border: 1px solid var(--co-admin-border); border-radius: .5rem; background: #fff; scroll-margin-top: 1rem; }
+.checkout-offer-admin .co-manual-task summary { padding: 1rem; cursor: pointer; color: #713900; }
+.checkout-offer-admin .co-manual-task summary h3 { display: inline; margin: 0; padding: 0; border: 0; font-size: .95rem; }
+.checkout-offer-admin .co-manual-task summary span { float: right; color: #52606d; font-size: .8rem; }
+.checkout-offer-admin .co-manual-task[open] summary { border-bottom: 1px solid var(--co-admin-border); background: #fff8ef; }
+.checkout-offer-admin .co-manual-detail { padding: 1.25rem; }
+.checkout-offer-admin .co-manual-detail > :last-child { margin-bottom: 0; }
+.checkout-offer-admin .co-manual-search { padding: 1rem; background: #f4f6f8; border-radius: .5rem; }
+.checkout-offer-admin .co-manual-search label { display: block; font-weight: 700; font-size: .9rem; }
+.checkout-offer-admin .co-manual-search input { width: 100%; max-width: 32rem; padding: .6rem .75rem; border: 1px solid #8795a3; border-radius: .3rem; background: #fff; }
+.checkout-offer-admin .co-manual-search p { margin: .4rem 0 0; font-size: .85rem; color: #52606d; }
+.checkout-offer-admin .co-admin-manual [hidden] { display: none; }
+.checkout-offer-admin .co-admin-manual a:focus-visible, .checkout-offer-admin .co-admin-manual summary:focus-visible, .checkout-offer-admin .co-admin-manual input:focus-visible, .checkout-offer-admin .co-manual-table:focus-visible { outline: 3px solid #914400; outline-offset: 3px; }
+@media (max-width: 767px) {
+    .checkout-offer-admin .co-manual-nav ol { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    .checkout-offer-admin .co-manual-task summary span { display: none; }
+}
+@media (max-width: 575px) {
+    .checkout-offer-admin .co-manual-nav ol { grid-template-columns: 1fr; }
+    .checkout-offer-admin .co-manual-quick, .checkout-offer-admin .co-manual-detail { padding: 1rem; }
+}
+@media (min-width: 768px) {
+    .checkout-offer-admin .co-manual-quick ol { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: .65rem 2rem; max-width: none; }
+}
+.checkout-offer-admin .co-manual-about { max-width: 76ch; margin-bottom: .65rem; }
+.checkout-offer-admin .co-manual-about summary { cursor: pointer; font-size: .85rem; font-weight: 600; color: #713900; }
+.checkout-offer-admin .co-manual-about p { margin: .65rem 0; }
+.checkout-offer-admin .co-manual-browse { display: inline-block; margin-bottom: 1rem; color: #713900; font-weight: 600; font-size: .85rem; }
+.checkout-offer-admin .co-manual-nav { scroll-margin-top: 1rem; }

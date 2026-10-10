@@ -1,8 +1,10 @@
 # One-Time Checkout Offer: User Manual
 
-For store owners and administrators using version **1.7.10**. Open **Reports → Checkout Offers → User manual** to read this guide inside administration.
+For store owners and administrators using version **1.7.11**. Open **Reports → Checkout Offers → User manual** to read this guide inside administration.
 
 The add-on shows eligible customers discounted products at the payment step of checkout. You choose the basket-value ranges, products, offer prices and presentation. Customers can add one unit of each offered product to their current order or continue without accepting an offer.
+
+Use **Find a task** to jump to a topic, then expand its guide. The quick start stays open. Search filters guide sections locally and opens matching details; clear the search to return to the full guide. Links and expandable guides also work without JavaScript. Reading help does not save or discard your unsaved settings.
 
 ## Contents
 
@@ -57,7 +59,7 @@ Global offers and the individual tier must both be enabled. The offered product 
 | Custom offer text | Headings, descriptions and button/label wording. |
 | Tiers & products | Basket-value ranges and the products/prices assigned to each tier. |
 | Maintenance | Permanent removal of the add-on's configuration. |
-| User manual | This searchable-in-browser guide, including the contents links and troubleshooting. |
+| User manual | Task navigation, quick start, expandable reference guides and local section search. |
 
 Setup, Offer template, Appearance and Custom offer text share one settings form. You can change tabs without losing those unsaved settings, then click **Save** to store them together. Leaving or reloading the page without saving discards unsaved changes.
 
@@ -254,7 +256,7 @@ If the problem remains, record the add-on/Phoenix versions, selected display/tem
 
 Back up the store, extract the new release and replace only the add-on files listed in `package-manifest.txt`. Upload the full package's runtime files together, including the checkout hook, stylesheets and JavaScript. Use your actual admin directory. Do not uninstall before updating; existing tiers and settings are retained.
 
-Open administration after updating, review settings and save where needed. Refresh cached assets and run the staging checks. Version 1.7.10 adds the User manual tab. Upload `admin/includes/manuals/checkout_offer.html` into the matching folder inside your actual admin directory, together with the updated admin page, language file, stylesheet and JavaScript. No database migration or reinstall is required.
+Open administration after updating, review settings and save where needed. Refresh cached assets and run the staging checks. Version 1.7.11 makes the User manual a navigable task guide with a quick start and expandable details. Upload `admin/includes/manuals/checkout_offer.html` into the matching folder inside your actual admin directory, together with the updated admin page, language file, stylesheet and JavaScript. No database migration or reinstall is required.
 
 ### Disable temporarily
 
