@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.8
+
+- Restore Left/Centre/Right image, text, button and incomplete product row alignment in inline offers as well as modals. Keep prices, savings and buttons in consistent vertical purchase areas across Classic and every template, preventing independent savings wrapping from shifting prices on option-bearing cards.
+
 ## 1.7.7
 
 - Show the customisable You save label and saving amount beneath Classic modal offer prices. Preserve card/button alignment and existing option-price recalculation.
