@@ -112,6 +112,7 @@ const CHECKOUT_OFFER_ADMIN_CHOICE_ITALIC = 'Italic';
 const CHECKOUT_OFFER_ADMIN_NAVIGATION = 'Checkout offer administration';
 const CHECKOUT_OFFER_ADMIN_OFFERS = 'Tiers & products';
 const CHECKOUT_OFFER_ADMIN_MAINTENANCE = 'Maintenance';
+const CHECKOUT_OFFER_ADMIN_MANUAL = 'User manual';
 const CHECKOUT_OFFER_ADMIN_GROUP_COLOURS = 'Colours';
 const CHECKOUT_OFFER_ADMIN_STYLE_HEADING_BACKGROUND = 'Heading background (blank = auto)';
 const CHECKOUT_OFFER_ADMIN_STYLE_IMAGE_BACKGROUND = 'Image background (blank = auto)';

@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.10
+
+- Make the complete user manual available inside Checkout Offers administration as a read-only User manual tab with contents navigation and responsive tables. Include the rendered manual in the runtime package and verify it matches the Markdown guide. Preserve unsaved settings across tab switches and provide the manual without JavaScript.
+
 ## 1.7.9
 
 - Add a packaged user manual with installation, tab-by-tab administration, tier and pricing examples, display/template/appearance controls, customer checkout behaviour, troubleshooting and maintenance instructions. Refresh README/install guidance for current alignment and modal behaviour. No runtime or database changes.

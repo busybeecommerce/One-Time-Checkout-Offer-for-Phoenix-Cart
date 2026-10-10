@@ -1,0 +1,423 @@
+<!-- USER_MANUAL.md sha256: 45a67d97635bc94c64aa90a5de9d38812284b78796acbec03fa7ca917860743e -->
+<h2 id="one-time-checkout-offer-user-manual">One-Time Checkout Offer: User Manual</h2>
+<p>For store owners and administrators using version <strong>1.7.10</strong>. Open <strong>Reports → Checkout Offers → User manual</strong> to read this guide inside administration.</p>
+<p>The add-on shows eligible customers discounted products at the payment step of checkout. You choose the basket-value ranges, products, offer prices and presentation. Customers can add one unit of each offered product to their current order or continue without accepting an offer.</p>
+<h3 id="contents">Contents</h3>
+<ol>
+<li><a href="#install-and-open-the-add-on">Install and open the add-on</a></li>
+<li><a href="#create-your-first-offer">Create your first offer</a></li>
+<li><a href="#use-the-administration-tabs">Use the administration tabs</a></li>
+<li><a href="#set-basket-value-tiers">Set basket-value tiers</a></li>
+<li><a href="#add-products-and-offer-prices">Add products and offer prices</a></li>
+<li><a href="#choose-inline-or-modal-display">Choose inline or modal display</a></li>
+<li><a href="#choose-a-template">Choose a template</a></li>
+<li><a href="#customise-appearance-and-alignment">Customise appearance and alignment</a></li>
+<li><a href="#change-the-wording">Change the wording</a></li>
+<li><a href="#understand-the-customer-checkout-journey">Understand the customer checkout journey</a></li>
+<li><a href="#check-an-offer-before-enabling-it">Check an offer before enabling it</a></li>
+<li><a href="#troubleshooting">Troubleshooting</a></li>
+<li><a href="#update-disable-or-remove-the-add-on">Update, disable or remove the add-on</a></li>
+</ol>
+<h3 id="install-and-open-the-add-on">Install and open the add-on</h3>
+<p>The release is tested with CE Phoenix Cart 1.1.0.6 and 1.1.0.8, using PHP 8.1 and 8.3. It requires Phoenix's standard checkout payment form and hooks. Installation does not require Phoenix core edits or an order-total module.</p>
+<ol>
+<li>Back up your store files and database, and install on a staging copy first.</li>
+<li>Extract the release ZIP. Copy its <code>includes/</code>, <code>ext/</code> and <code>images/</code> folders into your store root. Copy the contents of its <code>admin/</code> folder into your actual administration directory, including when you have renamed that directory.</li>
+<li>Open <strong>Reports → Checkout Offers</strong>. If necessary, grant the administrator access through your store's normal administrator permissions. You can also open <code>checkout_offer.php</code> inside your administration directory.</li>
+<li>Click <strong>Install database tables</strong> if the installation screen appears.</li>
+<li>Create your tiers and products before enabling offers.</li>
+</ol>
+<p>Documentation files can stay on your computer; they do not need to be uploaded to the public store. See <a href="#install-and-open-the-add-on">INSTALL.md</a> for installation and upgrade details.</p>
+<h3 id="create-your-first-offer">Create your first offer</h3>
+<p>This example offers an accessory at a 10% discount when the qualifying basket value is at least 50 but less than 100 in your store's base currency.</p>
+<ol>
+<li>Open <strong>Tiers &amp; products</strong>, then choose <strong>New tier</strong>.</li>
+<li>Enter a <strong>Title</strong>, such as <code>Basket 50–100</code>. This is an administrative label; the storefront heading is configured separately.</li>
+<li>Enter <strong>Minimum basket value</strong> <code>50</code>, <strong>Maximum basket value</strong> <code>100</code> and <strong>Priority</strong> <code>0</code>. Leave the tier's <strong>Enabled</strong> checkbox selected and click its <strong>Save</strong> button.</li>
+<li>With that tier selected, use <strong>Add a product</strong>. Enter the numeric <strong>Product ID</strong> of an active catalogue product.</li>
+<li>Set <strong>Pricing</strong> to <strong>Percentage discount</strong>, enter <code>10</code> under <strong>Price or percentage</strong>, and click that product form's <strong>Save</strong> button.</li>
+<li>Under <strong>Setup</strong>, choose <strong>At the top of checkout</strong> or <strong>Modal popup</strong>.</li>
+<li>Choose your template, appearance and wording in their tabs. Click the settings <strong>Save</strong> button.</li>
+<li>Test the offer on staging using a signed-in customer with an eligible basket. Once satisfied, select <strong>Enabled</strong> under Setup and save to activate offers. You can enable it on staging while testing.</li>
+</ol>
+<p>Global offers and the individual tier must both be enabled. The offered product must be eligible and must not already be in the customer's basket.</p>
+<h3 id="use-the-administration-tabs">Use the administration tabs</h3>
+<div class="co-manual-table"><table>
+<thead>
+<tr>
+<th>Tab</th>
+<th>What you manage</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Setup</td>
+<td>Global Enabled switch and inline/modal display.</td>
+</tr>
+<tr>
+<td>Offer template</td>
+<td>The predefined design or No template / Custom.</td>
+</tr>
+<tr>
+<td>Appearance</td>
+<td>Colours, layout, alignment, dimensions, buttons, shadows and typography.</td>
+</tr>
+<tr>
+<td>Custom offer text</td>
+<td>Headings, descriptions and button/label wording.</td>
+</tr>
+<tr>
+<td>Tiers &amp; products</td>
+<td>Basket-value ranges and the products/prices assigned to each tier.</td>
+</tr>
+<tr>
+<td>Maintenance</td>
+<td>Permanent removal of the add-on's configuration.</td>
+</tr>
+<tr>
+<td>User manual</td>
+<td>This searchable-in-browser guide, including the contents links and troubleshooting.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Setup, Offer template, Appearance and Custom offer text share one settings form. You can change tabs without losing those unsaved settings, then click <strong>Save</strong> to store them together. Leaving or reloading the page without saving discards unsaved changes.</p>
+<p>Tier and product forms have their own <strong>Save</strong> buttons. Save each edited tier or product rule separately. Saving the appearance settings does not save a tier or product form.</p>
+<h3 id="set-basket-value-tiers">Set basket-value tiers</h3>
+<p>The qualifying value includes products, product tax, delivery and delivery tax. Tier amounts use the <strong>store base currency</strong>, even when a customer shops in another currency. This qualifying amount is not necessarily the final payable total after other order-total adjustments.</p>
+<div class="co-manual-table"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Title</td>
+<td>A name to help you identify the tier in administration.</td>
+</tr>
+<tr>
+<td>Minimum basket value (inclusive)</td>
+<td>The lowest eligible value. A minimum of 50 includes exactly 50.</td>
+</tr>
+<tr>
+<td>Maximum basket value (exclusive; blank for unlimited)</td>
+<td>The upper boundary. A maximum of 100 excludes exactly 100. Leave blank for no upper limit.</td>
+</tr>
+<tr>
+<td>Priority (highest wins)</td>
+<td>Determines which enabled tier wins when ranges overlap.</td>
+</tr>
+<tr>
+<td>Enabled</td>
+<td>Allows this tier to be selected while global offers are enabled.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Use non-negative basket amounts. A maximum must be greater than the minimum. Enter amounts without currency symbols. Priority must be a whole number from -100000 to 100000; higher values take precedence.</p>
+<p>For adjacent ranges, use the same boundary: <code>0–50</code>, <code>50–100</code>, and <code>100–unlimited</code>. Exactly 50 belongs to the second range; exactly 100 belongs to the third.</p>
+<p>When ranges overlap, the highest numeric priority wins. If priorities are equal, the lowest tier ID wins. Products come from the winning tier; the add-on does not combine all matching tiers. A winning tier with no eligible products does not show offers from a lower-priority tier.</p>
+<p>Select a tier to edit its settings and assigned products. To pause one tier, clear its <strong>Enabled</strong> checkbox and save. <strong>Delete</strong> removes that tier and its product rules; use disable when you want to keep the configuration.</p>
+<h3 id="add-products-and-offer-prices">Add products and offer prices</h3>
+<p>Save or select a tier before adding products. In <strong>Add a product</strong>, enter an active product's numeric catalogue ID, choose the pricing method and save. Each product can appear once within a tier. The same product may have separate rules in different tiers.</p>
+<p>Existing product rules remain editable under the selected tier. Use a rule's <strong>Save</strong> button after changing its product, pricing method or value. Its <strong>Delete</strong> button removes only that rule.</p>
+<h4 id="fixed-unit-price-excluding-tax">Fixed unit price excluding tax</h4>
+<p>Enter the final offer unit price <strong>before tax</strong>, in base currency. The fixed price includes the selected product options; their surcharges are not added again to the fixed offer price. Phoenix applies the appropriate tax and currency display.</p>
+<p>For example, if the normal pre-tax price is 10 and an option adds 2, a fixed offer value of 8 sets the pre-tax offer price to 8. It does not become 10 after adding the option surcharge.</p>
+<h4 id="percentage-discount">Percentage discount</h4>
+<p>Enter a percentage from <strong>0 to 100</strong>. The percentage applies to the current normal/special price including the selected option adjustments.</p>
+<p>For example, a pre-tax product price of 10 plus a 2 option adjustment gives a normal option-inclusive price of 12. A 10% discount gives a pre-tax offer price of 10.80.</p>
+<p>Offers never increase the normal price. If a fixed offer value exceeds the normal option-inclusive price, the normal price is retained. A 0% discount gives no reduction; 100% reduces the offer price to zero.</p>
+<p>Only one unit of each offered product can be accepted. Products already in the basket are hidden. Inactive products are hidden, and stock availability is checked when the store's stock checking is enabled. Keep offer products and their stock up to date.</p>
+<h3 id="choose-inline-or-modal-display">Choose inline or modal display</h3>
+<p>Under <strong>Setup → Offer display</strong>, choose an option and save.</p>
+<div class="co-manual-table"><table>
+<thead>
+<tr>
+<th>Display</th>
+<th>Customer experience</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>At the top of checkout</td>
+<td>The offer panel appears above the payment methods when JavaScript is available.</td>
+</tr>
+<tr>
+<td>Modal popup</td>
+<td>Eligible offers open automatically on each payment-page visit or reload, including a cached history return.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Customers can dismiss the modal using its corner close button, Escape, the backdrop or the continue-checkout button. Dismissing it closes it for the current page entry; it can open again on the next eligible visit. There is no separate offer launcher and no remembered browser-storage suppression.</p>
+<p>Without JavaScript or native dialog support, modal offers fall back to inline content and customers can still add products. Without JavaScript, the inline panel stays at its original checkout hook position and displayed prices do not recalculate immediately when options change; the server still validates options and calculates the accepted price.</p>
+<h3 id="choose-a-template">Choose a template</h3>
+<p>Open <strong>Offer template</strong>, select a design and save. The choices are:</p>
+<ul>
+<li>No template / Custom</li>
+<li>Red special offer</li>
+<li>BusyBee honey</li>
+<li>Midnight</li>
+<li>Fresh green</li>
+<li>Ocean blue</li>
+<li>Soft plum</li>
+<li>Slate minimal</li>
+<li>Warm coral</li>
+<li>Clean teal</li>
+<li>Champagne</li>
+</ul>
+<p>Predefined templates supply their own palette, solid buttons and thumbnail sizing. Manual values for those template-controlled properties are retained but may not be visible while the design is selected. To return to your manual appearance, select <strong>No template / Custom</strong> and save.</p>
+<p>Layout, alignment, spacing, corners, text size and modal width remain configurable with a predefined template. Heading/image background overrides and heading/description typography also work with templates. The Classic modal has no separate header strip; styled designs have a promotional banner.</p>
+<h3 id="customise-appearance-and-alignment">Customise appearance and alignment</h3>
+<p>Open <strong>Appearance</strong>, change the required settings and save. Check the actual checkout at desktop and phone widths after making changes.</p>
+<h4 id="layout-and-alignment">Layout and alignment</h4>
+<div class="co-manual-table"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>How to use it</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Product layout: Row</td>
+<td>Places product cards beside one another, up to Desktop columns. Rows wrap to at most two columns below 768px and one below 576px.</td>
+</tr>
+<tr>
+<td>Product layout: Stacked</td>
+<td>Places one full-width product card on each row.</td>
+</tr>
+<tr>
+<td>Desktop columns</td>
+<td>Choose 1–4 for Row layout.</td>
+</tr>
+<tr>
+<td>Image, text and button alignment</td>
+<td>Select Left, Centre or Right for the offer content in both inline and modal displays.</td>
+</tr>
+<tr>
+<td>Product row alignment</td>
+<td>Positions an incomplete Row of cards within the available width. It is separate from the alignment of the content inside each card.</td>
+</tr>
+<tr>
+<td>Modal width</td>
+<td>Controls the popup width; the popup is also limited by the available screen space.</td>
+</tr>
+</tbody>
+</table></div>
+<p>For example, with four Desktop columns and two offered products, <strong>Product row alignment: Centre</strong> centres the two cards as a group. <strong>Image, text and button alignment: Left</strong> keeps each card's contents left aligned.</p>
+<p>In styled Stacked layouts, Left retains the compact image-beside-details arrangement; Centre and Right place the image above the details. Row cards share layout tracks so prices and buttons stay aligned even when one product has options or text wraps. Savings appear below prices, with Add buttons beneath savings.</p>
+<h4 id="colours-and-typography">Colours and typography</h4>
+<p>Use six-digit colour values such as <code>#ffffff</code> or <code>#166534</code>. Heading background, Image background, Heading text colour and Description colour may be left blank to keep the design defaults. Other colour fields require a valid colour.</p>
+<p>Heading and description font sizes use <strong>0</strong> for automatic sizing. Choose <strong>Automatic</strong> weight to retain the design's weight, or choose a listed weight. Normal and Italic styles are available. Customise the heading separately from the general Text size to keep the introductory title balanced with the cards.</p>
+<h4 id="sizing-and-spacing-limits">Sizing and spacing limits</h4>
+<p>Enter whole numbers within these limits:</p>
+<div class="co-manual-table"><table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Allowed value</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Corner radius</td>
+<td>0–40px</td>
+</tr>
+<tr>
+<td>Inner spacing</td>
+<td>0–60px</td>
+</tr>
+<tr>
+<td>Card gap</td>
+<td>0–48px</td>
+</tr>
+<tr>
+<td>Border width</td>
+<td>0–6px</td>
+</tr>
+<tr>
+<td>Image height</td>
+<td>60–300px; predefined templates supply their thumbnail sizing.</td>
+</tr>
+<tr>
+<td>Text size</td>
+<td>12–24px</td>
+</tr>
+<tr>
+<td>Desktop columns</td>
+<td>1–4</td>
+</tr>
+<tr>
+<td>Modal width</td>
+<td>360–1200px</td>
+</tr>
+<tr>
+<td>Heading font size</td>
+<td>0–60px; 0 = automatic.</td>
+</tr>
+<tr>
+<td>Description size</td>
+<td>0–36px; 0 = automatic.</td>
+</tr>
+</tbody>
+</table></div>
+<p>Choose <strong>Outline</strong> or <strong>Solid</strong> buttons when using your custom design. Shadow choices are None, Soft and Strong.</p>
+<h3 id="change-the-wording">Change the wording</h3>
+<p>Use <strong>Custom offer text</strong>, then save. Leave a field blank to use its predefined wording. Text is plain text: HTML tags are displayed as text rather than used for formatting. Description line breaks are preserved.</p>
+<div class="co-manual-table"><table>
+<thead>
+<tr>
+<th>Field</th>
+<th>Where it appears</th>
+<th>Maximum characters</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Heading</td>
+<td>Main offer heading.</td>
+<td>200</td>
+</tr>
+<tr>
+<td>Description</td>
+<td>Text below the heading.</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Offer badge</td>
+<td>Badge in predefined templates.</td>
+<td>80</td>
+</tr>
+<tr>
+<td>Add button</td>
+<td>Product addition button; styled designs append the current offer price automatically.</td>
+<td>100</td>
+</tr>
+<tr>
+<td>Continue checkout button</td>
+<td>Modal dismissal button.</td>
+<td>150</td>
+</tr>
+<tr>
+<td>Inline note</td>
+<td>Note beneath inline offers; hidden in modals and Classic design.</td>
+<td>1000</td>
+</tr>
+<tr>
+<td>Savings label</td>
+<td>Label before the calculated saving amount.</td>
+<td>80</td>
+</tr>
+</tbody>
+</table></div>
+<p>Changing labels does not change the action of the buttons. Keep Add and Continue wording clear so customers understand whether they are adding a product or dismissing the offer.</p>
+<h3 id="understand-the-customer-checkout-journey">Understand the customer checkout journey</h3>
+<ol>
+<li>A signed-in customer reaches the payment page with an eligible basket.</li>
+<li>The add-on selects one enabled tier and shows its eligible products with option selectors where needed.</li>
+<li>With JavaScript available, choosing an option updates the normal price, offer price and saving shown on the card.</li>
+<li>The customer clicks an Add button. The server checks eligibility, the selected options and stock rules, then adds one unit.</li>
+<li>The customer returns to the delivery step. Delivery is recalculated for the changed basket, and the payment selection must be reviewed again.</li>
+<li>The first acceptance locks the offer tier to that basket. Remaining products from the same tier may still be accepted; accepting an offer does not switch the customer to another tier.</li>
+<li>Phoenix recalculates the discounted lines and taxes during confirmation and order processing.</li>
+</ol>
+<p>Changing other basket contents, quantities, product options, the customer or the currency invalidates the saved acceptance. Accepted products remain in the basket at their normal prices and the customer must review checkout again. A completed order empties the basket and ends the acceptance.</p>
+<p>The offer is limited to the current checkout. It does not create a catalogue-wide special or a coupon. Disabling/deleting the tier or its product rule removes the associated discount entitlement for a checkout in progress. Historical orders keep the prices saved when they were placed.</p>
+<h3 id="check-an-offer-before-enabling-it">Check an offer before enabling it</h3>
+<p>Use a staging store and test a signed-in customer account.</p>
+<ol>
+<li>Check values just below, exactly at and just above each tier boundary. Include delivery and tax when preparing the basket.</li>
+<li>Check overlapping tiers and priorities, and confirm the intended winning tier has eligible products.</li>
+<li>Test a simple product and a product with options. Confirm the fixed/percentage prices and savings using your store's tax display and currency.</li>
+<li>Check Row and Stacked presentation, your selected alignment, incomplete product rows and narrow-screen wrapping.</li>
+<li>In modal mode, check close, Escape, backdrop dismissal and the continue-checkout button. Reload the payment page and confirm the expected reopening.</li>
+<li>Add an offer, select delivery again and verify the discounted line at confirmation. Confirm that an accepted product cannot be added twice through the offer.</li>
+<li>Change the basket or currency and check that old acceptance is invalidated. Review any resulting normal prices.</li>
+<li>Complete a test order using each supported payment route, and check the saved line prices, tax and order total.</li>
+</ol>
+<p>For the full technical/staging checklist, see <a href="#check-an-offer-before-enabling-it">TESTING.md</a>. Automated release checks do not replace installation and payment testing on your own store and theme.</p>
+<h3 id="troubleshooting">Troubleshooting</h3>
+<div class="co-manual-table"><table>
+<thead>
+<tr>
+<th>Symptom</th>
+<th>What to check</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Checkout Offers is missing from Reports</td>
+<td>Upload the admin box/language files into the actual admin directory and check administrator permissions.</td>
+</tr>
+<tr>
+<td>The installation screen still appears</td>
+<td>Complete Install database tables and check that the add-on's tables/settings were created successfully.</td>
+</tr>
+<tr>
+<td>No offers appear</td>
+<td>Sign in as a customer; enable offers and the tier; check the tax/delivery-inclusive base-currency range and the winning priority. The tier needs eligible active products.</td>
+</tr>
+<tr>
+<td>A configured product is missing</td>
+<td>Check its active status, stock rules and whether it is already in the basket. Check the product rule belongs to the winning tier.</td>
+</tr>
+<tr>
+<td>The product rule will not save</td>
+<td>Use an existing active numeric Product ID, a non-negative fixed price or a 0–100 percentage. The same product cannot be added twice to one tier.</td>
+</tr>
+<tr>
+<td>A higher-value tier is not selected after adding an offer</td>
+<td>The first acceptance intentionally locks the tier for that exact basket.</td>
+</tr>
+<tr>
+<td>Delivery/payment must be selected again</td>
+<td>Adding a product invalidates the previous shipping quote and payment selection so checkout can be recalculated.</td>
+</tr>
+<tr>
+<td>An accepted product returns to normal price</td>
+<td>Check for basket, option, quantity, customer or currency changes, or a disabled/deleted tier or product rule.</td>
+</tr>
+<tr>
+<td>Manual colours or button style seem ignored</td>
+<td>A predefined template supplies its own palette/button style. Select No template / Custom and save to restore manual appearance.</td>
+</tr>
+<tr>
+<td>Alignment appears wrong</td>
+<td>Save Appearance; distinguish content alignment from Product row alignment; upload the complete current package, including both the storefront hook and CSS; refresh cached assets. Check your theme for conflicting CSS.</td>
+</tr>
+<tr>
+<td>Modal offers appear again on a later visit</td>
+<td>This is expected: dismissal applies to the current page entry.</td>
+</tr>
+<tr>
+<td>Modal offers show inline</td>
+<td>Check JavaScript, native dialog support, the standard payment form and the theme's checkout hooks. Inline is the fallback.</td>
+</tr>
+<tr>
+<td>Option prices do not change immediately</td>
+<td>Check that the packaged JavaScript loads without errors. Without JavaScript, the accepted price is still calculated on the server.</td>
+</tr>
+<tr>
+<td>Appearance changes cannot be saved</td>
+<td>Use values within the listed ranges, six-digit colours and permitted choices. Check the error displayed after saving.</td>
+</tr>
+</tbody>
+</table></div>
+<p>If the problem remains, record the add-on/Phoenix versions, selected display/template/layout, tier boundaries and priority, product IDs, browser width and the checkout step. Include a screenshot and relevant error-log entry when seeking support.</p>
+<h3 id="update-disable-or-remove-the-add-on">Update, disable or remove the add-on</h3>
+<h4 id="update">Update</h4>
+<p>Back up the store, extract the new release and replace only the add-on files listed in <code>package-manifest.txt</code>. Upload the full package's runtime files together, including the checkout hook, stylesheets and JavaScript. Use your actual admin directory. Do not uninstall before updating; existing tiers and settings are retained.</p>
+<p>Open administration after updating, review settings and save where needed. Refresh cached assets and run the staging checks. Version 1.7.10 adds the User manual tab. Upload <code>admin/includes/manuals/checkout_offer.html</code> into the matching folder inside your actual admin directory, together with the updated admin page, language file, stylesheet and JavaScript. No database migration or reinstall is required.</p>
+<h4 id="disable-temporarily">Disable temporarily</h4>
+<p>Under <strong>Setup</strong>, clear <strong>Enabled</strong> and save. Tiers and product rules remain stored for later use. To pause only one tier, clear that tier's Enabled checkbox and save its form.</p>
+<h4 id="remove-permanently">Remove permanently</h4>
+<p>Uninstallation deletes all offer tiers, product rules and add-on settings. Back up anything you want to retain first.</p>
+<ol>
+<li>Disable offers in Setup and save.</li>
+<li>Open <strong>Maintenance → Danger zone</strong>.</li>
+<li>Read the removal notice and tick <strong>I confirm removal of all offer tiers and settings</strong>.</li>
+<li>Click <strong>Uninstall</strong>.</li>
+<li>Remove only the add-on runtime files listed in <code>package-manifest.txt</code>, using your actual admin directory. Do not delete shared Phoenix folders.</li>
+</ol>
+<p>Historical orders retain their saved prices. Reinstalling creates a fresh configuration; it does not restore deleted tiers.</p>

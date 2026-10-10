@@ -23,7 +23,7 @@ if ('POST' === ($_SERVER['REQUEST_METHOD'] ?? '')) {
         $messageStack->add_session(CHECKOUT_OFFER_ADMIN_ERROR, 'error');
     }
     $returnTab = $_POST['admin_tab'] ?? ('settings' === $action ? 'setup' : ('uninstall' === $action ? 'maintenance' : 'offers'));
-    if (!is_string($returnTab) || !in_array($returnTab, ['setup', 'templates', 'appearance', 'text', 'offers', 'maintenance'], true)) {
+    if (!is_string($returnTab) || !in_array($returnTab, ['setup', 'templates', 'appearance', 'text', 'offers', 'maintenance', 'manual'], true)) {
         $returnTab = 'setup';
     }
     Href::redirect($Admin->link('checkout_offer.php', ['tier_id' => (int)($_POST['tier_id'] ?? 0), 'tab' => $returnTab]));
@@ -35,13 +35,13 @@ $tier = $ready && $tierId > 0 ? checkout_offer_admin_tier($tierId) : null;
 $editTier = $tier ?? ['id' => 0, 'title' => '', 'minimum' => '0', 'maximum' => '', 'priority' => '0', 'enabled' => 1];
 $appearance = checkout_offer_appearance();
 $activeTab = $_GET['tab'] ?? ($tierId > 0 ? 'offers' : 'setup');
-if (!is_string($activeTab) || !in_array($activeTab, ['setup', 'templates', 'appearance', 'text', 'offers', 'maintenance'], true)) {
+if (!is_string($activeTab) || !in_array($activeTab, ['setup', 'templates', 'appearance', 'text', 'offers', 'maintenance', 'manual'], true)) {
     $activeTab = 'setup';
 }
 require 'includes/template_top.php';
 ?>
-<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.5')) ?>">
-<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.2')) ?>" defer></script>
+<link rel="stylesheet" href="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.css?v=1.7.10')) ?>">
+<script src="<?= checkout_offer_escape((string)$Admin->catalog('ext/checkout_offer/checkout_offer_admin.js?v=1.7.10')) ?>" defer></script>
 <div class="checkout-offer-admin">
   <header class="co-admin-header">
     <div class="co-admin-heading">
@@ -61,7 +61,7 @@ require 'includes/template_top.php';
   <?php } else { ?>
     <div class="co-admin-workspace" data-initial-tab="<?= $activeTab ?>">
       <nav class="co-admin-tabs" role="tablist" aria-label="<?= CHECKOUT_OFFER_ADMIN_NAVIGATION ?>" hidden>
-        <?php foreach (['setup' => CHECKOUT_OFFER_ADMIN_SETUP, 'templates' => CHECKOUT_OFFER_ADMIN_STYLE_TEMPLATE, 'appearance' => CHECKOUT_OFFER_ADMIN_APPEARANCE, 'text' => CHECKOUT_OFFER_ADMIN_CUSTOM_TEXT, 'offers' => CHECKOUT_OFFER_ADMIN_OFFERS, 'maintenance' => CHECKOUT_OFFER_ADMIN_MAINTENANCE] as $key => $label) { ?>
+        <?php foreach (['setup' => CHECKOUT_OFFER_ADMIN_SETUP, 'templates' => CHECKOUT_OFFER_ADMIN_STYLE_TEMPLATE, 'appearance' => CHECKOUT_OFFER_ADMIN_APPEARANCE, 'text' => CHECKOUT_OFFER_ADMIN_CUSTOM_TEXT, 'offers' => CHECKOUT_OFFER_ADMIN_OFFERS, 'maintenance' => CHECKOUT_OFFER_ADMIN_MAINTENANCE, 'manual' => CHECKOUT_OFFER_ADMIN_MANUAL] as $key => $label) { ?>
           <button type="button" id="co-tab-<?= $key ?>" role="tab" aria-controls="co-panel-<?= $key ?>" data-co-tab="<?= $key ?>"><?= $label ?></button>
         <?php } ?>
       </nav>
@@ -211,6 +211,9 @@ require 'includes/template_top.php';
       </form>
       </div>
     </details>
+    </section>
+    <section id="co-panel-manual" class="co-admin-panel co-admin-manual" data-co-panel="manual">
+      <?php require __DIR__ . '/includes/manuals/checkout_offer.html'; ?>
     </section>
     </div>
   <?php } ?>

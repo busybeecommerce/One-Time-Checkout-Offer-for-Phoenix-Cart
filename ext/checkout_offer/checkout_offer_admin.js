@@ -38,7 +38,7 @@ document.addEventListener('DOMContentLoaded', function () {
             panel.setAttribute('role', 'tabpanel');
             panel.setAttribute('aria-labelledby', 'co-tab-' + panel.dataset.coPanel);
         });
-        settingsForm.hidden = key === 'offers' || key === 'maintenance';
+        settingsForm.hidden = key === 'offers' || key === 'maintenance' || key === 'manual';
         workspace.querySelectorAll('[name="admin_tab"]').forEach(function (input) { input.value = key; });
     }
     tabs.forEach(function (tab, index) {

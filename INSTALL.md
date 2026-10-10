@@ -1,6 +1,6 @@
 # Installation
 
-For the current administration tabs, pricing examples and troubleshooting, see [USER_MANUAL.md](USER_MANUAL.md). The manual is included in the release ZIP; it does not need to be uploaded to the storefront.
+For the current administration tabs, pricing examples and troubleshooting, open **Reports → Checkout Offers → User manual**, or see [USER_MANUAL.md](USER_MANUAL.md). The Markdown document need not be uploaded to the storefront. The admin tab uses the packaged `admin/includes/manuals/checkout_offer.html` file.
 
 1. Back up store files and database. Use staging first.
 2. Extract the release ZIP. Copy `includes/`, `ext/` and `images/` into the store root and `admin/` contents into your actual admin directory (including a renamed admin). All are new files; no Phoenix files should be replaced.
@@ -47,3 +47,5 @@ For v1.7.0, also upload the new `ext/checkout_offer/checkout_offer_admin.js`. Ad
 For v1.7.4, upload the complete updated package. Under **Appearance → Colours**, set **Heading background** and **Image background** using #rrggbb, or leave either blank to retain the design default. Under **Heading & description styles**, set **Heading font size** (0 = automatic) and **Heading text colour** (blank = automatic). These settings work in inline and modal displays, including predefined templates. No migration or reinstall is required.
 
 For v1.7.8 and later, upload the storefront stylesheet and checkout-payment hook together as part of the complete runtime package. Row cards use shared layout tracks for aligned prices, savings and buttons, and Left/Centre/Right settings apply to inline and modal offers. Version 1.7.9 adds the packaged user manual and refreshed documentation; no database migration or reinstallation is required.
+
+For v1.7.10, upload the complete runtime package, including the new `admin/includes/manuals/checkout_offer.html` file into the same relative folder inside your actual admin directory. Upload the updated admin page, English language file, admin stylesheet and JavaScript together. The **User manual** tab will appear beside Maintenance. No database migration or reinstall is required.
