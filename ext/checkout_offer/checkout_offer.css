@@ -177,7 +177,7 @@
     display: grid; grid-template-columns: repeat(auto-fit, calc((100% - (var(--co-active-columns) - 1) * var(--co-gap)) / var(--co-active-columns)));
 }
 #checkout-offer[data-template][data-product-layout="row"][data-content-alignment] .checkout-offer-card {
-    display: grid; grid-template-rows: subgrid; grid-row: span 4; gap: 12px; align-items: start;
+    display: grid; grid-template-columns: minmax(0, 1fr); grid-template-rows: subgrid; grid-row: span 4; gap: 12px; align-items: start;
 }
 #checkout-offer[data-template][data-product-layout="row"][data-content-alignment] .checkout-offer-card-content,
 #checkout-offer[data-template][data-product-layout="row"][data-content-alignment] .checkout-offer-actions { display: contents; }
