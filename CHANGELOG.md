@@ -1,5 +1,9 @@
 # Changelog
 
+## 1.7.13
+
+- Match the desktop user-guide reading pane to the topic column height instead of capping it at 68vh. Retain scrolling for long guides and natural content height on mobile.
+
 ## 1.7.12
 
 - Move Checkout Offers into Catalog after Phoenix loads the Catalog box. Package inert Reports/legacy files for overwrite upgrades; avoid duplicate registrations.

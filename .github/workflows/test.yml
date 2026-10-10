@@ -74,13 +74,13 @@ jobs:
       - uses: actions/checkout@v4
       - name: Build and verify release from tested main
         shell: pwsh
-        run: ./scripts/build_package.ps1 -Version 1.7.12
+        run: ./scripts/build_package.ps1 -Version 1.7.13
       - name: Publish ZIP and SHA-256
         env:
           GH_TOKEN: ${{ github.token }}
         run: |
-          gh release create v1.7.12 \
-            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.7.12.zip \
-            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.7.12.zip.sha256.txt \
-            --target "$GITHUB_SHA" --title "v1.7.12 — Catalog help workspace" \
-            --notes "Move Checkout Offers to Catalog, with inert Reports and legacy files retained for safe overwrite upgrades. Replace duplicated manual lists with a compact grouped help workspace, three-step quick start and one selected reading pane. Preserve complete guidance, native/no-JavaScript access, keyboard and mobile support, unsaved settings and checkout behaviour. No database migration or Phoenix core edits. PHP 8.1/8.3 against Phoenix 1.1.0.6/1.1.0.8 and admin/storefront browser checks passed. ZIP manifest and every file hash verified. No live-store deployment."
+          gh release create v1.7.13 \
+            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.7.13.zip \
+            build/One-Time-Checkout-Offer-for-Phoenix-Cart-1.7.13.zip.sha256.txt \
+            --target "$GITHUB_SHA" --title "v1.7.13 — Matching manual column heights" \
+            --notes "Match the desktop user-guide reading pane to the topic column height, removing the viewport cap and unnecessary scrolling. Keep long guides scrollable and mobile content at its natural height. PHP and admin/storefront browser CI passed; package manifest and file hashes verified. No database migration or live-store deployment."

@@ -149,6 +149,16 @@ const { chromium } = require('playwright');
     assert.equal(await page.locator('.co-manual-welcome').isVisible(), true);
     assert.equal(await page.locator('.co-manual-task[open]').count(), 0);
     assert.ok(await page.locator('#co-panel-manual').evaluate(node => node.getBoundingClientRect().height < 1000), 'Compact initial desktop workspace');
+    for (const width of [1920, 1440, 800]) {
+        await page.setViewportSize({ width, height: 1000 });
+        const columns = await page.locator('.co-manual-grid').evaluate(node => {
+            const topics = node.querySelector('.co-manual-topics').getBoundingClientRect();
+            const reader = node.querySelector('.co-manual-reader').getBoundingClientRect();
+            return { top: reader.top - topics.top, bottom: reader.bottom - topics.bottom };
+        });
+        assert.ok(Math.abs(columns.top) < 1 && Math.abs(columns.bottom) < 1, 'Manual columns match at ' + width);
+    }
+    await page.setViewportSize({ width: 1440, height: 1000 });
     assert.ok(await page.locator('#co-panel-manual a').evaluateAll(links => links.every(link => link.getAttribute('href').startsWith('#') && document.getElementById(link.hash.slice(1)))));
     await page.locator('#co-panel-manual').evaluate(node => node.scrollIntoView({ block: 'start' }));
     await page.screenshot({ path: 'build/admin-manual-desktop.png' });
@@ -157,6 +167,10 @@ const { chromium } = require('playwright');
     assert.equal(await page.locator('#troubleshooting').evaluate(node => node.open), true);
     assert.equal(await page.locator('#co-manual-reader').evaluate(node => node === document.activeElement), true);
     assert.equal(await page.locator('#co-manual-reader table').isVisible(), true);
+    assert.equal(await page.locator('#co-manual-reader').evaluate(node => {
+        node.scrollTop = node.scrollHeight;
+        return node.scrollTop > 0 && node.scrollHeight > node.clientHeight;
+    }), true, 'Long guides remain scrollable within the matched reader');
     assert.equal(await page.locator('.co-manual-detail:visible').count(), 1);
     await page.locator('#set-basket-value-tiers summary').click();
     assert.equal(await page.locator('#troubleshooting').evaluate(node => node.open), false);

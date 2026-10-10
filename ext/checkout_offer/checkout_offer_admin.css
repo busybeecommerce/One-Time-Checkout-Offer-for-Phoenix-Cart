@@ -174,9 +174,9 @@
 .checkout-offer-admin .co-manual-task[open] > summary { background: #914400; color: #fff; border-radius: .45rem; }
 .checkout-offer-admin .co-manual-detail { padding: 1rem; font-size: .9rem; }
 .checkout-offer-admin .co-manual-detail > :last-child { margin-bottom: 0; }
-.checkout-offer-admin .co-manual-enhanced .co-manual-grid { display: grid; grid-template-columns: 18rem minmax(0, 1fr); gap: 1.25rem; align-items: start; }
+.checkout-offer-admin .co-manual-enhanced .co-manual-grid { display: grid; grid-template-columns: 18rem minmax(0, 1fr); gap: 1.25rem; align-items: start; min-height: 34rem; }
 .checkout-offer-admin .co-manual-enhanced .co-manual-topics { grid-column: 1; grid-row: 1; padding: .75rem; background: #f5f6f8; border-radius: .75rem; }
-.checkout-offer-admin .co-manual-enhanced .co-manual-reader { grid-column: 2; grid-row: 1; min-height: 34rem; max-height: 68vh; overflow-y: auto; }
+.checkout-offer-admin .co-manual-enhanced .co-manual-reader { grid-column: 2; grid-row: 1; align-self: stretch; contain: size; min-height: 0; max-height: none; margin-bottom: 0; overflow-y: auto; }
 .checkout-offer-admin .co-manual-enhanced .co-manual-reader > .co-manual-detail { padding: 0; }
 .checkout-offer-admin .co-admin-manual [hidden] { display: none; }
 .checkout-offer-admin .co-admin-manual a:focus-visible, .checkout-offer-admin .co-admin-manual summary:focus-visible, .checkout-offer-admin .co-admin-manual input:focus-visible, .checkout-offer-admin .co-admin-manual button:focus-visible, .checkout-offer-admin .co-manual-reader:focus-visible, .checkout-offer-admin .co-manual-table:focus-visible { outline: 3px solid #914400; outline-offset: 3px; }
@@ -184,7 +184,7 @@
     .checkout-offer-admin .co-manual-header { display: block; }
     .checkout-offer-admin .co-manual-search { margin-top: .75rem; }
     .checkout-offer-admin .co-manual-reader { padding: 1rem; }
-    .checkout-offer-admin .co-manual-enhanced .co-manual-grid { display: flex; flex-direction: column; gap: 0; }
-    .checkout-offer-admin .co-manual-enhanced .co-manual-reader { width: 100%; min-height: 0; max-height: none; overflow: visible; }
+    .checkout-offer-admin .co-manual-enhanced .co-manual-grid { display: flex; flex-direction: column; gap: 0; min-height: 0; }
+    .checkout-offer-admin .co-manual-enhanced .co-manual-reader { width: 100%; contain: none; min-height: 0; max-height: none; margin-bottom: 1rem; overflow: visible; }
     .checkout-offer-admin .co-manual-enhanced .co-manual-topics { width: 100%; }
 }
