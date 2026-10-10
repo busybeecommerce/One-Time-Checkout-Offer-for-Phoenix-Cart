@@ -72,8 +72,28 @@ const { chromium } = require('playwright');
     await page.locator('[name="appearance[template]"][value="red"]').check();
     await page.getByRole('tab', { name: 'Appearance', exact: true }).click();
     await page.locator('[name="appearance[product_layout]"]').selectOption('row');
+    assert.equal(await page.locator('[data-co-colour]').count(), 10);
+    for (const colour of await page.locator('[data-co-colour]').all()) {
+        const hex = colour.locator('[data-co-colour-hex]');
+        const original = await hex.inputValue();
+        await colour.locator('[data-co-colour-picker]').fill('#123456');
+        assert.equal(await hex.inputValue(), '#123456');
+        assert.equal(await colour.locator('[data-co-colour-rgb]').inputValue(), 'rgb(18, 52, 86)');
+        await hex.fill('#abcdef');
+        assert.equal(await colour.locator('[data-co-colour-picker]').inputValue(), '#abcdef');
+        assert.equal(await colour.locator('[data-co-colour-rgb]').inputValue(), 'rgb(171, 205, 239)');
+        await hex.fill('invalid');
+        assert.equal(await hex.evaluate(node => node.checkValidity()), false);
+        await hex.fill(original);
+        if (original === '') assert.equal(await colour.locator('[data-co-colour-rgb]').inputValue(), '');
+    }
     for (const width of [1440, 1200, 768]) {
         await page.setViewportSize({ width, height: 1000 });
+        if (width >= 1200) {
+            const heights = await page.locator('.co-admin-field-group').evaluateAll(nodes => nodes.map(node => node.getBoundingClientRect().height));
+            assert.ok(Math.abs(heights[0] - heights[1]) < 1, 'Colour and layout cards have equal heights');
+            assert.ok(Math.abs(heights[2] - heights[3]) < 1, 'Spacing and button cards have equal heights');
+        }
         for (const group of await page.locator('.co-admin-field-group').all()) {
         const fields = await group.locator('.co-appearance-field').evaluateAll(nodes => nodes.map(node => {
             const control = node.querySelector('input, select').getBoundingClientRect();
